@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin Console — Iskolusyon | City College of Calamba</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D2F6E;
+  --ccc-blue:#003CD0;
+  --blue:#1A4FA0;
+  --blue-light:#2563B0;
+  --green:#1B6B3A;
+  --green-dark:#155230;
+  --gold:#C8A84B;
+  --yellow:#FFD400;
+  --white:#fff;
+  --off:#F5F6F8;
+  --text:#2C3E50;
+  --muted:#6B7E9A;
+  --border:#E0E6F0;
+  --orange:#E07B39;
+  --red:#C0392B;
+}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);line-height:1.65;min-height:100vh}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--navy);color:#fff;font-size:.75rem;padding:6px 0;font-family:'Montserrat',sans-serif;letter-spacing:.3px}
+.topbar .inner{max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;gap:1.5rem;align-items:center}
+.topbar .badge-supersecure{display:flex;align-items:center;gap:6px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;font-size:.68rem;color:var(--gold)}
+
+/* ── NAVBAR ── */
+.navbar{background:var(--white);border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:300;box-shadow:0 2px 12px rgba(13,47,110,.08)}
+.nav-inner{width:100%;margin:0;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:72px;gap:1rem}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-logos{display:flex;align-items:center;gap:6px}
+.brand-logos img{height:52px;width:auto;object-fit:contain}
+.brand-text{font-family:'Montserrat',sans-serif;border-left:2px solid var(--border);padding-left:10px}
+.brand-text .main{font-size:1rem;font-weight:900;color:var(--navy);letter-spacing:.5px;text-transform:uppercase;display:block;line-height:1.1}
+.brand-text .sub{font-size:.58rem;font-weight:600;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-top:1px;display:block}
+.nav-portal-badge{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);background:#F3ECD9;padding:8px 16px;border-radius:20px;border:1px solid #E4D5A8}
+
+/* ══ PORTAL SHELL ══ */
+.portal-shell{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 108px);align-items:stretch}
+
+/* ── SIDEBAR ── */
+.sidebar{background:linear-gradient(180deg,var(--navy) 0%,#081F49 100%);color:#fff;padding:2rem 1.35rem 1.5rem;display:flex;flex-direction:column;position:sticky;top:108px;height:calc(100vh - 108px);overflow-y:auto}
+.sidebar-profile{text-align:center;margin-bottom:1.75rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,.15)}
+.admin-avatar{width:74px;height:74px;border-radius:50%;margin:0 auto .85rem;border:3px solid var(--gold);background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:1.5rem;position:relative;cursor:pointer;overflow:hidden;transition:border-color .2s;flex-shrink:0}
+.admin-avatar:hover{border-color:#fff}
+.admin-avatar img{width:100%;height:100%;object-fit:cover;display:none;position:absolute;inset:0}
+.admin-avatar .aa-initials{position:relative;z-index:1;transition:opacity .2s}
+.admin-avatar-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;z-index:2;border-radius:50%}
+.admin-avatar:hover .admin-avatar-overlay{opacity:1}
+.admin-avatar-overlay svg{color:#fff}
+#adminAvatarInput{display:none}
+.admin-name{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.95rem}
+.admin-role{font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.8px;margin-top:4px;font-family:'Montserrat',sans-serif;font-weight:700}
+
+.sidebar-menu{list-style:none;display:flex;flex-direction:column;gap:3px;flex:1}
+.sidebar-menu-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:.9rem 0 .4rem .6rem}
+.sidebar-menu-label:first-child{margin-top:0}
+.menu-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:.79rem;color:rgba(255,255,255,.8);transition:background .2s,color .2s;width:100%}
+.menu-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.menu-btn.active{background:#fff;color:var(--navy)}
+.menu-icon{width:18px;text-align:center;flex-shrink:0;font-size:.9rem}
+.menu-badge{margin-left:auto;background:var(--gold);color:var(--navy);font-size:.62rem;font-weight:800;padding:1px 7px;border-radius:10px;flex-shrink:0}
+
+.sidebar-logout{margin-top:1.25rem;padding-top:1.1rem;border-top:1px solid rgba(255,255,255,.15)}
+.logout-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.79rem;color:rgba(255,255,255,.85);width:100%;transition:background .2s,color .2s}
+.logout-btn:hover{background:rgba(192,57,43,.35);color:#fff}
+
+/* ── MAIN CONTENT ── */
+.portal-main{padding:2.5rem 3rem 4rem;overflow-y:auto}
+.portal-panel{display:none}
+.portal-panel.active{display:block;animation:slideDown .3s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.portal-header{margin-bottom:1.75rem;display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+.portal-header h1{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.5rem;color:var(--navy);letter-spacing:.2px}
+.portal-header p{font-size:.85rem;color:var(--muted);margin-top:.35rem;max-width:640px}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 3px 18px rgba(13,47,110,.06);padding:1.75rem 2rem;margin-bottom:1.5rem}
+.card-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.92rem;color:var(--navy);letter-spacing:.3px;margin-bottom:1.1rem;padding-bottom:.7rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.card-title span.tag{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);background:var(--off);padding:3px 10px;border-radius:20px;border:1px solid var(--border)}
+
+.badge{display:inline-flex;align-items:center;gap:5px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.3px;padding:4px 11px;border-radius:20px}
+.badge-pending{background:#FEF3E8;color:#7A4210}
+.badge-verified{background:#E6F4EC;color:#1A5C3A}
+.badge-deficient{background:#FBE7E7;color:#902020}
+.badge-progress{background:#EEF3FD;color:var(--ccc-blue)}
+.badge-waitlisted{background:#FDF0DC;color:#8A5A10}
+.badge-notsubmitted{background:#EEF0F3;color:var(--muted)}
+
+/* ── dashboard status summary cards ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin-bottom:1.5rem}
+.stat-card{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:1.25rem 1.4rem;box-shadow:0 3px 18px rgba(13,47,110,.06);cursor:pointer;transition:box-shadow .2s,transform .15s,border-color .2s}
+.stat-card:hover{box-shadow:0 6px 22px rgba(13,47,110,.12);transform:translateY(-1px)}
+.stat-card .stat-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.stat-card .stat-value{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.85rem;color:var(--navy)}
+.stat-card .stat-note{font-size:.72rem;color:var(--muted);margin-top:.5rem;line-height:1.5}
+.stat-card-hint{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.4px;text-transform:uppercase;color:var(--ccc-blue);margin-top:.6rem;display:flex;align-items:center;gap:4px}
+.stat-card.stat-all{border-top:4px solid var(--navy)}
+.stat-card.stat-pending{border-top:4px solid var(--ccc-blue)}
+.stat-card.stat-qualified{border-top:4px solid var(--green)}
+.stat-card.stat-notqualified{border-top:4px solid var(--red)}
+.stat-card.stat-waitlisted{border-top:4px solid #C8860A}
+.stat-card.stat-appealed{border-top:4px solid var(--gold)}
+
+.mbtn{padding:10px 22px;border:none;border-radius:6px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.mbtn-primary{background:var(--ccc-blue);color:#fff}
+.mbtn-primary:hover{background:#002fa8}
+.mbtn-secondary{background:var(--green);color:#fff}
+.mbtn-secondary:hover{background:var(--green-dark)}
+.mbtn-ghost{background:none;border:1.5px solid var(--border);color:var(--muted)}
+.mbtn-ghost:hover{background:var(--off);color:var(--text)}
+.mbtn-danger{background:#C0392B;color:#fff}
+.mbtn-danger:hover{background:#992d22}
+.mbtn:disabled{opacity:.5;cursor:not-allowed}
+.mbtn-sm{padding:7px 14px;font-size:.7rem}
+
+/* ── PASSWORD GATE ── */
+.gate-overlay{position:fixed;inset:0;background:linear-gradient(160deg,var(--navy) 0%,#081F49 60%,#04122B 100%);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.gate-overlay.hidden{display:none}
+.gate-box{background:#fff;border-radius:16px;box-shadow:0 25px 70px rgba(0,0,0,.35);max-width:400px;width:100%;padding:2.5rem 2.25rem;text-align:center}
+.gate-icon{width:60px;height:60px;border-radius:50%;background:#EEF3FD;color:var(--ccc-blue);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 1.1rem}
+.gate-box h2{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.15rem;color:var(--navy);margin-bottom:.4rem}
+.gate-box p{font-size:.8rem;color:var(--muted);margin-bottom:1.5rem}
+.gate-field{position:relative;margin-bottom:1rem;text-align:left}
+.gate-field label{display:block;font-size:.7rem;font-weight:700;color:var(--navy);margin-bottom:5px;font-family:'Montserrat',sans-serif;letter-spacing:.4px;text-transform:uppercase}
+.gate-field input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:7px;font-size:.9rem;outline:none;transition:border-color .2s,box-shadow .2s;letter-spacing:1px}
+.gate-field input:focus{border-color:var(--ccc-blue);box-shadow:0 0 0 3px rgba(0,60,208,.1)}
+.gate-error{font-size:.75rem;color:var(--red);margin:-.4rem 0 1rem;text-align:left;display:none;font-weight:600}
+.gate-error.show{display:block}
+.gate-box .mbtn{width:100%}
+.gate-shake{animation:gateShake .35s}
+@keyframes gateShake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
+.gate-foot{font-size:.68rem;color:var(--muted);margin-top:1.25rem}
+
+.app-content{display:none}
+.app-content.unlocked{display:block}
+
+/* ── APPLICANTS TABLE ── */
+.filter-bar{display:flex;gap:.75rem;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap}
+.filter-bar input[type="search"]{flex:1;min-width:220px;padding:10px 14px;border:1.5px solid var(--border);border-radius:7px;font-size:.85rem;outline:none}
+.filter-bar input[type="search"]:focus{border-color:var(--ccc-blue)}
+.filter-bar select{padding:10px 14px;border:1.5px solid var(--border);border-radius:7px;font-size:.82rem;font-family:'Montserrat',sans-serif;font-weight:600;color:var(--text);background:#fff;cursor:pointer}
+.applicant-table{width:100%;border-collapse:collapse;font-size:.84rem}
+.applicant-table th{text-align:left;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.66rem;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border)}
+.applicant-table th.sortable-th{cursor:pointer;user-select:none;transition:color .15s}
+.applicant-table th.sortable-th:hover{color:var(--ccc-blue)}
+.sort-header-inner{display:inline-flex;align-items:center;gap:5px}
+.sort-icon{width:18px;height:18px;flex-shrink:0;transition:transform .15s,opacity .15s;opacity:.85}
+.sort-icon.asc{transform:rotate(180deg)}
+.sort-icon.active{opacity:1;color:var(--ccc-blue)}
+.sortable-th:hover .sort-icon{opacity:1}
+.applicant-table td{padding:13px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.applicant-table tr:last-child td{border-bottom:none}
+.applicant-table tr.app-row{cursor:pointer;transition:background .15s}
+.applicant-table tr.app-row:hover{background:var(--off)}
+.app-name-cell{display:flex;align-items:center;gap:11px}
+.app-avatar{width:36px;height:36px;border-radius:50%;background:#EEF3FD;color:var(--ccc-blue);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.78rem;flex-shrink:0}
+.app-name-cell .nm{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.83rem;color:var(--text)}
+.app-name-cell .id{font-size:.7rem;color:var(--muted)}
+.review-lock-tag{display:inline-flex;align-items:center;gap:4px;font-size:.64rem;font-weight:700;color:#8A5A10;background:#FDF0DC;border:1px solid #F0DBAF;padding:2px 8px;border-radius:10px;margin-top:4px}
+.review-lock-tag.self{color:#1A5C3A;background:#E6F4EC;border-color:#BFE3CD}
+.review-lock-tag svg{width:10px;height:10px;flex-shrink:0}
+.view-link-locked{background:var(--off) !important;color:var(--muted) !important;cursor:not-allowed}
+.view-link-locked:hover{background:var(--off) !important}
+.reviewer-note{display:flex;align-items:flex-start;gap:10px;background:#EEF3FD;border:1px solid #D6E3FA;border-radius:8px;padding:.85rem 1rem;font-size:.78rem;color:var(--navy);margin-bottom:1.1rem}
+.reviewer-note svg{flex-shrink:0;margin-top:2px;color:var(--ccc-blue)}
+.mini-progress{width:70px;height:6px;border-radius:4px;background:var(--off);overflow:hidden;display:inline-block;vertical-align:middle;margin-right:6px}
+.mini-progress-bar{height:100%;background:var(--ccc-blue);border-radius:4px}
+.view-link{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;color:var(--ccc-blue);background:#EEF3FD;padding:6px 13px;border-radius:6px;border:none;cursor:pointer}
+.view-link:hover{background:#DCE7FB}
+
+/* ── APPLICANT DETAIL MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(13,20,38,.6);z-index:1000;align-items:center;justify-content:center;padding:2rem 1.5rem}
+.modal-overlay.open{display:flex}
+.modal-box{background:#fff;border-radius:14px;box-shadow:0 25px 70px rgba(0,0,0,.3);width:95vw;max-width:1400px;height:92vh;max-height:92vh;display:flex;flex-direction:column;animation:slideDown .25s ease;overflow:hidden}
+.modal-head{padding:1.5rem 2rem 1.25rem;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:1.1rem;flex-shrink:0}
+.modal-head-top{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.modal-head-info{display:flex;align-items:center;gap:14px}
+.modal-avatar{width:52px;height:52px;border-radius:50%;background:#EEF3FD;color:var(--ccc-blue);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:800;font-size:1rem;flex-shrink:0}
+.modal-head h3{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.02rem;color:var(--navy)}
+.modal-head .msub{font-size:.74rem;color:var(--muted);margin-top:2px}
+.modal-close{all:unset;cursor:pointer;color:var(--muted);font-size:1.1rem;padding:6px;border-radius:50%;line-height:1}
+.modal-close:hover{background:var(--off);color:var(--text)}
+.modal-body{padding:1.75rem 2rem;flex:1;overflow-y:auto;min-height:0}
+.modal-section-label{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin-bottom:.9rem;display:flex;align-items:center;justify-content:space-between}
+.modal-section-label .tag{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.6rem;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);background:var(--off);padding:3px 9px;border-radius:20px;border:1px solid var(--border)}
+.edit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 1.25rem;margin-bottom:1.5rem}
+.efield{margin-bottom:.9rem}
+.efield.full{grid-column:1/-1}
+.efield label{display:block;font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:4px;font-family:'Montserrat',sans-serif;letter-spacing:.3px;text-transform:uppercase}
+.efield input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:.85rem;outline:none;transition:border-color .2s}
+.efield input:focus{border-color:var(--ccc-blue);box-shadow:0 0 0 3px rgba(0,60,208,.1)}
+.edit-save-row{display:flex;align-items:center;gap:.75rem;margin-bottom:1.6rem}
+.save-flash{font-size:.72rem;color:var(--green);font-weight:700;display:none;align-items:center;gap:5px}
+.save-flash.show{display:flex}
+.efield input:disabled,.efield select:disabled,.efield textarea:disabled{background:var(--off);color:var(--muted);cursor:not-allowed}
+.efield select,.efield textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:.85rem;outline:none;transition:border-color .2s;font-family:'Open Sans',sans-serif}
+.efield select:focus,.efield textarea:focus{border-color:var(--ccc-blue);box-shadow:0 0 0 3px rgba(0,60,208,.1)}
+.section-edit-btn{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.66rem;letter-spacing:.3px;text-transform:uppercase;color:var(--ccc-blue);background:#EEF3FD;border:none;padding:5px 12px;border-radius:20px;cursor:pointer}
+.section-edit-btn:hover{background:#E0EAFB}
+.section-edit-btn.is-editing{color:#902020;background:#FBE7E7}
+
+/* ── Document categories ── */
+.doc-cat-tabs{display:flex;flex-wrap:wrap;gap:0;margin-bottom:1.1rem;border-bottom:2px solid var(--border)}
+.doc-cat-tab{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.74rem;letter-spacing:.2px;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;padding:.7rem 1rem;cursor:pointer;transition:color .15s,border-color .15s;display:flex;align-items:center;gap:6px}
+.doc-cat-tab:hover{color:var(--text)}
+.doc-cat-tab.active{color:var(--ccc-blue);border-color:var(--ccc-blue)}
+.doc-cat-tab .cat-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0}
+.doc-cat-tab .cat-dot.complete{background:var(--green)}
+.doc-cat-tab .cat-dot.attention{background:var(--orange)}
+.doc-cat-tab .cat-count{font-size:.66rem;color:inherit;opacity:.8}
+.doc-cat-panel{background:var(--off);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.2rem;margin-bottom:1.6rem}
+.doc-cat-panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+.doc-cat-panel-head h5{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.76rem;color:var(--navy);letter-spacing:.2px}
+.doc-list{margin-bottom:1rem}
+.doc-list-head{display:flex;align-items:center;gap:.75rem;padding:0 .85rem .5rem}
+.doc-list-head .dlh-name{flex:1}
+.doc-list-head .dlh-status{width:130px;flex-shrink:0;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.4px;text-transform:uppercase;color:var(--muted)}
+.doc-row{display:flex;align-items:center;gap:.75rem;background:#fff;border:1px solid var(--border);border-radius:8px;padding:.65rem .85rem;margin-bottom:.5rem}
+.doc-row-name{flex:1;font-size:.8rem;color:var(--ccc-blue);font-weight:600;background:none;border:none;padding:0;text-align:left;cursor:pointer;font-family:inherit}
+.doc-row-name:hover{text-decoration:underline}
+.doc-row .doc-row-status{width:130px;flex-shrink:0}
+.doc-row select{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);background:#fff;width:100%}
+.doc-row select:disabled{border:none;background:none;appearance:none;-webkit-appearance:none;padding:4px 0;color:inherit}
+.doc-cat-divider{border:none;border-top:1px dashed var(--border);margin:1.1rem 0}
+.doc-cat-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 1.25rem}
+.doc-cat-empty{font-size:.78rem;color:var(--muted);padding:.4rem 0 .6rem}
+
+.mini-summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75rem}
+.mini-summary{background:var(--off);border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;border-left:4px solid var(--border)}
+.mini-summary .ms-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+.mini-summary .ms-value{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.82rem;color:var(--text)}
+.mini-summary.ms-profile{background:#EEF3FD;border-color:#D6E2FA;border-left-color:var(--ccc-blue)}
+.mini-summary.ms-profile .ms-label{color:var(--ccc-blue)}
+.mini-summary.ms-profile.ongoing{background:#FFF7DB;border-color:#F5E4A0;border-left-color:var(--orange)}
+.mini-summary.ms-profile.ongoing .ms-label{color:#8A5A10}
+.mini-summary.ms-profile.complete{background:#F0F8F3;border-color:#D6ECDD;border-left-color:var(--green)}
+.mini-summary.ms-profile.complete .ms-label{color:var(--green-dark)}
+.mini-summary.ms-docs{background:#F0F8F3;border-color:#D6ECDD;border-left-color:var(--green)}
+.mini-summary.ms-docs .ms-label{color:var(--green-dark)}
+
+.modal-divider{border:none;border-top:1px solid var(--border);margin:1.75rem 0}
+
+.status-action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
+.status-btn{border:1.5px solid var(--border);background:#fff;border-radius:9px;padding:.9rem .6rem;cursor:pointer;text-align:center;transition:all .18s;font-family:'Montserrat',sans-serif}
+.status-btn .sb-icon{font-size:1.15rem;margin-bottom:.35rem}
+.status-btn .sb-label{font-weight:700;font-size:.74rem;letter-spacing:.2px}
+.status-btn.qualified:hover{border-color:var(--green);background:#F3FAF6}
+.status-btn.waitlisted:hover{border-color:var(--orange);background:#FDF6EE}
+.status-btn.not-qualified:hover{border-color:var(--red);background:#FDF2F1}
+.status-btn.current{cursor:default}
+.status-btn.qualified.current{border-color:var(--green);background:#E6F4EC;color:var(--green-dark)}
+.status-btn.waitlisted.current{border-color:var(--orange);background:#FDF0DC;color:#8A5A10}
+.status-btn.not-qualified.current{border-color:var(--red);background:#FBE7E7;color:#902020}
+
+.confirm-inline{margin-top:1.1rem;background:var(--off);border:1.5px dashed var(--border);border-radius:9px;padding:1rem 1.15rem;display:none}
+.confirm-inline.show{display:block;animation:slideDown .2s ease}
+.confirm-inline p{font-size:.82rem;color:var(--text);margin-bottom:.85rem;line-height:1.55}
+.confirm-inline .email-preview{background:#fff;border:1px solid var(--border);border-radius:7px;padding:.7rem .85rem;font-size:.74rem;color:var(--muted);margin-bottom:.85rem}
+.confirm-inline .email-preview b{color:var(--text)}
+.confirm-inline-actions{display:flex;gap:.6rem}
+
+/* ── TOAST ── */
+.toast-stack{position:fixed;bottom:1.5rem;right:1.5rem;z-index:3000;display:flex;flex-direction:column;gap:.6rem}
+.toast{background:var(--navy);color:#fff;font-family:'Montserrat',sans-serif;font-weight:600;font-size:.8rem;padding:12px 18px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.25);display:flex;align-items:center;gap:10px;max-width:340px;animation:toastIn .25s ease}
+.toast.success{background:var(--green-dark)}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.toast.fadeout{animation:toastOut .3s ease forwards}
+@keyframes toastOut{to{opacity:0;transform:translateY(6px)}}
+
+/* ── ANNOUNCEMENTS PANEL ── */
+.announce-form .mfield{margin-bottom:1rem}
+.announce-form label{display:block;font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:5px;font-family:'Montserrat',sans-serif;letter-spacing:.3px;text-transform:uppercase}
+.announce-form input,.announce-form select,.announce-form textarea{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:6px;font-family:'Open Sans',sans-serif;font-size:.85rem;outline:none}
+.announce-form textarea{min-height:90px;resize:vertical}
+.announce-form input:focus,.announce-form select:focus,.announce-form textarea:focus{border-color:var(--ccc-blue);box-shadow:0 0 0 3px rgba(0,60,208,.1)}
+.publish-note{font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:6px;margin-top:.5rem}
+
+.announce-item{display:flex;gap:14px;padding:1rem 0;border-bottom:1px solid var(--border)}
+.announce-item:last-child{border-bottom:none;padding-bottom:0}
+.announce-dot{width:38px;height:38px;border-radius:50%;background:#EEF3FD;color:var(--ccc-blue);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.announce-dot.auto{background:#F3ECD9;color:#8A5A10}
+.announce-body{flex:1}
+.announce-body h4{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.85rem;color:var(--text);margin-bottom:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.announce-body p{font-size:.8rem;color:var(--muted)}
+.announce-body .announce-date{font-size:.68rem;color:var(--muted);margin-top:4px;display:block}
+.auto-tag{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.58rem;letter-spacing:.4px;text-transform:uppercase;color:#8A5A10;background:#F3ECD9;padding:2px 8px;border-radius:10px}
+.msg-target-tag{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.58rem;letter-spacing:.4px;text-transform:uppercase;color:var(--ccc-blue);background:#EEF3FD;padding:2px 8px;border-radius:10px}
+.announce-del{all:unset;cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px;border-radius:50%;flex-shrink:0;align-self:flex-start}
+.announce-del:hover{background:var(--off);color:var(--red)}
+
+/* ── announcements: text/image post type toggle ── */
+.post-type-toggle{display:flex;gap:.6rem;margin-bottom:1rem}
+.post-type-btn{all:unset;box-sizing:border-box;cursor:pointer;flex:1;text-align:center;padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.76rem;color:var(--muted);transition:border-color .15s,background .15s,color .15s}
+.post-type-btn.active{border-color:var(--ccc-blue);background:#EEF3FD;color:var(--ccc-blue)}
+.announce-image-preview{display:none;margin-top:.6rem;max-width:220px;max-height:150px;border-radius:8px;border:1px solid var(--border);object-fit:cover}
+.announce-image-preview.show{display:block}
+.announce-thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0}
+
+/* ── communications: scope note (shown above announcements / messages forms) ── */
+.comm-scope-note{display:flex;align-items:flex-start;gap:9px;background:var(--off);border:1px solid var(--border);border-radius:8px;padding:.75rem .95rem;font-size:.78rem;color:var(--muted);line-height:1.55;margin-bottom:1.25rem}
+.comm-scope-note svg{flex-shrink:0;margin-top:2px;color:var(--ccc-blue)}
+.comm-scope-note b{color:var(--text)}
+
+/* ── MESSAGES PANEL (private, applicant-only communications) ── */
+.message-item{display:flex;gap:14px;padding:1rem 0;border-bottom:1px solid var(--border)}
+.message-item:last-child{border-bottom:none;padding-bottom:0}
+.message-dot{width:38px;height:38px;border-radius:50%;background:#EEF3FD;color:var(--ccc-blue);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.message-body{flex:1}
+.message-body h4{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.85rem;color:var(--text);margin-bottom:2px}
+.message-body p{font-size:.8rem;color:var(--muted)}
+.message-body .message-date{font-size:.68rem;color:var(--muted);margin-top:4px;display:block}
+.message-del{all:unset;cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px;border-radius:50%;flex-shrink:0;align-self:flex-start}
+.message-del:hover{background:var(--off);color:var(--red)}
+
+/* ── SUPER ADMIN: ACCOUNTS ── */
+.admin-list{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.5rem}
+.admin-row{display:flex;align-items:center;gap:13px;padding:.85rem 1rem;border:1px solid var(--border);border-radius:9px}
+.admin-row .aa-avatar{width:38px;height:38px;border-radius:50%;background:var(--off);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.78rem;color:var(--navy);flex-shrink:0}
+.admin-row .aa-info{flex:1;min-width:0}
+.admin-row .aa-name{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.83rem;color:var(--text)}
+.admin-row .aa-email{font-size:.72rem;color:var(--muted)}
+.role-tag{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.4px;text-transform:uppercase;padding:4px 11px;border-radius:20px;flex-shrink:0}
+.role-tag.super{background:#F3ECD9;color:#8A5A10}
+.role-tag.admin{background:#EEF3FD;color:var(--ccc-blue)}
+.admin-row-del{all:unset;cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px;border-radius:50%;flex-shrink:0}
+.admin-row-del:hover{background:var(--off);color:var(--red)}
+.add-admin-form{display:grid;grid-template-columns:1.4fr 1.6fr 1fr auto;gap:.7rem;align-items:end}
+.add-admin-form .efield{margin-bottom:0}
+
+/* ── SYSTEM TOGGLE ── */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-row-info h4{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.85rem;color:var(--text)}
+.toggle-row-info p{font-size:.76rem;color:var(--muted);margin-top:2px;max-width:440px}
+.toggle-detail-panel{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;padding:0 0 1rem;border-bottom:1px solid var(--border);max-height:200px;overflow:hidden;transition:max-height .25s ease,opacity .2s ease,padding .25s ease;opacity:1}
+.toggle-detail-panel.collapsed{max-height:0;padding-top:0;padding-bottom:0;opacity:0;border-bottom:none}
+.toggle-detail-panel .efield{margin-bottom:0}
+.switch{position:relative;width:46px;height:26px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;inset:0;background:#C9D2E0;border-radius:20px;transition:.2s}
+.slider::before{content:'';position:absolute;height:20px;width:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.switch input:checked + .slider{background:var(--green)}
+.switch input:checked + .slider::before{transform:translateX(20px)}
+
+/* activity timeline */
+.timeline{display:flex;flex-direction:column}
+.timeline-item{display:flex;gap:14px;position:relative;padding-bottom:1.4rem}
+.timeline-item:last-child{padding-bottom:0}
+.timeline-item:not(:last-child)::before{content:'';position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--border)}
+.timeline-dot{width:29px;height:29px;border-radius:50%;background:#EEF3FD;color:var(--ccc-blue);display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;z-index:1}
+.timeline-dot.done{background:#E6F4EC;color:var(--green)}
+.timeline-dot.warn{background:#FBE7E7;color:#902020}
+.timeline-body h4{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.82rem;color:var(--text)}
+.timeline-body p{font-size:.76rem;color:var(--muted);margin-top:2px}
+
+/* ── LOGOUT CONFIRM MODAL ── */
+.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(13,20,38,.55);z-index:1000;align-items:center;justify-content:center;padding:1.5rem}
+.confirm-overlay.open{display:flex}
+.confirm-box{background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-width:380px;width:100%;padding:2rem;text-align:center;animation:slideDown .25s ease}
+.confirm-icon{width:56px;height:56px;border-radius:50%;background:#FBE7E7;color:#C0392B;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 1rem}
+.confirm-box h3{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.05rem;color:var(--navy);margin-bottom:.5rem}
+.confirm-box p{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem}
+.confirm-actions{display:flex;gap:.75rem}
+.confirm-actions .mbtn{flex:1}
+
+@media(max-width:960px){
+  .portal-shell{grid-template-columns:1fr}
+  .sidebar{position:relative;top:0;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:1.25rem}
+  .sidebar-profile{margin-bottom:0;padding-bottom:0;border-bottom:none;flex-shrink:0}
+  .sidebar-menu{flex-direction:row;flex-wrap:wrap;margin-left:1rem}
+  .sidebar-menu-label{display:none}
+  .sidebar-logout{margin-top:0;padding-top:0;border-top:none;margin-left:auto}
+  .portal-main{padding:1.75rem 1.25rem 3rem}
+  .edit-grid,.status-action-grid,.mini-summary-grid{grid-template-columns:1fr}
+  .add-admin-form{grid-template-columns:1fr}
+  .toggle-detail-panel{grid-template-columns:1fr;max-height:400px}
+  .applicant-table{display:block;overflow-x:auto;white-space:nowrap}
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<!-- ══ PASSWORD GATE ══ -->
+<div class="gate-overlay" id="gateOverlay">
+  <div class="gate-box" id="gateBox">
+    <div class="gate-icon">&#128274;</div>
+    <h2>Admin Console Access</h2>
+    <p>This console is restricted. Enter your admin password to continue — access level is determined automatically by your password.</p>
+    <div class="gate-field">
+      <label for="gatePassword">Password</label>
+      <input type="password" id="gatePassword" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="off"/>
+    </div>
+    <p class="gate-error" id="gateError">Incorrect password. Please try again.</p>
+    <button class="mbtn mbtn-primary" onclick="attemptLogin()">Unlock Console</button>
+    <p class="gate-foot">Access is logged. Unauthorized use is prohibited.</p>
+  </div>
+</div>
+
+<!-- ══ APP CONTENT (hidden until unlocked) ══ -->
+<div class="app-content" id="appContent">
+
+<!-- ══ TOPBAR ══ -->
+<div class="topbar">
+  <div class="inner">
+    <span>Iskolusyon Admin Console</span>
+    <span class="badge-supersecure" id="sessionBadge">&#128737; Super Admin Session</span>
+  </div>
+</div>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-logos">
+        <img src="LOGO_CCC.png" alt="City College of Calamba Logo"/>
+        <img src="LOGO_CCC_Admissions.png" alt="CCC Admissions Logo"/>
+      </div>
+      <div class="brand-text">
+        <span class="main">City College of Calamba</span>
+        <span class="sub">Scholarship Application Portal</span>
+      </div>
+    </div>
+    <div class="nav-portal-badge">Admin Console</div>
+  </div>
+</nav>
+
+<!-- ══ PORTAL SHELL ══ -->
+<div class="portal-shell">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+    <div class="sidebar-profile">
+      <div class="admin-avatar" onclick="document.getElementById('adminAvatarInput').click()" title="Change profile picture" id="adminAvatarWrap">
+        <span class="aa-initials" id="adminAvatarInitials">&#128100;</span>
+        <img id="adminAvatarImg" alt="Admin profile picture"/>
+        <div class="admin-avatar-overlay">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+      </div>
+      <input type="file" id="adminAvatarInput" accept="image/*" onchange="handleAdminAvatarUpload(event)"/>
+      <div class="admin-name" id="sidebarAdminName">Guidance &amp; Testing Office</div>
+      <div class="admin-role" id="sidebarAdminRole">Super Admin</div>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li class="sidebar-menu-label">Overview</li>
+      <li><button class="menu-btn active" data-panel="dashboard" onclick="showPanel('dashboard',this)"><span class="menu-icon">&#128202;</span> Dashboard</button></li>
+
+      <li class="sidebar-menu-label">Communications</li>
+      <li><button class="menu-btn" data-panel="announcements" onclick="showPanel('announcements',this)"><span class="menu-icon">&#128227;</span> Announcements</button></li>
+
+      <li class="sidebar-menu-label super-admin-only" id="superAdminLabel">Super Admin</li>
+      <li class="super-admin-only"><button class="menu-btn" data-panel="admins" onclick="showPanel('admins',this)"><span class="menu-icon">&#128737;</span> Admin Accounts</button></li>
+      <li class="super-admin-only"><button class="menu-btn" data-panel="system" onclick="showPanel('system',this)"><span class="menu-icon">&#9881;</span> System &amp; Activity</button></li>
+    </ul>
+
+    <div class="sidebar-logout">
+      <button class="logout-btn" onclick="openLogoutConfirm()"><span class="menu-icon">&#10162;</span> Log Out</button>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN CONTENT ══ -->
+  <main class="portal-main">
+
+    <!-- ══ DASHBOARD (default) ══ -->
+    <section class="portal-panel active" id="panel-dashboard">
+      <div class="portal-header">
+        <div>
+          <h1>Dashboard</h1>
+          <p>A summary of applicant statuses across the scholarship pipeline. Available to both Admin and Super Admin.</p>
+        </div>
+        <button class="mbtn mbtn-secondary" onclick="exportQualifiedPDF()" title="Save all qualified applicants' personal information as a PDF, for submission to the LGU">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export Qualified Applicants (PDF)
+        </button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card stat-all" onclick="goToApplicantsFiltered('all')" role="button" tabindex="0" aria-label="View all applications">
+          <div class="stat-label">All Applications</div>
+          <div class="stat-value" id="statCountAll">0</div>
+          <div class="stat-note">All applications submitted across the pipeline.</div>
+          <div class="stat-card-hint"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg> Click to View List</div>
+        </div>
+        <div class="stat-card stat-pending" onclick="goToApplicantsFiltered('pending')" role="button" tabindex="0" aria-label="View applicants pending review">
+          <div class="stat-label">Pending for Review</div>
+          <div class="stat-value" id="statCountPending">0</div>
+          <div class="stat-note">Awaiting initial qualification review.</div>
+          <div class="stat-card-hint"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg> Click to View List</div>
+        </div>
+        <div class="stat-card stat-qualified" onclick="goToApplicantsFiltered('qualified')" role="button" tabindex="0" aria-label="View qualified applicants">
+          <div class="stat-label">Qualified</div>
+          <div class="stat-value" id="statCountQualified">0</div>
+          <div class="stat-note">Meets requirements for the CCC scholarship program.</div>
+          <div class="stat-card-hint"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg> Click to View List</div>
+        </div>
+        <div class="stat-card stat-notqualified" onclick="goToApplicantsFiltered('not-qualified')" role="button" tabindex="0" aria-label="View not qualified applicants">
+          <div class="stat-label">Not Qualified</div>
+          <div class="stat-value" id="statCountNotQualified">0</div>
+          <div class="stat-note">Does not currently meet program requirements.</div>
+          <div class="stat-card-hint"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg> Click to View List</div>
+        </div>
+        <div class="stat-card stat-waitlisted" onclick="goToApplicantsFiltered('waitlisted')" role="button" tabindex="0" aria-label="View waitlisted applicants">
+          <div class="stat-label">Waitlisted</div>
+          <div class="stat-value" id="statCountWaitlisted">0</div>
+          <div class="stat-note">Meets baseline requirements, pending available slots.</div>
+          <div class="stat-card-hint"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg> Click to View List</div>
+        </div>
+        <div class="stat-card stat-appealed" onclick="goToApplicantsFiltered('appealed')" role="button" tabindex="0" aria-label="View appealed applicants">
+          <div class="stat-label">Appealed</div>
+          <div class="stat-value" id="statCountAppealed">0</div>
+          <div class="stat-note">Filed an appeal for reconsideration of their status.</div>
+          <div class="stat-card-hint"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg> Click to View List</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">All Applicants</div>
+
+        <div class="reviewer-note">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <span>To prevent conflicting edits, only one admin can have an applicant's profile open at a time. While it's open, it's marked <b>Locked</b> below with the reviewing admin's name until they close it.</span>
+        </div>
+
+        <div class="filter-bar">
+          <input type="search" id="applicantSearch" placeholder="Search by name or applicant ID&hellip;" oninput="renderApplicants()"/>
+        </div>
+        <table class="applicant-table">
+          <thead>
+            <tr>
+              <th>Applicant</th>
+              <th class="sortable-th" onclick="toggleProfileSort()" title="Sort by review priority: fully-submitted applicants (oldest first), then newest applicants with the lowest profile completion">
+                <span class="sort-header-inner">Profile
+                  <svg class="sort-icon" id="profileSortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 16l-6-6h12z"/></svg>
+                </span>
+              </th>
+              <th>Documents</th>
+              <th class="sortable-th" onclick="toggleDateSort()" title="Sort by submission date">
+                <span class="sort-header-inner">Date
+                  <svg class="sort-icon" id="dateSortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 16l-6-6h12z"/></svg>
+                </span>
+              </th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="applicantTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══ ANNOUNCEMENTS &amp; MESSAGES ══ -->
+    <section class="portal-panel" id="panel-announcements">
+      <div class="portal-header">
+        <div>
+          <h1>Announcements</h1>
+          <p>Manage the two ways your office communicates with applicants: public Announcements and private Messages.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Post New Communication</div>
+        <div class="announce-form">
+          <div class="post-type-toggle">
+            <button type="button" class="post-type-btn active" id="commTypeAnnBtn" onclick="setCommType('announcement')">Announcement</button>
+            <button type="button" class="post-type-btn" id="commTypeMsgBtn" onclick="setCommType('message')">Message</button>
+          </div>
+
+          <div class="comm-scope-note">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+            <span id="commScopeNoteText"><b>Announcements</b> are displayed at the guest (public) page as well as the Applicant Portal, and are received by all applicants. You can add either text (a Title and Body) or an image to announce.</span>
+          </div>
+
+          <div class="mfield">
+            <label for="commTitle">Title</label>
+            <input type="text" id="commTitle" placeholder="e.g. Scholarship Examination Schedule Released"/>
+          </div>
+
+          <div id="commAnnFields">
+            <div class="mfield">
+              <label for="annCategory">Category</label>
+              <select id="annCategory">
+                <option value="General">General</option>
+                <option value="Exam">Exam Schedule</option>
+                <option value="Deficiency">Document Deficiency</option>
+                <option value="Result">Results &amp; Status</option>
+              </select>
+            </div>
+            <div class="post-type-toggle">
+              <button type="button" class="post-type-btn active" id="annTypeTextBtn" onclick="setAnnouncementType('text')">Text (Title &amp; Body)</button>
+              <button type="button" class="post-type-btn" id="annTypeImageBtn" onclick="setAnnouncementType('image')">Image</button>
+            </div>
+            <div class="mfield" id="annBodyField">
+              <label for="annBody">Message</label>
+              <textarea id="annBody" placeholder="Write the announcement message&hellip;"></textarea>
+            </div>
+            <div class="mfield" id="annImageField" style="display:none">
+              <label for="annImage">Image</label>
+              <input type="file" id="annImage" accept="image/*" onchange="handleAnnouncementImage(this)"/>
+              <img class="announce-image-preview" id="annImagePreview" alt="Announcement image preview"/>
+            </div>
+          </div>
+
+          <div id="commMsgFields" style="display:none">
+            <div class="mfield">
+              <label for="msgTarget">Send To</label>
+              <select id="msgTarget" onchange="setMsgTargetMode(this.value)">
+                <option value="all">All Applicants</option>
+                <option value="specific">Specific Applicant</option>
+                <option value="category">Category of Applicants</option>
+              </select>
+            </div>
+            <div class="mfield" id="msgTargetApplicantField" style="display:none">
+              <label for="msgTargetApplicant">Applicant</label>
+              <select id="msgTargetApplicant"></select>
+            </div>
+            <div class="mfield" id="msgTargetCategoryField" style="display:none">
+              <label for="msgTargetCategory">Category</label>
+              <select id="msgTargetCategory">
+                <option value="pending">Pending Review</option>
+                <option value="qualified">Qualified</option>
+                <option value="waitlisted">Waitlisted</option>
+                <option value="not-qualified">Not Qualified</option>
+              </select>
+            </div>
+            <div class="mfield">
+              <label for="msgBody">Message</label>
+              <textarea id="msgBody" placeholder="Write the message to applicants&hellip;"></textarea>
+            </div>
+          </div>
+
+          <button class="mbtn mbtn-primary" id="commSubmitBtn" onclick="submitCommunication()">Publish Announcement</button>
+          <p class="publish-note" id="commPublishNote">&#128228; This will publish immediately to the Applicant Portal and the public website.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Published Announcements <span class="tag" id="annCount">3 total</span></div>
+        <div id="announceList"></div>
+      </div>
+
+      <hr class="modal-divider"/>
+
+      <div class="card">
+        <div class="card-title">Sent Messages <span class="tag" id="msgCount">3 total</span></div>
+        <div id="messageList"></div>
+      </div>
+    </section>
+
+    <!-- ══ SUPER ADMIN: ACCOUNTS ══ -->
+    <section class="portal-panel" id="panel-admins">
+      <div class="portal-header">
+        <div>
+          <h1>Admin Accounts</h1>
+          <p>Super admin-only. Manage who has access to this console and their permission level.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Add Admin Account</div>
+        <div class="add-admin-form">
+          <div class="efield">
+            <label for="newAdminName">Full Name</label>
+            <input type="text" id="newAdminName" placeholder="e.g. Grace Villanueva"/>
+          </div>
+          <div class="efield">
+            <label for="newAdminEmail">Email</label>
+            <input type="email" id="newAdminEmail" placeholder="name@ccc.edu.ph"/>
+          </div>
+          <div class="efield">
+            <label for="newAdminRole">Role</label>
+            <select id="newAdminRole" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:.85rem">
+              <option value="admin">Admin</option>
+              <option value="super">Super Admin</option>
+            </select>
+          </div>
+          <button class="mbtn mbtn-primary" onclick="addAdmin()">Add</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Current Accounts <span class="tag" id="adminCount">3 accounts</span></div>
+        <div class="admin-list" id="adminList"></div>
+      </div>
+    </section>
+
+    <!-- ══ SUPER ADMIN: SYSTEM & ACTIVITY ══ -->
+    <section class="portal-panel" id="panel-system">
+      <div class="portal-header">
+        <div>
+          <h1>System &amp; Activity</h1>
+          <p>Super admin-only. Control application cycle availability and review recent console activity.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Application Cycle Settings</div>
+        <div class="toggle-row">
+          <div class="toggle-row-info">
+            <h4>Applications Open</h4>
+            <p>When off, applicants can no longer submit new applications through the public site.</p>
+          </div>
+          <label class="switch"><input type="checkbox" id="toggleAppsOpen" checked onchange="handleAppsOpenToggle(this.checked)"/><span class="slider"></span></label>
+        </div>
+        <div class="toggle-detail-panel" id="appsOpenSettings">
+          <div class="efield">
+            <label for="maxApplicants">Applicant Slots</label>
+            <input type="number" id="maxApplicants" min="0" step="1" placeholder="e.g. 100" onchange="logSettingChange('Applicant Slots', this.value)"/>
+          </div>
+          <div class="efield">
+            <label for="appStartDate">Acceptance Start Date</label>
+            <input type="date" id="appStartDate" onchange="logSettingChange('Acceptance Start Date', this.value)"/>
+          </div>
+          <div class="efield">
+            <label for="appEndDate">Acceptance End Date</label>
+            <input type="date" id="appEndDate" onchange="logSettingChange('Acceptance End Date', this.value)"/>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-info">
+            <h4>Document Uploads Enabled</h4>
+            <p>When off, applicants cannot upload or re-upload documents.</p>
+          </div>
+          <label class="switch"><input type="checkbox" id="toggleUploads" checked onchange="logToggle('Document Uploads', this.checked)"/><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-info">
+            <h4>Exam Results Visible to Applicants</h4>
+            <p>When on, qualifying exam results are shown on applicants' dashboards once released.</p>
+          </div>
+          <label class="switch"><input type="checkbox" id="toggleResults" onchange="logToggle('Exam Results Visibility', this.checked)"/><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Recent Activity Log <span class="tag">Auto-recorded</span></div>
+        <div class="timeline" id="activityLog"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ══ APPLICANT DETAIL MODAL ══ -->
+<div class="modal-overlay" id="applicantModal" onclick="handleModalBackdrop(event)">
+  <div class="modal-box" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div class="modal-head-top">
+        <div class="modal-head-info">
+          <div class="modal-avatar" id="modalAvatar">JD</div>
+          <div>
+            <h3 id="modalName">Applicant Name</h3>
+            <div class="msub" id="modalId">Applicant ID</div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeApplicantModal()" aria-label="Close">&#10005;</button>
+      </div>
+      <div class="mini-summary-grid">
+        <div class="mini-summary ms-profile" id="miniProfileCard">
+          <div class="ms-label">Profile Completion</div>
+          <div class="ms-value" id="modalProfile">&mdash;</div>
+        </div>
+        <div class="mini-summary ms-docs">
+          <div class="ms-label">Documents</div>
+          <div class="ms-value" id="modalDocs">&mdash;</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+
+      <div class="modal-section-label">
+        Required Information
+        <button class="section-edit-btn" id="reqInfoEditBtn" onclick="toggleReqInfoEdit()">Edit</button>
+      </div>
+      <div class="edit-grid">
+        <div class="efield full">
+          <label for="editName">Full Legal Name</label>
+          <input type="text" id="editName" disabled/>
+        </div>
+        <div class="efield">
+          <label for="editEmail">Email Address</label>
+          <input type="email" id="editEmail" disabled/>
+        </div>
+        <div class="efield">
+          <label for="editPhone">Contact Number</label>
+          <input type="text" id="editPhone" disabled/>
+        </div>
+        <div class="efield full">
+          <label for="editAddress">Current Address</label>
+          <input type="text" id="editAddress" disabled/>
+        </div>
+      </div>
+      <div class="edit-save-row">
+        <button class="mbtn mbtn-secondary mbtn-sm" id="reqInfoSaveBtn" onclick="saveApplicantInfo()" style="display:none">Save Changes</button>
+        <span class="save-flash" id="saveFlash">&#10003; Saved</span>
+      </div>
+
+      <hr class="modal-divider"/>
+
+      <div class="modal-section-label">Submitted Documents &amp; Profile Data</div>
+
+      <div class="doc-cat-tabs" id="docCatTabs"></div>
+      <div class="doc-cat-panel" id="docCatPanel"></div>
+
+      <hr class="modal-divider"/>
+
+      <div class="modal-section-label">Update Application Status <span class="tag">Emails applicant</span></div>
+      <div class="status-action-grid" id="statusActionGrid">
+        <button class="status-btn qualified" data-status="qualified" onclick="requestStatusChange('qualified')">
+          <div class="sb-icon">&#10003;</div><div class="sb-label">Qualified</div>
+        </button>
+        <button class="status-btn waitlisted" data-status="waitlisted" onclick="requestStatusChange('waitlisted')">
+          <div class="sb-icon">&#8987;</div><div class="sb-label">Waitlisted</div>
+        </button>
+        <button class="status-btn not-qualified" data-status="not-qualified" onclick="requestStatusChange('not-qualified')">
+          <div class="sb-icon">&#10005;</div><div class="sb-label">Not Qualified</div>
+        </button>
+      </div>
+
+      <div class="confirm-inline" id="statusConfirmBox">
+        <p id="statusConfirmText"></p>
+        <div class="email-preview" id="statusEmailPreview"></div>
+        <div class="confirm-inline-actions">
+          <button class="mbtn mbtn-ghost mbtn-sm" onclick="cancelStatusChange()">Cancel</button>
+          <button class="mbtn mbtn-primary mbtn-sm" onclick="confirmStatusChange()">Send &amp; Update Status</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ LOGOUT CONFIRM MODAL ══ -->
+<div class="confirm-overlay" id="logoutOverlay" onclick="handleLogoutBackdrop(event)">
+  <div class="confirm-box" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="confirm-icon">&#10162;</div>
+    <h3 id="logoutTitle">Log out of the Admin Console?</h3>
+    <p>You'll need to re-enter the super admin password to access this console again.</p>
+    <div class="confirm-actions">
+      <button class="mbtn mbtn-ghost" onclick="closeLogoutConfirm()">No, Stay</button>
+      <button class="mbtn mbtn-danger" onclick="confirmLogout()">Yes, Log Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOASTS ══ -->
+<div class="toast-stack" id="toastStack"></div>
+
+</div><!-- /app-content -->
+
+<script>
+/* ══════════════════════════════════════════
+   MOCK AUTH — for demo purposes only.
+   In production these must be verified server-side,
+   never hardcoded in client-side JavaScript.
+   ══════════════════════════════════════════ */
+const SUPER_ADMIN_PASSWORD = 'CCC-SuperAdmin-2026';
+const ADMIN_PASSWORD = 'CCC-Admin-2026';
+let currentRole = null; // 'super' | 'admin'
+let currentAdminName = null; // which named admin account this session represents
+let currentStatusFilter = 'all'; // which status the applicant table is filtered to (set via the dashboard stat cards)
+
+function attemptLogin(){
+  const input = document.getElementById('gatePassword');
+  const err = document.getElementById('gateError');
+  let role = null;
+  if(input.value === SUPER_ADMIN_PASSWORD) role = 'super';
+  else if(input.value === ADMIN_PASSWORD) role = 'admin';
+
+  if(role){
+    currentRole = role;
+    document.getElementById('gateOverlay').classList.add('hidden');
+    document.getElementById('appContent').classList.add('unlocked');
+    err.classList.remove('show');
+    input.value='';
+    applyRoleUI(role);
+  } else {
+    err.classList.add('show');
+    const box = document.getElementById('gateBox');
+    box.classList.remove('gate-shake');
+    void box.offsetWidth;
+    box.classList.add('gate-shake');
+  }
+}
+
+function applyRoleUI(role){
+  const isSuper = role === 'super';
+  document.querySelectorAll('.super-admin-only').forEach(el=>{
+    el.style.display = isSuper ? '' : 'none';
+  });
+  document.getElementById('sessionBadge').innerHTML = isSuper
+    ? '&#128737; Super Admin Session'
+    : '&#128100; Admin Session';
+  document.getElementById('sidebarAdminRole').textContent = isSuper ? 'Super Admin' : 'Admin';
+  if(isSuper){
+    currentAdminName = 'Guidance & Testing Office';
+  } else {
+    const adminPool = adminAccounts.filter(ac=>ac.role==='admin');
+    currentAdminName = adminPool.length ? adminPool[Math.floor(Math.random()*adminPool.length)].name : 'Admissions Staff';
+  }
+  document.getElementById('sidebarAdminName').textContent = currentAdminName;
+  // if a non-super admin was somehow left on a super-only panel, send them back to the Dashboard
+  if(!isSuper){
+    const activePanel = document.querySelector('.portal-panel.active');
+    if(activePanel && (activePanel.id==='panel-admins' || activePanel.id==='panel-system')){
+      showPanel('dashboard');
+    }
+  }
+}
+
+document.getElementById('gatePassword').addEventListener('keydown', e=>{
+  if(e.key==='Enter') attemptLogin();
+});
+
+/* ══ SIDEBAR NAVIGATION ══ */
+function showPanel(name, btn){
+  document.querySelectorAll('.portal-panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+name));
+  document.querySelectorAll('.menu-btn').forEach(b=>b.classList.remove('active'));
+  const target = btn || document.querySelector('.menu-btn[data-panel="'+name+'"]');
+  if(target) target.classList.add('active');
+  document.querySelector('.portal-main').scrollTo({top:0,behavior:'smooth'});
+  if(name==='dashboard'){ renderDashboard(); renderApplicants(); }
+}
+
+/* ══ DASHBOARD: APPLICANT STATUS SUMMARY ══ */
+function renderDashboard(){
+  const counts = {pending:0, qualified:0, waitlisted:0, 'not-qualified':0, appealed:0};
+  applicants.forEach(a=>{ if(counts.hasOwnProperty(a.status)) counts[a.status]++; });
+  document.getElementById('statCountAll').textContent = applicants.length;
+  document.getElementById('statCountPending').textContent = counts.pending;
+  document.getElementById('statCountQualified').textContent = counts.qualified;
+  document.getElementById('statCountNotQualified').textContent = counts['not-qualified'];
+  document.getElementById('statCountWaitlisted').textContent = counts.waitlisted;
+  document.getElementById('statCountAppealed').textContent = counts.appealed;
+}
+
+/* ══ DASHBOARD: EXPORT QUALIFIED APPLICANTS' PERSONAL INFO (PDF, FOR LGU) ══ */
+function exportQualifiedPDF(){
+  const qualified = applicants.filter(a=>a.status==='qualified');
+  if(!qualified.length){
+    showToast('There are no qualified applicants to export yet.', false);
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const genDate = new Date().toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric'});
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.text('City College of Calamba — Iskolusyon Scholarship Program', 14, 16);
+  doc.setFontSize(11);
+  doc.text('List of Qualified Applicants — Personal Information for LGU Submission', 14, 23);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.text('Generated: ' + genDate + '   |   Total Qualified Applicants: ' + qualified.length, 14, 29);
+
+  doc.autoTable({
+    startY: 34,
+    head: [['Applicant ID', 'Full Name', 'Email Address', 'Contact Number', 'Home Address']],
+    body: qualified.map(a => [a.applicantId, a.name, a.email, a.phone, a.address]),
+    styles: {fontSize: 8.5, cellPadding: 3},
+    headStyles: {fillColor: [13, 47, 110], textColor: 255, fontStyle: 'bold'},
+    alternateRowStyles: {fillColor: [245, 246, 248]},
+    margin: {left: 14, right: 14}
+  });
+
+  const fileDate = new Date().toISOString().slice(0,10);
+  doc.save(`Qualified_Applicants_LGU_${fileDate}.pdf`);
+  addActivity(`Exported personal information of ${qualified.length} qualified applicant(s) to PDF for LGU submission.`, 'done');
+  showToast('&#10003; PDF exported for ' + qualified.length + ' qualified applicant(s).', true);
+}
+
+function goToApplicantsFiltered(status){
+  showPanel('dashboard');
+  currentStatusFilter = status;
+  document.getElementById('applicantSearch').value = '';
+  renderApplicants();
+  document.getElementById('applicantTableBody').closest('.card').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ══ MOCK DATA ══ */
+let applicants = [
+  {id:'a1', applicantId:'CCC-2026-00214', name:'Juan Dela Cruz', email:'juan.delacruz@example.com', phone:'0917 123 4567', address:'Brgy. Real, Calamba City, Laguna', profile:'2 of 5 sections done (40%)', docs:'1 Verified · 1 Pending · 0 Deficient', status:'pending', submittedDate:'2026-06-15', lockedBy:null},
+  {id:'a2', applicantId:'CCC-2026-00215', name:'Maria Santos', email:'maria.santos@example.com', phone:'0918 234 5678', address:'Brgy. Canlubang, Calamba City, Laguna', profile:'5 of 5 sections done (100%)', docs:'6 Verified · 0 Pending · 0 Deficient', status:'qualified', submittedDate:'2026-06-10', lockedBy:null},
+  {id:'a3', applicantId:'CCC-2026-00216', name:'Pedro Reyes', email:'pedro.reyes@example.com', phone:'0919 345 6789', address:'Brgy. Bucal, Calamba City, Laguna', profile:'5 of 5 sections done (100%)', docs:'5 Verified · 1 Pending · 0 Deficient', status:'waitlisted', submittedDate:'2026-06-18', lockedBy:'Mark Osorio'},
+  {id:'a4', applicantId:'CCC-2026-00217', name:'Ana Lim', email:'ana.lim@example.com', phone:'0920 456 7890', address:'Brgy. Parian, Calamba City, Laguna', profile:'5 of 5 sections done (100%)', docs:'4 Verified · 0 Pending · 2 Deficient', status:'not-qualified', submittedDate:'2026-06-20', lockedBy:null},
+  {id:'a5', applicantId:'CCC-2026-00218', name:'Carlo Ramos', email:'carlo.ramos@example.com', phone:'0921 567 8901', address:'Brgy. Sucol, Calamba City, Laguna', profile:'4 of 5 sections done (80%)', docs:'3 Verified · 2 Pending · 0 Deficient', status:'pending', submittedDate:'2026-06-25', lockedBy:null},
+  {id:'a6', applicantId:'CCC-2026-00219', name:'Bea Fernandez', email:'bea.fernandez@example.com', phone:'0922 678 9012', address:'Brgy. Mayapa, Calamba City, Laguna', profile:'1 of 5 sections done (20%)', docs:'0 Verified · 1 Pending · 0 Deficient', status:'pending', submittedDate:'2026-07-02', lockedBy:null}
+];
+
+const ANN_STORAGE_KEY = 'iskolusyon_announcements';
+
+let announcements = [
+  {id:'n1', type:'text', title:'Scholarship Examination Schedule Released', category:'Exam', body:'The written examination for AY 2026–2027 applicants is set on August 15, 2026, 8:00 AM at the CCC Main Campus.', date:'Posted July 3, 2026', auto:false},
+  {id:'n2', type:'text', title:'Deficiency Notice: Barangay Certificate', category:'Deficiency', body:'Some applicants\u2019 uploaded Barangay Certificate of Residency needs to be re-uploaded — unreadable copies must be resubmitted.', date:'Posted July 5, 2026', auto:false},
+  {id:'n3', type:'text', title:'Registration Confirmed', category:'General', body:'Newly created Iskolusyon applicant accounts have been successfully verified.', date:'Posted July 9, 2026', auto:false}
+];
+/* Pick up whatever was last published, so this panel always reflects
+   what the public site (index.html) is currently showing. */
+try {
+  const storedAnn = localStorage.getItem(ANN_STORAGE_KEY);
+  if (storedAnn) announcements = JSON.parse(storedAnn);
+} catch (e) { /* ignore malformed/blocked storage, keep defaults above */ }
+function saveAnnouncementsToStorage() {
+  try { localStorage.setItem(ANN_STORAGE_KEY, JSON.stringify(announcements)); } catch (e) { /* storage unavailable */ }
+}
+saveAnnouncementsToStorage();
+
+/* Messages: private, applicant-only communications (separate from public Announcements) */
+let messages = [
+  {id:'msg1', title:'Scholarship Examination Schedule Released', body:'The written examination for AY 2026–2027 applicants is set on August 15, 2026, 8:00 AM at the CCC Main Campus.', date:'Posted July 3, 2026', target:'All Applicants'},
+  {id:'msg2', title:'Deficiency Notice: Barangay Certificate', body:'Your uploaded Barangay Certificate of Residency needs to be re-uploaded — the copy submitted is unreadable.', date:'Posted July 5, 2026', target:'Juan Dela Cruz'},
+  {id:'msg3', title:'Registration Confirmed', body:'Your Iskolusyon applicant account was successfully created and verified.', date:'Posted July 9, 2026', target:'Juan Dela Cruz'}
+];
+
+let adminAccounts = [
+  {id:'d1', name:'Guidance & Testing Office', email:'gctcdo@ccc.edu.ph', role:'super'},
+  {id:'d2', name:'Grace Villanueva', email:'g.villanueva@ccc.edu.ph', role:'admin'},
+  {id:'d3', name:'Mark Osorio', email:'m.osorio@ccc.edu.ph', role:'admin'}
+];
+
+let activityLog = [];
+
+const STATUS_META = {
+  pending:{label:'Pending Review', cls:'badge-progress'},
+  qualified:{label:'Qualified', cls:'badge-verified'},
+  waitlisted:{label:'Waitlisted', cls:'badge-waitlisted'},
+  'not-qualified':{label:'Not Qualified', cls:'badge-deficient'}
+};
+
+/* ══ SUBMITTED DOCUMENTS & PROFILE DATA, BY CATEGORY ══
+   Categories mirror the "My Profile" sections on the Applicant page
+   (Overview > Personal Information, Academic Profile, Financial & Employment,
+   Special Demographics & Legal, Health & Wellness). */
+const CATEGORY_ORDER = ['personal','academic','financial','demographics','health'];
+const CATEGORY_DEFS = {
+  personal:{
+    label:'Personal Information',
+    fields:[],
+    docs:[
+      {key:'birthcert', name:'Birth Certificate / PSA'},
+      {key:'voterid', name:'Voter\u2019s ID'}
+    ]
+  },
+  academic:{
+    label:'Academic Profile',
+    fields:[
+      {key:'enrollment', label:'Enrollment Status'},
+      {key:'type', label:'Applicant Type'},
+      {key:'department', label:'Department'},
+      {key:'program', label:'Course (Took / Will Take)'},
+      {key:'school', label:'Last School Attended'},
+      {key:'yearlevel', label:'Year Level'},
+      {key:'gwa', label:'General Weighted Average (GWA)'},
+      {key:'scholarship', label:'Current Availed Scholarship/s'}
+    ],
+    docs:[
+      {key:'form138', name:'Grades (Form 138 / Report Card)'},
+      {key:'enrollmentcert', name:'Certificate of Enrollment'},
+      {key:'goodmoral', name:'Good Moral Character'},
+      {key:'currentscholarship', name:'Proof of Current Availed Scholarship/s'}
+    ]
+  },
+  financial:{
+    label:'Financial & Employment',
+    fields:[
+      {key:'income', label:'Household Monthly Income'},
+      {key:'occupation', label:'Parent / Guardian Occupation'},
+      {key:'siblings', label:'Number of Siblings'},
+      {key:'employment', label:'Applicant\u2019s Employment Status'},
+      {key:'grossincome', label:'Annual Gross / Family Earning'},
+      {key:'allowance', label:'Source of Allowance'},
+      {key:'scholarsinhh', label:'Number of Scholars in the Household'}
+    ],
+    docs:[
+      {key:'indigency', name:'Proof of Income (Family / Guardian)'},
+      {key:'employmentcert', name:'Certificate of Employment'}
+    ]
+  },
+  demographics:{
+    label:'Special Demographics & Legal',
+    fields:[
+      {key:'specialgroup', label:'Special Group of Persons'},
+      {key:'pwdtype', label:'If PWD, Type of Disability'}
+    ],
+    docs:[
+      {key:'supportdoc', name:'Supporting Document (per classification)'}
+    ]
+  },
+  health:{
+    label:'Health & Wellness',
+    fields:[
+      {key:'condition', label:'Existing Medical Condition/s'},
+      {key:'allergies', label:'Allergies'},
+      {key:'ecname', label:'Emergency Contact Person'},
+      {key:'ecnumber', label:'Emergency Contact Number'}
+    ],
+    docs:[
+      {key:'medcert', name:'Current Medical Status'}
+    ]
+  }
+};
+const FIELD_SAMPLE_VALUES = {
+  enrollment:['New Applicant','Previously Enrolled'],
+  type:['First Year','Transferee','Old Curriculum / ALS Completer'],
+  department:['College of Information Technology','College of Business Administration','College of Education','College of Arts and Sciences'],
+  program:['BS Information Technology','BS Business Administration','Bachelor of Elementary Education','Bachelor of Secondary Education'],
+  school:['Calamba National High School','Real National High School','Canlubang National High School'],
+  yearlevel:['Grade 12','1st Year','2nd Year'],
+  gwa:['1.75','1.90','2.10','88'],
+  scholarship:['None','CHED Scholarship'],
+  income:['Below \u20b110,000','\u20b110,000 \u2013 \u20b120,000','\u20b120,001 \u2013 \u20b140,000'],
+  occupation:['Tricycle Driver','Sari-sari Store Owner','Factory Worker','Unemployed'],
+  siblings:['1','2','3','0'],
+  employment:['Not Employed','Part-time Employed','Full-time Employed'],
+  grossincome:['\u20b196,000.00','\u20b1120,000.00','\u20b1150,000.00'],
+  allowance:['Provided by Parents','Working Independently','Financial Aid'],
+  scholarsinhh:['0','1','2'],
+  specialgroup:['None of the above','Underprivileged / Homeless (RA 7279)','Solo Parents'],
+  pwdtype:['\u2014','Visual','Hearing'],
+  condition:['None','Asthma','None reported'],
+  allergies:['None','Peanuts','Dust'],
+  ecname:['Maria Dela Cruz','Jose Santos','Rosa Reyes'],
+  ecnumber:['0917 111 2222','0918 222 3333','0919 333 4444']
+};
+const DOC_STATUS_OPTS = [
+  {value:'verified', label:'Verified'},
+  {value:'pending', label:'Pending'},
+  {value:'deficient', label:'Deficient'},
+  {value:'not-submitted', label:'Not Submitted'}
+];
+const DOC_STATUS_META = {
+  verified:{label:'Verified', cls:'badge-verified'},
+  pending:{label:'Pending', cls:'badge-pending'},
+  deficient:{label:'Deficient', cls:'badge-deficient'},
+  'not-submitted':{label:'Not Submitted', cls:'badge-notsubmitted'}
+};
+
+function parseSectionsDone(profileStr){
+  return parseInt((profileStr.match(/(\d+)\s*of\s*\d+\s*sections/)||[])[1]||0,10);
+}
+function updateProfileCompletionCard(a){
+  const card = document.getElementById('miniProfileCard');
+  if(!card) return;
+  const done = parseSectionsDone(a.profile);
+  const total = CATEGORY_ORDER.length;
+  card.classList.remove('ongoing','complete');
+  if(done>=total) card.classList.add('complete');
+  else if(done>0) card.classList.add('ongoing');
+}
+function parseDocCounts(docsStr){
+  return {
+    verified: parseInt((docsStr.match(/(\d+)\s*Verified/)||[])[1]||0,10),
+    pending: parseInt((docsStr.match(/(\d+)\s*Pending/)||[])[1]||0,10),
+    deficient: parseInt((docsStr.match(/(\d+)\s*Deficient/)||[])[1]||0,10)
+  };
+}
+
+/* Builds each applicant's per-category documents & profile data from their
+   mock summary fields, so the Admin console has something real to show
+   and edit under each "My Profile" category. */
+function buildApplicantCategories(a, idx){
+  const sectionsDone = parseSectionsDone(a.profile);
+  const completedCats = CATEGORY_ORDER.slice(0, sectionsDone);
+  const counts = parseDocCounts(a.docs);
+  const statusQueue = [];
+  for(let i=0;i<counts.verified;i++) statusQueue.push('verified');
+  for(let i=0;i<counts.pending;i++) statusQueue.push('pending');
+  for(let i=0;i<counts.deficient;i++) statusQueue.push('deficient');
+  let qi = 0;
+  const categories = {};
+  CATEGORY_ORDER.forEach(catKey=>{
+    const def = CATEGORY_DEFS[catKey];
+    const isDone = completedCats.includes(catKey);
+    const docs = def.docs.map(dd=>({
+      key:dd.key,
+      name:dd.name,
+      status: isDone ? (statusQueue[qi++] || 'pending') : 'not-submitted'
+    }));
+    const fields = def.fields.map((fd,fi)=>{
+      const pool = FIELD_SAMPLE_VALUES[fd.key] || ['\u2014'];
+      const value = isDone ? pool[(idx+fi)%pool.length] : 'Not yet submitted';
+      return {key:fd.key, label:fd.label, value};
+    });
+    categories[catKey] = {docs, fields};
+  });
+  return categories;
+}
+
+function escapeAttr(str){
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+applicants.forEach((a,i)=>{ a.categories = buildApplicantCategories(a,i); });
+
+function initials(name){
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0]||'')+(parts[parts.length-1]?.[0]||'')).toUpperCase();
+}
+
+/* ══ RENDER APPLICANTS TABLE ══ */
+let dateSortDir = 'asc'; // 'asc' = oldest first (default), 'desc' = newest first
+let profileSortActive = false; // when true, the Profile column's priority sort overrides the Date sort
+
+function toggleDateSort(){
+  profileSortActive = false;
+  dateSortDir = dateSortDir === 'desc' ? 'asc' : 'desc';
+  renderApplicants();
+}
+function toggleProfileSort(){
+  profileSortActive = !profileSortActive;
+  renderApplicants();
+}
+/* Share of an applicant's required documents that have actually been
+   submitted (Verified, Pending, or Deficient all count as "submitted";
+   only "not-submitted" docs are excluded), independent of section-completion %. */
+function docSubmissionPercent(a){
+  let total = 0, submitted = 0;
+  CATEGORY_ORDER.forEach(catKey=>{
+    const docs = (a.categories && a.categories[catKey] && a.categories[catKey].docs) || [];
+    docs.forEach(d=>{ total++; if(d.status !== 'not-submitted') submitted++; });
+  });
+  return total ? Math.round((submitted/total)*100) : 0;
+}
+function profileCompletionPercent(a){
+  return parseInt((a.profile.match(/(\d+)%/)||[])[1]||0,10);
+}
+/* Profile-column priority sort:
+   1) Applicants with 100% document submission, oldest submission date first.
+   2) Everyone else, newest submission date first, with the lowest profile
+      completion breaking ties among applicants submitted on the same date. */
+function profilePriorityCompare(a,b){
+  const aFull = docSubmissionPercent(a) === 100;
+  const bFull = docSubmissionPercent(b) === 100;
+  if(aFull !== bFull) return aFull ? -1 : 1;
+  if(aFull && bFull){
+    return new Date(a.submittedDate) - new Date(b.submittedDate);
+  }
+  const dateDiff = new Date(b.submittedDate) - new Date(a.submittedDate);
+  if(dateDiff !== 0) return dateDiff;
+  return profileCompletionPercent(a) - profileCompletionPercent(b);
+}
+function formatSubmittedDate(iso){
+  if(!iso) return '&mdash;';
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+}
+function renderApplicants(){
+  const q = document.getElementById('applicantSearch').value.trim().toLowerCase();
+  const filter = currentStatusFilter;
+  const tbody = document.getElementById('applicantTableBody');
+  tbody.innerHTML='';
+
+  const sortIcon = document.getElementById('dateSortIcon');
+  if(sortIcon) sortIcon.classList.toggle('asc', dateSortDir==='asc');
+  const profileIcon = document.getElementById('profileSortIcon');
+  if(profileIcon) profileIcon.classList.toggle('active', profileSortActive);
+
+  applicants
+    .filter(a => filter==='all' || a.status===filter)
+    .filter(a => !q || a.name.toLowerCase().includes(q) || a.applicantId.toLowerCase().includes(q))
+    .sort((a,b) => {
+      if(profileSortActive) return profilePriorityCompare(a,b);
+      const diff = new Date(a.submittedDate) - new Date(b.submittedDate);
+      return dateSortDir==='asc' ? diff : -diff;
+    })
+    .forEach(a=>{
+      const meta = STATUS_META[a.status];
+      const pct = parseInt((a.profile.match(/(\d+)%/)||[])[1]||0,10);
+      const lockIconSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+      const isLockedBySelf = a.lockedBy && a.lockedBy === currentAdminName;
+      const isLockedByOther = a.lockedBy && a.lockedBy !== currentAdminName;
+      const lockTag = a.lockedBy
+        ? `<div class="review-lock-tag${isLockedBySelf?' self':''}">${lockIconSvg} ${isLockedBySelf ? 'You are reviewing this' : 'Locked &middot; '+a.lockedBy}</div>`
+        : '';
+      const tr = document.createElement('tr');
+      tr.className='app-row';
+      tr.onclick = ()=>openApplicantModal(a.id);
+      tr.innerHTML = `
+        <td>
+          <div class="app-name-cell">
+            <div class="app-avatar">${initials(a.name)}</div>
+            <div><div class="nm">${a.name}</div><div class="id">${a.applicantId}</div>${lockTag}</div>
+          </div>
+        </td>
+        <td><span class="mini-progress"><span class="mini-progress-bar" style="width:${pct}%"></span></span>${pct}%</td>
+        <td style="font-size:.78rem;color:var(--muted)">${a.docs}</td>
+        <td style="font-size:.78rem;color:var(--muted);white-space:nowrap">${formatSubmittedDate(a.submittedDate)}</td>
+        <td><span class="badge ${meta.cls}">${meta.label}</span></td>
+        <td>${isLockedByOther
+            ? `<button class="view-link view-link-locked" onclick="event.stopPropagation();openApplicantModal('${a.id}')" title="Locked by ${a.lockedBy}">Locked</button>`
+            : `<button class="view-link" onclick="event.stopPropagation();openApplicantModal('${a.id}')">View &amp; Manage</button>`}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  if(!tbody.children.length){
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem 1rem">No applicants match your search or filter.</td></tr>';
+  }
+}
+
+/* ══ APPLICANT DETAIL MODAL ══ */
+let activeApplicantId = null;
+let pendingStatus = null;
+let activeDocCat = 'personal';
+let docCatEditing = false;
+let reqInfoEditing = false;
+
+function openApplicantModal(id){
+  const a = applicants.find(x=>x.id===id);
+  if(!a) return;
+
+  /* Single-reviewer access: block if another admin already has this profile open */
+  if(a.lockedBy && a.lockedBy !== currentAdminName){
+    showToast(`<b>${a.name}</b> is currently being reviewed by <b>${a.lockedBy}</b>. Only one admin can access an applicant's profile at a time &mdash; please try again once they're finished.`, false);
+    return;
+  }
+  a.lockedBy = currentAdminName;
+  renderApplicants();
+
+  activeApplicantId = id;
+  document.getElementById('modalAvatar').textContent = initials(a.name);
+  document.getElementById('modalName').textContent = a.name;
+  document.getElementById('modalId').textContent = a.applicantId;
+  document.getElementById('editName').value = a.name;
+  document.getElementById('editEmail').value = a.email;
+  document.getElementById('editPhone').value = a.phone;
+  document.getElementById('editAddress').value = a.address;
+  document.getElementById('modalProfile').textContent = a.profile;
+  updateProfileCompletionCard(a);
+  document.getElementById('modalDocs').textContent = a.docs;
+  document.getElementById('saveFlash').classList.remove('show');
+  setReqInfoEditing(false);
+  activeDocCat = 'personal';
+  docCatEditing = false;
+  renderDocCatTabs();
+  renderDocCatPanel();
+  cancelStatusChange();
+  updateStatusButtons(a.status);
+  document.getElementById('applicantModal').classList.add('open');
+}
+function closeApplicantModal(){
+  const a = applicants.find(x=>x.id===activeApplicantId);
+  if(a && a.lockedBy===currentAdminName){
+    a.lockedBy = null;
+    renderApplicants();
+  }
+  document.getElementById('applicantModal').classList.remove('open');
+  activeApplicantId = null;
+}
+function handleModalBackdrop(e){
+  if(e.target.id==='applicantModal') closeApplicantModal();
+}
+
+function updateStatusButtons(status){
+  document.querySelectorAll('#statusActionGrid .status-btn').forEach(btn=>{
+    btn.classList.toggle('current', btn.dataset.status===status);
+  });
+}
+
+/* ── Required Information: edit-gated ── */
+function setReqInfoEditing(on){
+  reqInfoEditing = on;
+  ['editName','editEmail','editPhone','editAddress'].forEach(id=>{
+    document.getElementById(id).disabled = !on;
+  });
+  document.getElementById('reqInfoEditBtn').textContent = on ? 'Cancel' : 'Edit';
+  document.getElementById('reqInfoEditBtn').classList.toggle('is-editing', on);
+  document.getElementById('reqInfoSaveBtn').style.display = on ? 'inline-flex' : 'none';
+}
+function toggleReqInfoEdit(){
+  const a = applicants.find(x=>x.id===activeApplicantId);
+  if(reqInfoEditing && a){
+    // Cancel: revert any unsaved edits back to stored values
+    document.getElementById('editName').value = a.name;
+    document.getElementById('editEmail').value = a.email;
+    document.getElementById('editPhone').value = a.phone;
+    document.getElementById('editAddress').value = a.address;
+  }
+  setReqInfoEditing(!reqInfoEditing);
+}
+function saveApplicantInfo(){
+  const a = applicants.find(x=>x.id===activeApplicantId);
+  if(!a) return;
+  a.name = document.getElementById('editName').value.trim() || a.name;
+  a.email = document.getElementById('editEmail').value.trim() || a.email;
+  a.phone = document.getElementById('editPhone').value.trim() || a.phone;
+  a.address = document.getElementById('editAddress').value.trim() || a.address;
+  document.getElementById('modalAvatar').textContent = initials(a.name);
+  document.getElementById('modalName').textContent = a.name;
+  setReqInfoEditing(false);
+  const flash = document.getElementById('saveFlash');
+  flash.classList.add('show');
+  setTimeout(()=>flash.classList.remove('show'), 2200);
+  renderApplicants();
+  addActivity(`Updated required information for ${a.name} (${a.applicantId}).`, 'done');
+}
+
+/* ── Submitted Documents & Profile Data, by category ── */
+function getCategoryStatus(cat){
+  const attention = cat.docs.filter(d=>d.status!=='verified').length;
+  const complete = cat.docs.length>0 && attention===0;
+  return {complete, attention};
+}
+function renderDocCatTabs(){
+  const wrap = document.getElementById('docCatTabs');
+  const a = applicants.find(x=>x.id===activeApplicantId);
+  if(!a || !wrap) return;
+  wrap.innerHTML = CATEGORY_ORDER.map(catKey=>{
+    const def = CATEGORY_DEFS[catKey];
+    const st = getCategoryStatus(a.categories[catKey]);
+    const dotCls = st.complete ? 'complete' : (st.attention>0 ? 'attention' : '');
+    const count = (!st.complete && st.attention>0) ? `<span class="cat-count">(${st.attention})</span>` : '';
+    return `<button class="doc-cat-tab${catKey===activeDocCat?' active':''}" data-cat="${catKey}" onclick="showDocCategory('${catKey}')"><span class="cat-dot ${dotCls}"></span>${def.label}${count}</button>`;
+  }).join('');
+}
+function showDocCategory(catKey){
+  activeDocCat = catKey;
+  docCatEditing = false;
+  document.querySelectorAll('#docCatTabs .doc-cat-tab').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.cat===catKey);
+  });
+  renderDocCatPanel();
+}
+function toggleDocCatEdit(){
+  docCatEditing = !docCatEditing;
+  renderDocCatPanel();
+}
+function renderDocCatPanel(){
+  const panel = document.getElementById('docCatPanel');
+  const a = applicants.find(x=>x.id===activeApplicantId);
+  if(!a || !panel) return;
+  const def = CATEGORY_DEFS[activeDocCat];
+  const cat = a.categories[activeDocCat];
+  const editing = docCatEditing;
+  let html = `<div class="doc-cat-panel-head"><h5>${def.label}</h5><button class="section-edit-btn${editing?' is-editing':''}" type="button" onclick="toggleDocCatEdit()">${editing?'Cancel':'Edit'}</button></div>`;
+
+  html += '<div class="doc-list">';
+  if(cat.docs.length){
+    html += `<div class="doc-list-head"><span class="dlh-name"></span><span class="dlh-status">Status</span></div>`;
+    cat.docs.forEach(d=>{
+      const meta = DOC_STATUS_META[d.status] || DOC_STATUS_META['not-submitted'];
+      html += `<div class="doc-row"><button type="button" class="doc-row-name" onclick="viewDocument('${d.name.replace(/'/g,"\\'")}','${meta.label}')">${d.name}</button>`;
+      if(editing){
+        html += `<span class="doc-row-status"><select data-dockey="${d.key}">${DOC_STATUS_OPTS.map(o=>`<option value="${o.value}"${o.value===d.status?' selected':''}>${o.label}</option>`).join('')}</select></span>`;
+      } else {
+        html += `<span class="doc-row-status"><span class="badge ${meta.cls}">${meta.label}</span></span>`;
+      }
+      html += `</div>`;
+    });
+  } else {
+    html += '<div class="doc-cat-empty">No documents required for this category.</div>';
+  }
+  html += '</div>';
+
+  if(def.fields.length){
+    html += '<hr class="doc-cat-divider"/>';
+    html += '<div class="doc-cat-fields">';
+    cat.fields.forEach(f=>{
+      html += `<div class="efield full"><label>${f.label}</label><input type="text" value="${escapeAttr(f.value)}" data-fieldkey="${f.key}" ${editing?'':'disabled'}/></div>`;
+    });
+    html += '</div>';
+  }
+
+  if(editing){
+    html += `<div class="edit-save-row" style="margin-top:.5rem"><button class="mbtn mbtn-secondary mbtn-sm" type="button" onclick="saveDocCategory()">Save Changes</button></div>`;
+  }
+  panel.innerHTML = html;
+}
+function saveDocCategory(){
+  const a = applicants.find(x=>x.id===activeApplicantId);
+  if(!a) return;
+  const cat = a.categories[activeDocCat];
+  document.querySelectorAll('#docCatPanel select[data-dockey]').forEach(sel=>{
+    const doc = cat.docs.find(d=>d.key===sel.dataset.dockey);
+    if(doc) doc.status = sel.value;
+  });
+  document.querySelectorAll('#docCatPanel input[data-fieldkey]').forEach(inp=>{
+    const f = cat.fields.find(x=>x.key===inp.dataset.fieldkey);
+    if(f) f.value = inp.value.trim() || 'Not yet submitted';
+  });
+  recomputeDocsSummary(a);
+  docCatEditing = false;
+  renderDocCatTabs();
+  renderDocCatPanel();
+  renderApplicants();
+  const flash = document.getElementById('saveFlash');
+  flash.classList.add('show');
+  setTimeout(()=>flash.classList.remove('show'), 2200);
+  addActivity(`Updated ${CATEGORY_DEFS[activeDocCat].label} documents/data for ${a.name} (${a.applicantId}).`, 'done');
+}
+function recomputeDocsSummary(a){
+  let v=0,p=0,d=0,n=0;
+  CATEGORY_ORDER.forEach(catKey=>{
+    a.categories[catKey].docs.forEach(doc=>{
+      if(doc.status==='verified') v++;
+      else if(doc.status==='pending') p++;
+      else if(doc.status==='deficient') d++;
+      else n++;
+    });
+  });
+  a.docs = `${v} Verified \u00b7 ${p} Pending \u00b7 ${d} Deficient` + (n ? ` \u00b7 ${n} Not Submitted` : '');
+  document.getElementById('modalDocs').textContent = a.docs;
+}
+function viewDocument(name, statusLabel){
+  showToast(`<b>${name}</b><br/>Status: ${statusLabel}. (Preview not available in this demo.)`, true);
+}
+
+
+/* ══ STATUS CHANGE + AUTOMATED EMAIL ══ */
+function requestStatusChange(status){
+  const a = applicants.find(x=>x.id===activeApplicantId);
+  if(!a) return;
+  pendingStatus = status;
+  const meta = STATUS_META[status];
+  const box = document.getElementById('statusConfirmBox');
+  const messages = {
+    qualified: `${a.name} has been reviewed and QUALIFIES for the CCC scholarship program based on submitted requirements.`,
+    waitlisted: `${a.name} meets baseline requirements and has been placed on the WAITLIST pending available slots.`,
+    'not-qualified': `${a.name} does not currently meet the requirements for the CCC scholarship program.`
+  };
+  document.getElementById('statusConfirmText').textContent = `Mark ${a.name} as "${meta.label}"? This will automatically post a status announcement to their Applicant Portal and send them an email.`;
+  document.getElementById('statusEmailPreview').innerHTML = `<b>To:</b> ${a.email}<br/><b>Subject:</b> Update on Your CCC Scholarship Application — ${meta.label}<br/><b>Message:</b> ${messages[status]}`;
+  box.classList.add('show');
+}
+function cancelStatusChange(){
+  pendingStatus = null;
+  document.getElementById('statusConfirmBox').classList.remove('show');
+}
+function confirmStatusChange(){
+  const a = applicants.find(x=>x.id===activeApplicantId);
+  if(!a || !pendingStatus) return;
+  a.status = pendingStatus;
+  const meta = STATUS_META[pendingStatus];
+  updateStatusButtons(a.status);
+  renderApplicants();
+  renderDashboard();
+
+  announcements.unshift({
+    id:'auto-'+Date.now(),
+    type:'text',
+    title:`Application Status Update — ${a.name}`,
+    category:'Result',
+    body:`${a.name} (${a.applicantId}) has been marked as "${meta.label}". An email notification was sent to ${a.email}.`,
+    date:'Posted just now',
+    auto:true
+  });
+  renderAnnouncements();
+
+  addActivity(`Marked ${a.name} (${a.applicantId}) as "${meta.label}" and emailed ${a.email}.`, 'done');
+  showToast(`&#9993; Status email sent to ${a.email} — marked "${meta.label}".`, true);
+  cancelStatusChange();
+}
+
+/* ══ ANNOUNCEMENTS &amp; MESSAGES: unified compose filter ══ */
+let commType = 'announcement';
+function setCommType(type){
+  commType = type;
+  document.getElementById('commTypeAnnBtn').classList.toggle('active', type==='announcement');
+  document.getElementById('commTypeMsgBtn').classList.toggle('active', type==='message');
+  document.getElementById('commAnnFields').style.display = type==='announcement' ? '' : 'none';
+  document.getElementById('commMsgFields').style.display = type==='message' ? '' : 'none';
+  const noteText = document.getElementById('commScopeNoteText');
+  const submitBtn = document.getElementById('commSubmitBtn');
+  const publishNote = document.getElementById('commPublishNote');
+  if(type==='announcement'){
+    noteText.innerHTML = '<b>Announcements</b> are displayed at the guest (public) page as well as the Applicant Portal, and are received by all applicants. You can add either text (a Title and Body) or an image to announce.';
+    submitBtn.textContent = 'Publish Announcement';
+    publishNote.innerHTML = '&#128228; This will publish immediately to the Applicant Portal and the public website.';
+  } else {
+    noteText.innerHTML = '<b>Messages</b> are private and never shown on the guest/public page &mdash; send to a specific applicant or a category of applicants.';
+    submitBtn.textContent = 'Send Message';
+    publishNote.innerHTML = '&#128228; This will be sent immediately to the selected recipient(s)\' Applicant Portal Messages.';
+  }
+}
+function setMsgTargetMode(mode){
+  document.getElementById('msgTargetApplicantField').style.display = mode==='specific' ? '' : 'none';
+  document.getElementById('msgTargetCategoryField').style.display = mode==='category' ? '' : 'none';
+}
+function populateMsgApplicantSelect(){
+  const sel = document.getElementById('msgTargetApplicant');
+  sel.innerHTML = applicants.map(a=>`<option value="${a.id}">${a.name} (${a.applicantId})</option>`).join('');
+}
+function submitCommunication(){
+  if(commType==='announcement') postAnnouncement();
+  else postMessage();
+}
+
+/* ══ ANNOUNCEMENTS (public — guest page + Applicant Portal; text or image) ══ */
+let annType = 'text';
+function setAnnouncementType(type){
+  annType = type;
+  document.getElementById('annTypeTextBtn').classList.toggle('active', type==='text');
+  document.getElementById('annTypeImageBtn').classList.toggle('active', type==='image');
+  document.getElementById('annBodyField').style.display = type==='text' ? '' : 'none';
+  document.getElementById('annImageField').style.display = type==='image' ? '' : 'none';
+}
+function handleAnnouncementImage(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const img = document.getElementById('annImagePreview');
+    img.src = ev.target.result;
+    img.classList.add('show');
+    img.dataset.imageData = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function renderAnnouncements(){
+  const list = document.getElementById('announceList');
+  list.innerHTML='';
+  announcements.forEach(n=>{
+    const div = document.createElement('div');
+    div.className='announce-item';
+    const media = n.type==='image'
+      ? `<img class="announce-thumb" src="${n.imageData}" alt=""/>`
+      : `<div class="announce-dot${n.auto?' auto':''}">${n.auto?'&#129302;':'&#128227;'}</div>`;
+    const body = n.type==='image' ? `<p>Image announcement</p>` : `<p>${n.body}</p>`;
+    div.innerHTML = `
+      ${media}
+      <div class="announce-body">
+        <h4>${n.title} ${n.auto?'<span class="auto-tag">Automated</span>':''}</h4>
+        ${body}
+        <span class="announce-date">${n.date} &middot; ${n.category}</span>
+      </div>
+      <button class="announce-del" title="Delete announcement" onclick="deleteAnnouncement('${n.id}')">&#128465;</button>
+    `;
+    list.appendChild(div);
+  });
+  document.getElementById('annCount').textContent = announcements.length+' total';
+}
+function postAnnouncement(){
+  const title = document.getElementById('commTitle').value.trim();
+  const category = document.getElementById('annCategory').value;
+
+  if(annType === 'text'){
+    const body = document.getElementById('annBody').value.trim();
+    if(!title || !body){
+      showToast('Please fill out both a title and a message.', false);
+      return;
+    }
+    announcements.unshift({id:'m-'+Date.now(), type:'text', title, category, body, date:'Posted just now', auto:false});
+    document.getElementById('annBody').value='';
+  } else {
+    const preview = document.getElementById('annImagePreview');
+    const imageData = preview.dataset.imageData;
+    if(!title || !imageData){
+      showToast('Please add a title and choose an image.', false);
+      return;
+    }
+    announcements.unshift({id:'m-'+Date.now(), type:'image', title, category, imageData, date:'Posted just now', auto:false});
+    document.getElementById('annImage').value='';
+    preview.classList.remove('show');
+    preview.removeAttribute('src');
+    delete preview.dataset.imageData;
+  }
+
+  document.getElementById('commTitle').value='';
+  renderAnnouncements();
+  saveAnnouncementsToStorage();
+  addActivity(`Published announcement "${title}" to the Applicant Portal and website.`, 'done');
+  showToast('&#10003; Announcement published to Applicant Portal and website.', true);
+}
+function deleteAnnouncement(id){
+  const n = announcements.find(x=>x.id===id);
+  announcements = announcements.filter(x=>x.id!==id);
+  renderAnnouncements();
+  saveAnnouncementsToStorage();
+  if(n) addActivity(`Removed announcement "${n.title}".`, 'warn');
+}
+
+/* ══ MESSAGES (private — sent only to applicants) ══ */
+function renderMessages(){
+  const list = document.getElementById('messageList');
+  list.innerHTML='';
+  messages.forEach(m=>{
+    const div = document.createElement('div');
+    div.className='message-item';
+    div.innerHTML = `
+      <div class="message-dot">&#128172;</div>
+      <div class="message-body">
+        <h4>${m.title} ${m.target?`<span class="msg-target-tag">${m.target}</span>`:''}</h4>
+        <p>${m.body}</p>
+        <span class="message-date">${m.date}</span>
+      </div>
+      <button class="message-del" title="Delete message" onclick="deleteMessage('${m.id}')">&#128465;</button>
+    `;
+    list.appendChild(div);
+  });
+  document.getElementById('msgCount').textContent = messages.length+' total';
+}
+function postMessage(){
+  const title = document.getElementById('commTitle').value.trim();
+  const body = document.getElementById('msgBody').value.trim();
+  if(!title || !body){
+    showToast('Please fill out both a title and a message.', false);
+    return;
+  }
+  const targetMode = document.getElementById('msgTarget').value;
+  let target = 'All Applicants';
+  if(targetMode==='specific'){
+    const a = applicants.find(x=>x.id===document.getElementById('msgTargetApplicant').value);
+    target = a ? a.name : 'All Applicants';
+  } else if(targetMode==='category'){
+    const meta = STATUS_META[document.getElementById('msgTargetCategory').value];
+    target = meta ? meta.label : 'Category';
+  }
+  messages.unshift({id:'msg-'+Date.now(), title, body, date:'Posted just now', target});
+  document.getElementById('commTitle').value='';
+  document.getElementById('msgBody').value='';
+  renderMessages();
+  addActivity(`Sent message "${title}" to ${target}.`, 'done');
+  showToast(`&#10003; Message sent to ${target}.`, true);
+}
+function deleteMessage(id){
+  const m = messages.find(x=>x.id===id);
+  messages = messages.filter(x=>x.id!==id);
+  renderMessages();
+  if(m) addActivity(`Removed message "${m.title}".`, 'warn');
+}
+
+/* ══ SUPER ADMIN: ACCOUNTS ══ */
+function renderAdmins(){
+  const list = document.getElementById('adminList');
+  list.innerHTML='';
+  adminAccounts.forEach(ac=>{
+    const row = document.createElement('div');
+    row.className='admin-row';
+    row.innerHTML = `
+      <div class="aa-avatar">${initials(ac.name)}</div>
+      <div class="aa-info"><div class="aa-name">${ac.name}</div><div class="aa-email">${ac.email}</div></div>
+      <span class="role-tag ${ac.role}">${ac.role==='super'?'Super Admin':'Admin'}</span>
+      <button class="admin-row-del" title="Remove account" onclick="removeAdmin('${ac.id}')">&#128465;</button>
+    `;
+    list.appendChild(row);
+  });
+  document.getElementById('adminCount').textContent = adminAccounts.length+' accounts';
+}
+function addAdmin(){
+  const name = document.getElementById('newAdminName').value.trim();
+  const email = document.getElementById('newAdminEmail').value.trim();
+  const role = document.getElementById('newAdminRole').value;
+  if(!name || !email){
+    showToast('Please enter both a name and email.', false);
+    return;
+  }
+  adminAccounts.push({id:'ad-'+Date.now(), name, email, role});
+  document.getElementById('newAdminName').value='';
+  document.getElementById('newAdminEmail').value='';
+  renderAdmins();
+  addActivity(`Added new ${role==='super'?'super admin':'admin'} account for ${name} (${email}).`, 'done');
+  showToast('&#10003; Admin account added.', true);
+}
+function removeAdmin(id){
+  const ac = adminAccounts.find(x=>x.id===id);
+  if(ac && ac.role==='super' && adminAccounts.filter(x=>x.role==='super').length<=1){
+    showToast('At least one Super Admin account must remain.', false);
+    return;
+  }
+  adminAccounts = adminAccounts.filter(x=>x.id!==id);
+  renderAdmins();
+  if(ac) addActivity(`Removed admin account for ${ac.name}.`, 'warn');
+}
+
+/* ══ SYSTEM TOGGLES + ACTIVITY LOG ══ */
+function logToggle(label, checked){
+  addActivity(`${label} was turned ${checked?'ON':'OFF'}.`, checked?'done':'warn');
+}
+function handleAppsOpenToggle(checked){
+  document.getElementById('appsOpenSettings').classList.toggle('collapsed', !checked);
+  logToggle('Applications Open', checked);
+}
+function logSettingChange(label, value){
+  addActivity(`${label} set to ${value || '(cleared)'}.`, 'done');
+}
+function addActivity(text, kind){
+  const now = new Date();
+  const time = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  activityLog.unshift({text, kind: kind==='warn'?'warn':'done', time});
+  renderActivity();
+}
+function renderActivity(){
+  const log = document.getElementById('activityLog');
+  log.innerHTML='';
+  if(!activityLog.length){
+    log.innerHTML = '<p style="font-size:.82rem;color:var(--muted)">No activity yet this session.</p>';
+    return;
+  }
+  activityLog.slice(0,25).forEach(item=>{
+    const div = document.createElement('div');
+    div.className='timeline-item';
+    div.innerHTML = `
+      <div class="timeline-dot ${item.kind}">${item.kind==='warn'?'!':'&#10003;'}</div>
+      <div class="timeline-body"><h4>${item.text}</h4><p>${item.time}</p></div>
+    `;
+    log.appendChild(div);
+  });
+}
+
+/* ══ TOAST ══ */
+function showToast(html, success){
+  const stack = document.getElementById('toastStack');
+  const t = document.createElement('div');
+  t.className = 'toast'+(success?' success':'');
+  t.innerHTML = html;
+  stack.appendChild(t);
+  setTimeout(()=>{
+    t.classList.add('fadeout');
+    setTimeout(()=>t.remove(), 320);
+  }, 3400);
+}
+
+/* ══ LOGOUT ══ */
+function openLogoutConfirm(){ document.getElementById('logoutOverlay').classList.add('open'); }
+function closeLogoutConfirm(){ document.getElementById('logoutOverlay').classList.remove('open'); }
+function handleLogoutBackdrop(e){ if(e.target.id==='logoutOverlay') closeLogoutConfirm(); }
+
+/* ── ADMIN AVATAR UPLOAD ── */
+function handleAdminAvatarUpload(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const img = document.getElementById('adminAvatarImg');
+    img.src = ev.target.result;
+    img.style.display = 'block';
+    document.getElementById('adminAvatarInitials').style.opacity = '0';
+  };
+  reader.readAsDataURL(file);
+}
+function confirmLogout(){
+  document.getElementById('logoutOverlay').classList.remove('open');
+  document.getElementById('appContent').classList.remove('unlocked');
+  document.getElementById('gateOverlay').classList.remove('hidden');
+  applicants.forEach(a=>{ if(a.lockedBy===currentAdminName) a.lockedBy=null; });
+  currentRole = null;
+  currentAdminName = null;
+  showPanel('dashboard');
+}
+
+/* ══ INIT ══ */
+renderApplicants();
+renderAnnouncements();
+renderMessages();
+populateMsgApplicantSelect();
+renderAdmins();
+renderDashboard();
+renderActivity();
+</script>
+</body>
+</html>
