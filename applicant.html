@@ -220,6 +220,10 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .org-table thead th:first-child{background:var(--off);border-left:1px solid var(--border)}
 .org-table .org-table-action-th{width:44px;background:#fff;border-top:none;border-right:none}
 .org-table .org-row-action{padding:6px!important;text-align:center;vertical-align:middle;background:#fff}
+
+/* ── sibling income table: per-column add/remove button sits inline in the header ── */
+.edu-table thead th.sib-col{white-space:nowrap}
+.sib-col-btn{display:inline-flex;vertical-align:middle;margin-left:8px}
 .org-row-btn{all:unset;box-sizing:border-box;cursor:pointer;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;line-height:1;font-weight:700;transition:background .2s,color .2s}
 .org-row-add{background:#EEF3FD;color:var(--ccc-blue)}
 .org-row-add:hover{background:var(--ccc-blue);color:#fff}
@@ -325,10 +329,11 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       <div class="brand-logos">
         <img src="LOGO_CCC.png" alt="City College of Calamba Logo"/>
         <img src="LOGO_CCC_Admissions.png" alt="CCC Admissions Logo"/>
+        <img src="LOGO_CCC_Registrar.png" alt="CCC Registrar Logo"/>
       </div>
       <div class="brand-text">
         <span class="main">City College of Calamba</span>
-        <span class="sub">Scholarship Application Portal</span>
+        <span class="sub">Scholarship Portal</span>
       </div>
     </div>
   </div>
@@ -366,7 +371,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
         <li class="sidebar-menu-label">My Profile (Softcopy)</li>
         <li><button class="menu-btn" data-panel="personal" onclick="showPanel('personal',this)"><span class="menu-icon"></span> Personal Information</button></li>
         <li><button class="menu-btn" data-panel="academic" onclick="showPanel('academic',this)"><span class="menu-icon"></span> Educational Background</button></li>
-        <li><button class="menu-btn" data-panel="financial" onclick="showPanel('financial',this)"><span class="menu-icon"></span> Financial &amp; Employment</button></li>
+        <li><button class="menu-btn" data-panel="financial" onclick="showPanel('financial',this)"><span class="menu-icon"></span> Family &amp; Financial Information</button></li>
         <li><button class="menu-btn" data-panel="health" onclick="showPanel('health',this)"><span class="menu-icon"></span> Health &amp; Wellness</button></li>
         <li class="sidebar-subgroup-divider" aria-hidden="true"></li>
         <li class="sidebar-menu-label">Application</li>
@@ -469,7 +474,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
             </div>
             <div class="timeline-item">
               <div class="timeline-dot step-notstarted">3</div>
-              <div class="timeline-body"><h4>Financial &amp; Employment</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('financial');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
+              <div class="timeline-body"><h4>Family &amp; Financial Information</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('financial');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot step-notstarted">4</div>
@@ -614,10 +619,6 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
             <select id="pi-lgbtqi" required><option value="">Select</option><option>Yes</option><option>No</option></select>
           </div>
           <div class="mfield"><label for="pi-disability">Do you have a physical or behavioral condition/disability? <span class="req-mark">*</span></label><input type="text" id="pi-disability" placeholder="e.g. None" required/></div>
-          <div class="mfield">
-            <label for="pi-working-student">Are you a working student? <span class="req-mark">*</span></label>
-            <select id="pi-working-student" required><option value="">Select</option><option>Yes</option><option>No</option></select>
-          </div>
           <div class="mfield full"><label for="pi-hobbies">What are your hobbies and interests? <span class="req-mark">*</span></label><input type="text" id="pi-hobbies" placeholder="e.g. Reading, basketball, drawing" required/></div>
         </div>
       </div>
@@ -876,46 +877,46 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
             <thead>
               <tr>
                 <th></th>
-                <th>Mother</th>
-                <th>Father</th>
+                <th>Mother <span class="req-mark">*</span></th>
+                <th>Father <span class="req-mark">*</span></th>
                 <th>Guardian</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <th>Name</th>
-                <td><input type="text" id="fam-mother-name" placeholder="e.g. Juana Dela Cruz"/></td>
-                <td><input type="text" id="fam-father-name" placeholder="e.g. Juan Dela Cruz"/></td>
+                <td><input type="text" id="fam-mother-name" placeholder="e.g. Juana Dela Cruz" required/></td>
+                <td><input type="text" id="fam-father-name" placeholder="e.g. Juan Dela Cruz" required/></td>
                 <td><input type="text" id="fam-guardian-name" placeholder="e.g. N/A"/></td>
               </tr>
               <tr>
                 <th>Citizenship</th>
-                <td><input type="text" id="fam-mother-citizenship" placeholder="e.g. Filipino"/></td>
-                <td><input type="text" id="fam-father-citizenship" placeholder="e.g. Filipino"/></td>
+                <td><input type="text" id="fam-mother-citizenship" placeholder="e.g. Filipino" required/></td>
+                <td><input type="text" id="fam-father-citizenship" placeholder="e.g. Filipino" required/></td>
                 <td><input type="text" id="fam-guardian-citizenship" placeholder="e.g. N/A"/></td>
               </tr>
               <tr>
                 <th>Date of Birth</th>
-                <td><input type="text" id="fam-mother-dob" placeholder="e.g. MM/DD/YYYY"/></td>
-                <td><input type="text" id="fam-father-dob" placeholder="e.g. MM/DD/YYYY"/></td>
+                <td><input type="text" id="fam-mother-dob" placeholder="e.g. MM/DD/YYYY" required/></td>
+                <td><input type="text" id="fam-father-dob" placeholder="e.g. MM/DD/YYYY" required/></td>
                 <td><input type="text" id="fam-guardian-dob" placeholder="e.g. N/A"/></td>
               </tr>
               <tr>
                 <th>Contact No.</th>
-                <td><input type="text" id="fam-mother-contact" placeholder="e.g. 0917 123 4567"/></td>
-                <td><input type="text" id="fam-father-contact" placeholder="e.g. 0917 123 4567"/></td>
+                <td><input type="text" id="fam-mother-contact" placeholder="e.g. 0917 123 4567" required/></td>
+                <td><input type="text" id="fam-father-contact" placeholder="e.g. 0917 123 4567" required/></td>
                 <td><input type="text" id="fam-guardian-contact" placeholder="e.g. N/A"/></td>
               </tr>
               <tr>
                 <th>Highest Educational Attainment</th>
-                <td><input type="text" id="fam-mother-education" placeholder="e.g. College Graduate"/></td>
-                <td><input type="text" id="fam-father-education" placeholder="e.g. College Graduate"/></td>
+                <td><input type="text" id="fam-mother-education" placeholder="e.g. College Graduate" required/></td>
+                <td><input type="text" id="fam-father-education" placeholder="e.g. College Graduate" required/></td>
                 <td><input type="text" id="fam-guardian-education" placeholder="e.g. N/A"/></td>
               </tr>
               <tr>
                 <th>Employment Status</th>
-                <td><input type="text" id="fam-mother-employment" placeholder="e.g. Employed"/></td>
-                <td><input type="text" id="fam-father-employment" placeholder="e.g. Employed"/></td>
+                <td><input type="text" id="fam-mother-employment" placeholder="e.g. Employed" required/></td>
+                <td><input type="text" id="fam-father-employment" placeholder="e.g. Employed" required/></td>
                 <td><input type="text" id="fam-guardian-employment" placeholder="e.g. N/A"/></td>
               </tr>
             </tbody>
@@ -927,25 +928,25 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
         <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.75rem;letter-spacing:.3px;text-transform:uppercase;color:var(--navy);margin:0 0 .85rem">Sibling's Information</p>
         <div class="form-grid">
           <div class="mfield">
-            <label for="fam-onlychild">Are you an only child?</label>
-            <select id="fam-onlychild">
+            <label for="fam-onlychild">Are you an only child? <span class="req-mark">*</span></label>
+            <select id="fam-onlychild" required onchange="toggleIfOnlyChild(this)">
               <option value="">Select&hellip;</option>
               <option>Yes</option>
               <option>No</option>
             </select>
           </div>
-          <div class="mfield">
-            <label for="fam-numsiblings">Number of Siblings</label>
-            <input type="number" id="fam-numsiblings" min="0" placeholder="e.g. 2"/>
+          <div class="mfield" id="fam-numsiblings-field" style="display:none">
+            <label for="fam-numsiblings">Number of Siblings <span class="req-mark">*</span></label>
+            <input type="number" id="fam-numsiblings" min="0" placeholder="e.g. 2" required/>
           </div>
         </div>
-        <div class="edu-table-wrap">
+        <div class="edu-table-wrap" id="sib-ccc-questions-wrap" style="display:none">
           <table class="edu-table">
             <tbody>
               <tr>
-                <th style="white-space:normal">Do you have a brother or sister who is currently a student at the City College of Calamba?</th>
+                <th style="white-space:normal">Do you have a brother or sister who is currently a student at the City College of Calamba? <span class="req-mark">*</span></th>
                 <td>
-                  <select id="fam-sibling-currentstudent">
+                  <select id="fam-sibling-currentstudent" required>
                     <option value="">Select&hellip;</option>
                     <option>Yes</option>
                     <option>No</option>
@@ -953,9 +954,9 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
                 </td>
               </tr>
               <tr>
-                <th style="white-space:normal">Do you have a brother or sister who graduated from the City College of Calamba?</th>
+                <th style="white-space:normal">Do you have a brother or sister who graduated from the City College of Calamba? <span class="req-mark">*</span></th>
                 <td>
-                  <select id="fam-sibling-graduate">
+                  <select id="fam-sibling-graduate" required>
                     <option value="">Select&hellip;</option>
                     <option>Yes</option>
                     <option>No</option>
@@ -968,86 +969,99 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 
         <hr style="border:none;border-top:1px solid var(--border);margin:1.4rem 0 1.25rem"/>
 
-        <div class="mfield full">
-          <label for="fam-emergency-contact">Person to be Notified in Case of Emergency</label>
-          <textarea id="fam-emergency-contact" placeholder="e.g. Full Name, Relationship, Address, Contact Number"></textarea>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Household &amp; Employment Details</div>
         <div class="form-grid">
-          <div class="mfield full">
-            <label for="f-income">Household Monthly Income</label>
-            <select id="f-income">
-              <option value="">Select&hellip;</option>
-              <option>Below &#8369;10,000</option>
-              <option>&#8369;10,000 &ndash; &#8369;20,000</option>
-              <option>&#8369;20,001 &ndash; &#8369;40,000</option>
-              <option>Above &#8369;40,000</option>
-            </select>
+          <div class="mfield">
+            <label for="fam-emergency-contact">Person to be Notified in Case of Emergency <span class="req-mark">*</span></label>
+            <textarea id="fam-emergency-contact" placeholder="e.g. Full Name, Relationship, Address, Contact Number" required></textarea>
           </div>
           <div class="mfield">
-            <label for="f-occupation">Parent / Guardian Occupation</label>
-            <input type="text" id="f-occupation" placeholder="e.g. Tricycle Driver"/>
-          </div>
-          <div class="mfield">
-            <label for="f-siblings">Number of Siblings</label>
-            <input type="number" id="f-siblings" min="0" placeholder="e.g. 2"/>
-          </div>
-          <div class="mfield full">
-            <label for="f-employment">Applicant's Employment Status</label>
-            <select id="f-employment">
-              <option value="">Select&hellip;</option>
-              <option>Not Employed</option>
-              <option>Part-time Employed</option>
-              <option>Full-time Employed</option>
-              <option>City Government of Calamba Employee</option>
-              <option>City College of Calamba Employee</option>
-              <option>DepEd Personnel</option>
-            </select>
-            <div class="field-note">Required if applying under an Executive Program.</div>
-          </div>
-          <div class="mfield">
-            <label for="f-grossincome">Annual Gross / Family Earning Requirement</label>
-            <input type="text" id="f-grossincome" placeholder="e.g. &#8369;120,000.00"/>
-          </div>
-          <div class="mfield">
-            <label for="f-allowance">Source of Allowance</label>
-            <select id="f-allowance">
-              <option value="">Select&hellip;</option>
-              <option>Provided by Parents</option>
-              <option>Working Independently</option>
-              <option>Financial Aid</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="mfield full">
-            <label for="f-scholarsinhh">Number of Scholars in the Household</label>
-            <input type="number" id="f-scholarsinhh" min="0" placeholder="e.g. 1"/>
+            <label for="h-ec-number">Emergency Contact Number</label>
+            <input type="tel" id="h-ec-number" placeholder="e.g. 09XX XXX XXXX"/>
           </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">Required Documents <span class="tag">Per CCC &amp; LGU requirements</span></div>
-        <div class="upload-row" id="up-indigency">
-          <div class="upload-icon"></div>
-          <div class="upload-info">
-            <div class="u-title">Proof of Income (Family / Guardian)</div>
-            <div class="u-sub">Certificate of Indigency / Income issued by your Barangay or the City Social Welfare Office</div>
-            <div class="u-filename" id="up-indigency-name"></div>
+      <div class="card" id="fam-employment-card">
+        <div class="card-title">Applicant's Employment</div>
+        <div class="form-grid">
+          <div class="mfield">
+            <label for="fam-workingstudent">Are you a working student? <span class="req-mark">*</span></label>
+            <select id="fam-workingstudent" required onchange="toggleWorkingStudentDoc(this)"><option value="">Select</option><option>Yes</option><option>No</option></select>
           </div>
-          <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-indigency')"/></label>
         </div>
-        <div class="upload-row" id="up-employment">
-          <div class="upload-icon"></div>
-          <div class="upload-info">
-            <div class="u-title">Certificate of Employment (if employed)</div>
-            <div class="u-sub">From your or your parent/guardian's employer</div>
-            <div class="u-filename" id="up-employment-name"></div>
+        <div class="topic-doc-section" id="fam-employment-doc-section" style="display:none">
+          <div class="topic-doc-label">Verifying Document <span class="tdl-count">1 required</span></div>
+          <div class="upload-row required" id="up-employment">
+            <div class="upload-icon"></div>
+            <div class="upload-info">
+              <div class="u-title">Proof of Employment <span class="req-mark">*</span></div>
+              <div class="u-sub">Accepted documents include an ID, certificate, or any document provided by your employer</div>
+              <div class="u-filename" id="up-employment-name"></div>
+            </div>
+            <label class="upload-btn-label">Upload<input type="file" required onchange="handleDocUpload(this,'up-employment')"/></label>
           </div>
-          <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-employment')"/></label>
+        </div>
+      </div>
+
+      <div class="card" id="fam-income-card" style="display:none">
+        <div class="card-title">Family's Annual Income</div>
+        <p class="topic-card-intro">List each sibling from eldest to youngest. Use the &plus; button to add another sibling.</p>
+        <div class="edu-table-wrap">
+          <table class="edu-table" id="sibling-income-table">
+            <thead>
+              <tr>
+                <th>Eldest to Youngest</th>
+                <th class="sib-col">Sibling 1 <span class="req-mark">*</span></th>
+                <th class="sib-col">Sibling 2 <span class="req-mark">*</span></th>
+                <th class="sib-col">Sibling 3 <span class="req-mark">*</span> <button type="button" class="org-row-btn org-row-add sib-col-btn" onclick="addSiblingColumn(this)" title="Add sibling">&plus;</button></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-field="name">
+                <th>Name</th>
+                <td><input type="text" placeholder="e.g. N/A" required/></td>
+                <td><input type="text" placeholder="e.g. N/A" required/></td>
+                <td><input type="text" placeholder="e.g. N/A" required/></td>
+              </tr>
+              <tr data-field="dob">
+                <th>Date of Birth</th>
+                <td><input type="text" placeholder="e.g. MM/DD/YYYY" required/></td>
+                <td><input type="text" placeholder="e.g. MM/DD/YYYY" required/></td>
+                <td><input type="text" placeholder="e.g. MM/DD/YYYY" required/></td>
+              </tr>
+              <tr data-field="civilstatus">
+                <th>Civil Status</th>
+                <td><select required><option value="">Select&hellip;</option><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option></select></td>
+                <td><select required><option value="">Select&hellip;</option><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option></select></td>
+                <td><select required><option value="">Select&hellip;</option><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option></select></td>
+              </tr>
+              <tr data-field="contact">
+                <th>Contact Number</th>
+                <td><input type="text" placeholder="e.g. 0917 123 4567" required/></td>
+                <td><input type="text" placeholder="e.g. 0917 123 4567" required/></td>
+                <td><input type="text" placeholder="e.g. 0917 123 4567" required/></td>
+              </tr>
+              <tr data-field="education">
+                <th>Highest Educational Attainment</th>
+                <td><input type="text" placeholder="e.g. College Graduate" required/></td>
+                <td><input type="text" placeholder="e.g. College Graduate" required/></td>
+                <td><input type="text" placeholder="e.g. College Graduate" required/></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="topic-doc-section">
+          <div class="topic-doc-label">Verifying Document <span class="tdl-count">Optional</span></div>
+          <div class="upload-row" id="up-indigency">
+            <div class="upload-icon"></div>
+            <div class="upload-info">
+              <div class="u-title">Proof of Income (Family / Guardian)</div>
+              <div class="u-sub">Certificate of Indigency / Income issued by your Barangay or the City Social Welfare Office</div>
+              <div class="u-filename" id="up-indigency-name"></div>
+            </div>
+            <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-indigency')"/></label>
+          </div>
         </div>
       </div>
 
@@ -1075,14 +1089,6 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
           <div class="mfield full">
             <label for="h-allergies">Allergies</label>
             <input type="text" id="h-allergies" placeholder="e.g. None, Peanuts, etc."/>
-          </div>
-          <div class="mfield">
-            <label for="h-ec-name">Emergency Contact Person</label>
-            <input type="text" id="h-ec-name" placeholder="e.g. Maria Dela Cruz"/>
-          </div>
-          <div class="mfield">
-            <label for="h-ec-number">Emergency Contact Number</label>
-            <input type="tel" id="h-ec-number" placeholder="e.g. 09XX XXX XXXX"/>
           </div>
         </div>
       </div>
@@ -1174,7 +1180,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
         </table>
 
         <!-- Category: Financial & Employment -->
-        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 .5rem;padding:.6rem .5rem .3rem;border-bottom:2px solid var(--border);">Financial &amp; Employment</p>
+        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 .5rem;padding:.6rem .5rem .3rem;border-bottom:2px solid var(--border);">Family &amp; Financial Information</p>
         <table class="doc-table" style="margin-bottom:1.25rem">
           <thead>
             <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
@@ -1364,7 +1370,7 @@ const STAGE_CONTENT = {
         </div>
         <div class="timeline-item">
           <div class="timeline-dot">3</div>
-          <div class="timeline-body"><h4>Financial &amp; Employment</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('financial');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
+          <div class="timeline-body"><h4>Family &amp; Financial Information</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('financial');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
         </div>
         <div class="timeline-item">
           <div class="timeline-dot">4</div>
@@ -1543,6 +1549,58 @@ function toggleIfMarried(sel){
   document.getElementById('if-married-group').style.display = (sel.value === 'Married') ? 'grid' : 'none';
 }
 
+/* ── FAMILY & FINANCIAL: "Are you an only child?" gates the sibling-related questions —
+   answering "No" reveals them, answering "Yes" (or leaving it blank) hides them ── */
+function toggleIfOnlyChild(sel){
+  const showSiblingInfo = sel.value === 'No';
+  document.getElementById('fam-numsiblings-field').style.display = showSiblingInfo ? '' : 'none';
+  document.getElementById('sib-ccc-questions-wrap').style.display = showSiblingInfo ? '' : 'none';
+  document.getElementById('fam-income-card').style.display = showSiblingInfo ? '' : 'none';
+}
+
+/* ── APPLICANT'S EMPLOYMENT: show the verifying document only when the applicant answers "Yes" ── */
+function toggleWorkingStudentDoc(sel){
+  document.getElementById('fam-employment-doc-section').style.display = (sel.value === 'Yes') ? '' : 'none';
+}
+
+/* ── FAMILY'S ANNUAL INCOME: add/remove a sibling column, mirroring addOrgRow/removeOrgRow ── */
+function siblingFieldInputHTML(field){
+  if(field === 'civilstatus') return '<select required><option value="">Select&hellip;</option><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option></select>';
+  if(field === 'dob') return '<input type="text" placeholder="e.g. MM/DD/YYYY" required/>';
+  if(field === 'contact') return '<input type="text" placeholder="e.g. 0917 123 4567" required/>';
+  if(field === 'education') return '<input type="text" placeholder="e.g. College Graduate" required/>';
+  return '<input type="text" placeholder="e.g. N/A" required/>';
+}
+function addSiblingColumn(btn){
+  /* the column that owns the "+" button becomes a removable column, since only the
+     newest (last) column should offer to add another */
+  const th = btn.parentElement;
+  btn.className = 'org-row-btn org-row-remove sib-col-btn';
+  btn.title = 'Remove sibling';
+  btn.textContent = '\u00d7';
+  btn.setAttribute('onclick','removeSiblingColumn(this)');
+
+  const headerRow = document.querySelector('#sibling-income-table thead tr');
+  const nextNum = headerRow.querySelectorAll('th.sib-col').length + 1;
+  const newTh = document.createElement('th');
+  newTh.className = 'sib-col';
+  newTh.innerHTML = 'Sibling '+nextNum+' <span class="req-mark">*</span> <button type="button" class="org-row-btn org-row-add sib-col-btn" onclick="addSiblingColumn(this)" title="Add sibling">&plus;</button>';
+  headerRow.appendChild(newTh);
+
+  document.querySelectorAll('#sibling-income-table tbody tr').forEach(row=>{
+    const td = document.createElement('td');
+    td.innerHTML = siblingFieldInputHTML(row.dataset.field);
+    row.appendChild(td);
+  });
+}
+function removeSiblingColumn(btn){
+  const th = btn.parentElement;
+  const table = document.getElementById('sibling-income-table');
+  const index = Array.from(th.parentElement.children).indexOf(th);
+  th.remove();
+  table.querySelectorAll('tbody tr').forEach(row=>{ row.children[index].remove(); });
+}
+
 /* ── EDUCATIONAL BACKGROUND: show tech/voc school details only when Yes is selected ── */
 function toggleIfTechVoc(sel){
   document.getElementById('techvoc-details-group').style.display = (sel.value === 'Yes') ? 'grid' : 'none';
@@ -1555,11 +1613,35 @@ function saveDraft(btn){
   setTimeout(()=>{ btn.textContent = original; }, 1600);
   /* In production: POST /api/applicant/save-draft { section, data } */
 }
+/* Returns the missing required-document labels for a panel, skipping any
+   required upload row that's currently hidden (e.g. a document that only
+   becomes required after the applicant chooses a particular option). */
+function getMissingRequiredDocs(panelId){
+  const panel = document.getElementById(panelId);
+  const missing = [];
+  if(!panel) return missing;
+  panel.querySelectorAll('.upload-row.required').forEach(row=>{
+    if(row.offsetParent === null) return; /* hidden — not applicable yet */
+    if(!row.classList.contains('has-file')){
+      const titleEl = row.querySelector('.u-title');
+      missing.push(titleEl ? titleEl.textContent.replace('*','').trim() : row.id);
+    }
+  });
+  return missing;
+}
 function submitSection(btn, sectionName){
   if(sectionName === 'Appeal / Reschedule Request'){
     const appealRow = document.getElementById('up-appeal');
     if(!appealRow.classList.contains('has-file')){
       alert('Please upload a supporting document before submitting. This is required.');
+      return;
+    }
+  }
+  if(sectionName === 'Personal Information' || sectionName === 'Financial & Employment'){
+    const panelId = sectionName === 'Personal Information' ? 'panel-personal' : 'panel-financial';
+    const missingDocs = getMissingRequiredDocs(panelId);
+    if(missingDocs.length){
+      alert('Please upload the following required document(s) before submitting:\n\n- '+missingDocs.join('\n- '));
       return;
     }
   }
