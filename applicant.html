@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Applicant Page — Iskolusyon | City College of Calamba</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D2F6E;
+  --ccc-blue:#003CD0;
+  --blue:#1A4FA0;
+  --blue-light:#2563B0;
+  --green:#1B6B3A;
+  --green-dark:#155230;
+  --gold:#C8A84B;
+  --yellow:#FFD400;
+  --white:#fff;
+  --off:#F5F6F8;
+  --text:#2C3E50;
+  --muted:#6B7E9A;
+  --border:#E0E6F0;
+  --orange:#E07B39;
+  --red:#C0392B;
+}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);line-height:1.65;min-height:100vh}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--ccc-blue);color:#fff;font-size:.75rem;padding:6px 0;font-family:'Montserrat',sans-serif;letter-spacing:.3px}
+.topbar .inner{max-width:1400px;margin:0 auto;padding:0 2rem;display:flex;justify-content:flex-end;gap:1.5rem;align-items:center}
+.topbar a{color:#fff;text-decoration:none;font-weight:700}
+.topbar a:hover{opacity:.8}
+.topbar span{color:#fff;font-weight:700}
+
+/* ── NAVBAR (brand only — no public nav links while signed in) ── */
+.navbar{background:var(--white);border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:300;box-shadow:0 2px 12px rgba(13,47,110,.08)}
+.nav-inner{width:100%;margin:0;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:72px;gap:1rem}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-logos{display:flex;align-items:center;gap:6px}
+.brand-logos img{height:52px;width:auto;object-fit:contain}
+.brand-text{font-family:'Montserrat',sans-serif;border-left:2px solid var(--border);padding-left:10px}
+.brand-text .main{font-size:1rem;font-weight:900;color:var(--navy);letter-spacing:.5px;text-transform:uppercase;display:block;line-height:1.1}
+.brand-text .sub{font-size:.58rem;font-weight:600;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-top:1px;display:block}
+.nav-portal-badge{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.5px;text-transform:uppercase;color:var(--ccc-blue);background:#EEF3FD;padding:8px 16px;border-radius:20px}
+
+/* ══════════════════════════════════════════
+   PORTAL SHELL (sidebar + content)
+   ══════════════════════════════════════════ */
+.portal-shell{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 108px);align-items:stretch}
+
+/* ── SIDEBAR ── */
+.sidebar{background:linear-gradient(180deg,var(--navy) 0%,var(--ccc-blue) 100%);color:#fff;padding:2rem 1.35rem 1.5rem;display:flex;flex-direction:column;position:sticky;top:108px;height:calc(100vh - 108px);overflow-y:auto}
+.sidebar-profile{text-align:center;margin-bottom:1.75rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,.15)}
+.avatar-wrap{width:84px;height:84px;border-radius:50%;margin:0 auto .85rem;position:relative;border:3px solid rgba(255,255,255,.35);overflow:hidden;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:1.9rem;font-family:'Montserrat',sans-serif;font-weight:800}
+.avatar-wrap img{width:100%;height:100%;object-fit:cover;display:none;position:absolute;inset:0}
+.avatar-wrap .avatar-initials{position:relative;z-index:1}
+.profile-name-row{display:flex;align-items:center;justify-content:center;gap:6px}
+.profile-name{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.98rem;letter-spacing:.2px}
+.profile-role{font-size:.68rem;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.6px;margin-top:3px;font-family:'Montserrat',sans-serif;font-weight:600}
+.profile-id{font-size:.68rem;color:rgba(255,255,255,.45);margin-top:6px}
+
+.sidebar-menu{display:flex;flex-direction:column;gap:.9rem;flex:1}
+/* top-level portal divisions: Overview / Admission / Allowance — each is its own
+   list wrapped in .sidebar-group so it can carry a shared contrasting background */
+.sidebar-group{list-style:none;display:flex;flex-direction:column;gap:3px;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:.7rem .65rem .8rem}
+.sidebar-section-label{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:1.1px;text-transform:uppercase;color:#fff;margin:0 .6rem .5rem}
+.sidebar-section-label:first-child{margin-top:0}
+.sidebar-section-label.divider-before{border-top:1.5px solid rgba(255,255,255,.2);padding-top:.8rem}
+/* sub-groupings within a top-level division (e.g. My Profile (Softcopy), Application) */
+.sidebar-menu-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:.9rem 0 .4rem .6rem}
+.sidebar-menu-label:first-child{margin-top:0}
+/* thin divider directly under each top-level section label (Overview / Admission / Allowance),
+   separating the heading from its subcontents */
+.sidebar-label-divider{list-style:none;height:1px;margin:0 .55rem .65rem;background:rgba(255,255,255,.16)}
+/* distinct divider used only WITHIN Admission, between the "My Profile (Softcopy)" items and
+   the "Application" items — dashed + warm gold tint so it reads differently from the thin
+   solid divider above and doesn't feel repetitive */
+.sidebar-subgroup-divider{list-style:none;height:0;margin:.8rem .55rem .1rem;border-top:1px dashed rgba(200,168,75,.45)}
+.sidebar-subgroup-divider + .sidebar-menu-label{margin-top:.5rem}
+.menu-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:.79rem;color:rgba(255,255,255,.8);transition:background .2s,color .2s;width:100%}
+.menu-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.menu-btn.active{background:#fff;color:var(--ccc-blue)}
+.menu-icon{width:18px;text-align:center;flex-shrink:0;font-size:.9rem}
+.menu-badge{margin-left:auto;background:var(--yellow);color:var(--navy);font-size:.62rem;font-weight:800;padding:1px 7px;border-radius:10px;flex-shrink:0}
+
+.sidebar-logout{margin-top:1.25rem;padding-top:1.1rem;border-top:1px solid rgba(255,255,255,.15)}
+.logout-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.79rem;color:rgba(255,255,255,.85);width:100%;transition:background .2s,color .2s}
+.logout-btn:hover{background:rgba(192,57,43,.35);color:#fff}
+
+/* ── MAIN CONTENT ── */
+.portal-main{padding:2.5rem 3rem 4rem;overflow-y:auto}
+.portal-panel{display:none}
+.portal-panel.active{display:block;animation:slideDown .3s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.portal-header{margin-bottom:1.75rem}
+.portal-eyebrow{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.6px;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem}
+.portal-eyebrow.eyebrow-yellow{color:var(--yellow)}
+.portal-header h1{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.5rem;color:var(--navy);letter-spacing:.2px}
+.portal-header p{font-size:.85rem;color:var(--muted);margin-top:.35rem;max-width:640px}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 3px 18px rgba(13,47,110,.06);padding:1.75rem 2rem;margin-bottom:1.5rem}
+.card-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.92rem;color:var(--navy);letter-spacing:.3px;margin-bottom:1.1rem;padding-bottom:.7rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.card-title span.tag{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);background:var(--off);padding:3px 10px;border-radius:20px;border:1px solid var(--border)}
+
+/* status summary cards (dashboard) */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin-bottom:1.75rem}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.4rem;box-shadow:0 3px 18px rgba(13,47,110,.06)}
+.stat-card .stat-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.stat-card .stat-value{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.02rem;color:var(--navy)}
+.stat-card .stat-note{font-size:.72rem;color:var(--muted);margin-top:.5rem;line-height:1.5}
+.stat-progress{width:100%;height:8px;border-radius:5px;background:var(--off);overflow:hidden;margin-top:.6rem}
+.stat-progress-bar{height:100%;background:linear-gradient(90deg,var(--ccc-blue),var(--blue-light));border-radius:5px}
+.stat-locked{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.85rem;color:var(--muted)}
+
+/* ── locked / unlocked stat cards ── */
+.stat-card{position:relative;transition:box-shadow .2s,border-color .2s,transform .15s}
+.stat-card.locked{opacity:.52;filter:saturate(.65)}
+.stat-card.locked .stat-value,.stat-card.locked .stat-label{color:var(--muted)}
+.stat-lock-badge{position:absolute;top:.9rem;right:.9rem;width:26px;height:26px;border-radius:50%;background:var(--off);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--muted)}
+.stat-card.unlocked-clickable{cursor:pointer;border-width:1.5px}
+.stat-card.unlocked-clickable:hover{box-shadow:0 6px 22px rgba(13,47,110,.12);transform:translateY(-1px)}
+.stat-card.unlocked-clickable.tab-active{border-color:var(--ccc-blue);box-shadow:0 6px 22px rgba(0,60,208,.14)}
+.stat-card.unlocked-clickable.tab-active .stat-label{color:var(--ccc-blue)}
+.stat-card-hint{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.4px;text-transform:uppercase;color:var(--ccc-blue);margin-top:.6rem;display:flex;align-items:center;gap:4px}
+.stat-card.locked .stat-card-hint{display:none}
+
+/* ── section divider (unlockable category marker) ── */
+.section-divider{display:flex;align-items:center;gap:.9rem;margin:1.5rem 0 1.5rem}
+.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.section-divider-chip{display:flex;align-items:center;gap:8px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.5px;text-transform:uppercase;color:var(--ccc-blue);background:#EEF3FD;border:1px solid #D6E3FA;padding:6px 16px;border-radius:20px;white-space:nowrap}
+.section-divider-chip .divider-icon{font-size:.78rem;width:16px;text-align:center;flex-shrink:0}
+.section-divider-sub{font-size:.68rem;color:var(--muted);text-align:center;margin-top:-1.1rem;margin-bottom:1.5rem;font-style:italic}
+
+/* ── connected-tab pointer + content panel ── */
+.tab-connector{height:16px;position:relative;margin:-.25rem auto 0}
+.tab-connector-arrow{position:absolute;top:-1px;width:15px;height:15px;background:#fff;border-left:1.5px solid var(--ccc-blue);border-top:1.5px solid var(--ccc-blue);transform:rotate(45deg);transition:left .25s ease}
+.tab-content-card{border-color:var(--ccc-blue);border-width:1.5px}
+.tab-lock-notice{display:flex;align-items:center;gap:12px;background:var(--off);border:1px dashed var(--border);border-radius:8px;padding:1rem 1.25rem;font-size:.82rem;color:var(--muted)}
+.tab-lock-notice .tln-icon{width:34px;height:34px;border-radius:8px;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+
+/* application status hero card */
+.status-hero{padding:2rem 2.25rem;margin-bottom:1.25rem}
+.status-hero-eyebrow{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:.4px;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem}
+.status-hero-value{margin-bottom:.9rem}
+.status-hero-value .badge{font-size:.78rem;padding:6px 15px}
+.status-hero-desc{font-size:.86rem;color:var(--muted);max-width:680px;margin-bottom:1.4rem}
+.status-hero-next{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:var(--off);border:1px solid var(--border);border-radius:10px;padding:1rem 1.4rem}
+.next-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.next-action{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.92rem;color:var(--navy)}
+.next-action-btn{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.4px;text-transform:uppercase;color:#fff;background:var(--ccc-blue);padding:9px 20px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:background .2s}
+.next-action-btn:hover{background:#002fa8}
+.badge{display:inline-flex;align-items:center;gap:5px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.3px;padding:4px 11px;border-radius:20px}
+.badge-pending{background:#FEF3E8;color:#7A4210}
+.badge-verified{background:#E6F4EC;color:#1A5C3A}
+.badge-deficient{background:#FBE7E7;color:#902020}
+.badge-progress{background:#EEF3FD;color:var(--ccc-blue)}
+
+/* message list */
+.message-item{display:flex;gap:14px;padding:1rem 0;border-bottom:1px solid var(--border)}
+.message-item:last-child{border-bottom:none;padding-bottom:0}
+.message-dot{width:38px;height:38px;border-radius:50%;background:#EEF3FD;color:var(--ccc-blue);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.message-body h4{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.85rem;color:var(--text);margin-bottom:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.message-body p{font-size:.8rem;color:var(--muted)}
+.message-body .message-date{font-size:.68rem;color:var(--muted);margin-top:4px;display:block}
+
+/* ── comms filter: Announcements / Messages toggle ── */
+.post-type-toggle{display:flex;gap:.6rem;margin-bottom:1.1rem}
+.post-type-btn{all:unset;box-sizing:border-box;cursor:pointer;flex:1;text-align:center;padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.76rem;color:var(--muted);transition:border-color .15s,background .15s,color .15s}
+.post-type-btn.active{border-color:var(--ccc-blue);background:#EEF3FD;color:var(--ccc-blue)}
+.comm-scope-note{display:flex;align-items:flex-start;gap:9px;background:var(--off);border:1px solid var(--border);border-radius:8px;padding:.75rem .95rem;font-size:.78rem;color:var(--muted);line-height:1.55;margin-bottom:1.1rem}
+.comm-scope-note svg{flex-shrink:0;margin-top:2px;color:var(--ccc-blue)}
+.comm-scope-note b{color:var(--text)}
+.msg-kind-tag{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.58rem;letter-spacing:.4px;text-transform:uppercase;color:var(--ccc-blue);background:#EEF3FD;padding:2px 8px;border-radius:10px}
+
+/* two-column layout: personal info textboxes beside required-document uploads */
+.dual-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start}
+.dual-grid .card{margin-bottom:0}
+
+/* ── STACKED TOPIC CARDS (single column): each card owns one topic plus the
+   document(s) that verify it, so related content stays together top-to-bottom
+   instead of splitting fields and uploads into separate side-by-side panes ── */
+.topic-card .card-title{margin-bottom:.9rem}
+.topic-card-intro{font-size:.82rem;color:var(--muted);margin:-.4rem 0 1.1rem}
+.topic-doc-section{margin-top:1.4rem;padding-top:1.25rem;border-top:1.5px dashed var(--border)}
+.topic-doc-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.4px;text-transform:uppercase;color:var(--ccc-blue);margin-bottom:.85rem;display:flex;align-items:center;gap:7px}
+.topic-doc-label .tdl-count{background:#EEF3FD;color:var(--ccc-blue);border-radius:20px;padding:1px 8px;font-size:.62rem}
+.topic-card .upload-row:last-child{margin-bottom:0}
+.topic-card-number{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#EEF3FD;color:var(--ccc-blue);font-family:'Montserrat',sans-serif;font-weight:800;font-size:.78rem;flex-shrink:0}
+
+/* forms (shared with signup styling) */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 1.1rem}
+.mfield{margin-bottom:1rem}
+.mfield.full{grid-column:1/-1}
+.mfield label{display:block;font-size:.75rem;font-weight:700;color:var(--navy);margin-bottom:5px;font-family:'Montserrat',sans-serif;letter-spacing:.3px;text-transform:uppercase}
+.mfield label .req-mark{color:var(--red);margin-left:2px}
+.upload-row.required .u-title .req-mark{color:var(--red);margin-left:2px}
+.mfield input,.mfield select,.mfield textarea{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:6px;font-family:'Open Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;background:#fff}
+.mfield input:focus,.mfield select:focus,.mfield textarea:focus{border-color:var(--ccc-blue);box-shadow:0 0 0 3px rgba(0,60,208,.1)}
+.mfield input::placeholder,.mfield textarea::placeholder{color:#A9B4C7;opacity:1}
+.mfield select{cursor:pointer}
+.mfield textarea{resize:vertical;min-height:68px}
+.field-note{font-size:.72rem;color:var(--muted);margin-top:4px}
+
+/* ── EDUCATIONAL BACKGROUND fillable table (Primary / Secondary / Tertiary) ── */
+.edu-table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:8px;margin-bottom:1.5rem}
+.edu-table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:640px}
+.edu-table th,.edu-table td{border:1px solid var(--border)}
+.edu-table thead th{background:var(--off);font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.4px;text-transform:uppercase;color:var(--navy);padding:12px;text-align:center}
+.edu-table thead th:first-child{background:#fff;border-top:none;border-left:none}
+.edu-table tbody th{background:var(--off);font-family:'Montserrat',sans-serif;font-weight:700;font-size:.74rem;color:var(--navy);text-align:left;padding:10px 12px;vertical-align:middle;white-space:nowrap}
+.edu-table tbody td{padding:0;vertical-align:middle}
+.edu-table tbody td input{width:100%;height:100%;border:none;background:transparent;padding:10px 12px;font-family:'Open Sans',sans-serif;font-size:.82rem;color:var(--text);outline:none;transition:background .2s}
+.edu-table tbody td input:focus{background:#EEF3FD;box-shadow:inset 0 0 0 1.5px var(--ccc-blue)}
+.edu-table tbody td input::placeholder{color:#A9B4C7}
+.edu-table tbody tr:last-child th,.edu-table tbody tr:last-child td{border-bottom:none}
+
+/* ── ORGANIZATIONAL INVOLVEMENT fillable table (row-based, expandable) ── */
+.org-table thead th:first-child{background:var(--off);border-left:1px solid var(--border)}
+.org-table .org-table-action-th{width:44px;background:#fff;border-top:none;border-right:none}
+.org-table .org-row-action{padding:6px!important;text-align:center;vertical-align:middle;background:#fff}
+.org-row-btn{all:unset;box-sizing:border-box;cursor:pointer;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;line-height:1;font-weight:700;transition:background .2s,color .2s}
+.org-row-add{background:#EEF3FD;color:var(--ccc-blue)}
+.org-row-add:hover{background:var(--ccc-blue);color:#fff}
+.org-row-remove{background:#FDECEA;color:var(--red)}
+.org-row-remove:hover{background:var(--red);color:#fff}
+
+.check-grid{display:flex;flex-direction:column;gap:9px;margin-bottom:.5rem}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;transition:border-color .2s,background .2s;font-size:.83rem;color:var(--text);user-select:none}
+.check-item:hover{background:var(--off)}
+.check-item input{margin-top:2px;width:16px;height:16px;accent-color:var(--ccc-blue);flex-shrink:0;cursor:pointer}
+.check-item.checked{border-color:var(--ccc-blue);background:#EEF3FD}
+
+/* document upload row */
+.upload-row{display:flex;align-items:center;gap:14px;padding:13px 15px;border:1.5px dashed #C0392B;border-radius:8px;margin-bottom:.7rem;background:#FEF8F8}
+.upload-row.has-file{border-style:solid;border-color:#1B6B3A;background:#F3FAF6}
+.upload-icon{display:none}
+.upload-info{flex:1;min-width:0}
+.upload-info .u-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.8rem;color:var(--text)}
+.upload-info .u-sub{font-size:.72rem;color:var(--muted);margin-top:2px}
+.upload-info .u-filename{font-size:.72rem;color:var(--green);margin-top:2px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.upload-btn-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.3px;text-transform:uppercase;color:var(--ccc-blue);border:1.5px solid var(--ccc-blue);border-radius:6px;padding:8px 14px;cursor:pointer;flex-shrink:0;white-space:nowrap;transition:background .2s,color .2s}
+.upload-btn-label:hover{background:var(--ccc-blue);color:#fff}
+.upload-row input[type="file"]{display:none}
+
+/* action buttons */
+.mbtn{padding:10px 22px;border:none;border-radius:6px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.mbtn-primary{background:var(--ccc-blue);color:#fff}
+.mbtn-primary:hover{background:#002fa8}
+.mbtn-secondary{background:var(--green);color:#fff}
+.mbtn-secondary:hover{background:var(--green-dark)}
+.mbtn-ghost{background:none;border:1.5px solid var(--border);color:var(--muted)}
+.mbtn-ghost:hover{background:var(--off);color:var(--text)}
+.mbtn-danger{background:#C0392B;color:#fff}
+.mbtn-danger:hover{background:#992d22}
+.form-actions{display:flex;gap:.75rem;margin-top:1.5rem;flex-wrap:wrap}
+.save-note{font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:6px;margin-top:.5rem}
+
+/* ── MILESTONE STEP CIRCLES (dashboard) ── */
+.timeline-dot.step-done{background:#E6F4EC;color:#1B6B3A;border:2px solid #1B6B3A;font-weight:800}
+.timeline-dot.step-ongoing{background:#FFF8DC;color:#7A5C00;border:2px solid #FFD400;font-weight:800}
+.timeline-dot.step-notstarted{background:#FBE7E7;color:#902020;border:2px solid #C0392B;font-weight:800}
+
+/* activity log / timeline */
+.timeline{display:flex;flex-direction:column}
+.timeline-item{display:flex;gap:14px;position:relative;padding-bottom:1.4rem}
+.timeline-item:last-child{padding-bottom:0}
+.timeline-item:not(:last-child)::before{content:'';position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--border)}
+.timeline-dot{width:29px;height:29px;border-radius:50%;background:#EEF3FD;color:var(--ccc-blue);display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;z-index:1}
+.timeline-dot.done{background:#1B6B3A;color:#fff;font-weight:800}
+.timeline-dot.warn{background:#C0392B;color:#fff;font-weight:800}
+.timeline-body h4{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.82rem;color:var(--text)}
+.timeline-body p{font-size:.76rem;color:var(--muted);margin-top:2px}
+
+/* document status table */
+.doc-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.doc-table th{text-align:left;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--border)}
+.doc-table td{padding:12px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.doc-table tr:last-child td{border-bottom:none}
+.reupload-link{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;color:var(--ccc-blue);cursor:pointer;background:none;border:none;text-decoration:underline}
+
+/* ── LOGOUT CONFIRM MODAL ── */
+.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(13,20,38,.55);z-index:1000;align-items:center;justify-content:center;padding:1.5rem}
+.confirm-overlay.open{display:flex}
+.confirm-box{background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-width:380px;width:100%;padding:2rem;text-align:center;animation:slideDown .25s ease}
+.confirm-icon{width:56px;height:56px;border-radius:50%;background:#FBE7E7;color:#C0392B;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 1rem}
+.confirm-box h3{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.05rem;color:var(--navy);margin-bottom:.5rem}
+.confirm-box p{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem}
+.confirm-actions{display:flex;gap:.75rem}
+.confirm-actions .mbtn{flex:1}
+
+@media(max-width:960px){
+  .dual-grid{grid-template-columns:1fr}
+  .portal-shell{grid-template-columns:1fr}
+  .sidebar{position:relative;top:0;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:1.25rem}
+  .sidebar-profile{margin-bottom:0;padding-bottom:0;border-bottom:none;flex-shrink:0}
+  .sidebar-menu{flex-direction:row;flex-wrap:wrap;margin-left:1rem}
+  .sidebar-group{display:contents}
+  .sidebar-menu-label{display:none}
+  .sidebar-label-divider,.sidebar-subgroup-divider{display:none}
+  .sidebar-logout{margin-top:0;padding-top:0;border-top:none;margin-left:auto}
+  .portal-main{padding:1.75rem 1.25rem 3rem}
+}
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr}
+  .nav-portal-badge{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ TOPBAR ══ -->
+<div class="topbar">
+  <div class="inner">
+    <span>(049) 559-8900 to 8907 / (02) 8-539-5170 to 5171</span>
+    <a href="https://www.ccc.edu.ph" target="_blank" rel="noopener">www.ccc.edu.ph</a>
+  </div>
+</div>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-logos">
+        <img src="LOGO_CCC.png" alt="City College of Calamba Logo"/>
+        <img src="LOGO_CCC_Admissions.png" alt="CCC Admissions Logo"/>
+      </div>
+      <div class="brand-text">
+        <span class="main">City College of Calamba</span>
+        <span class="sub">Scholarship Application Portal</span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ PORTAL SHELL ══ -->
+<div class="portal-shell">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+    <div class="sidebar-profile">
+      <div class="avatar-wrap" title="Profile picture">
+        <span class="avatar-initials" id="avatarInitials">JD</span>
+        <img id="avatarImg" alt="Profile picture"/>
+      </div>
+
+      <div class="profile-name-row" id="profileNameRow">
+        <span class="profile-name" id="profileNameDisplay">Juan Dela Cruz</span>
+      </div>
+      <div class="profile-role">Applicant</div>
+      <div class="profile-id">Applicant ID: CCC-2026-00214</div>
+    </div>
+
+    <div class="sidebar-menu">
+      <ul class="sidebar-group">
+        <li class="sidebar-section-label">Overview</li>
+        <li class="sidebar-label-divider" aria-hidden="true"></li>
+        <li><button class="menu-btn active" data-panel="dashboard" onclick="showPanel('dashboard',this)"><span class="menu-icon"></span> Dashboard</button></li>
+        <li><button class="menu-btn" data-panel="messages" onclick="showPanel('messages',this)"><span class="menu-icon"></span> Messages <span class="menu-badge">3</span></button></li>
+      </ul>
+
+      <ul class="sidebar-group">
+        <li class="sidebar-section-label">Admission</li>
+        <li class="sidebar-label-divider" aria-hidden="true"></li>
+        <li class="sidebar-menu-label">My Profile (Softcopy)</li>
+        <li><button class="menu-btn" data-panel="personal" onclick="showPanel('personal',this)"><span class="menu-icon"></span> Personal Information</button></li>
+        <li><button class="menu-btn" data-panel="academic" onclick="showPanel('academic',this)"><span class="menu-icon"></span> Educational Background</button></li>
+        <li><button class="menu-btn" data-panel="financial" onclick="showPanel('financial',this)"><span class="menu-icon"></span> Financial &amp; Employment</button></li>
+        <li><button class="menu-btn" data-panel="health" onclick="showPanel('health',this)"><span class="menu-icon"></span> Health &amp; Wellness</button></li>
+        <li class="sidebar-subgroup-divider" aria-hidden="true"></li>
+        <li class="sidebar-menu-label">Application</li>
+        <li><button class="menu-btn" data-panel="status" onclick="showPanel('status',this)"><span class="menu-icon"></span> Documents &amp; Status</button></li>
+        <li><button class="menu-btn" data-panel="appeals" onclick="showPanel('appeals',this)"><span class="menu-icon"></span> Appeals &amp; Rescheduling</button></li>
+      </ul>
+
+      <ul class="sidebar-group">
+        <li class="sidebar-section-label">Allowance</li>
+        <li class="sidebar-label-divider" aria-hidden="true"></li>
+        <li><button class="menu-btn" data-panel="allowance" onclick="showPanel('allowance',this)"><span class="menu-icon"></span> Allowance</button></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-logout">
+      <button class="logout-btn" onclick="openLogoutConfirm()"><span class="menu-icon"></span> Log Out</button>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN CONTENT ══ -->
+  <main class="portal-main">
+
+    <!-- ══ DASHBOARD ══ -->
+    <section class="portal-panel active" id="panel-dashboard">
+      <div class="portal-header">
+        <h1 id="dashGreeting">Welcome back, Juan!</h1>
+        <p>Here's a quick look at your scholarship application progress with the City College of Calamba.</p>
+      </div>
+
+      <div class="card status-hero">
+        <p class="status-hero-eyebrow">Application Status</p>
+        <div class="status-hero-value"><span class="badge badge-progress">Step 2 of 6 &middot; Filling Out Profile</span></div>
+        <p class="status-hero-desc">You've created and verified your account. You're now completing your applicant profile &mdash; once your Academic, Financial, and Health sections are filled out and your documents are verified, you'll be scheduled for the scholarship qualifying exam.</p>
+        <div class="status-hero-next">
+          <div>
+            <div class="next-label">Next Step</div>
+            <div class="next-action">Complete your Educational Background</div>
+          </div>
+          <a href="#" class="next-action-btn" onclick="showPanel('academic');return false;">Continue &rarr;</a>
+        </div>
+      </div>
+
+      <div class="section-divider">
+        <div class="section-divider-chip"><span class="divider-icon">&#128275;</span> Progress Milestones</div>
+      </div>
+      <p class="section-divider-sub">Each milestone below unlocks as you clear the corresponding step in the application process.</p>
+
+      <div class="stat-grid" id="statGrid">
+        <div class="stat-card unlocked-clickable tab-active" data-stage="profile" data-required-step="2" onclick="selectStage('profile', this)" role="button" tabindex="0" aria-label="View Profile Completion progress">
+          <div class="stat-label">Profile Completion</div>
+          <div class="stat-value">2 of 5 sections done</div>
+          <div class="stat-progress"><div class="stat-progress-bar" style="width:40%"></div></div>
+          <div class="stat-note">Includes filling out each section and uploading &amp; submitting its documents.</div>
+          <div class="stat-card-hint">&#9660; Viewing details below</div>
+        </div>
+
+        <div class="stat-card locked" data-stage="documents" data-required-step="3">
+          <div class="stat-lock-badge">&#128274;</div>
+          <div class="stat-label">Document Verification</div>
+          <div class="stat-value stat-locked">Locked</div>
+          <div class="stat-note">Unlocks once your profile is complete &mdash; Step 3: Upload Docs.</div>
+        </div>
+
+        <div class="stat-card locked" data-stage="exam" data-required-step="5">
+          <div class="stat-lock-badge">&#128274;</div>
+          <div class="stat-label">Exam Schedule</div>
+          <div class="stat-value stat-locked">Locked</div>
+          <div class="stat-note">Unlocks once your documents are verified &mdash; Step 5: Take Exam.</div>
+        </div>
+
+        <div class="stat-card locked" data-stage="medical" data-required-step="5.5">
+          <div class="stat-lock-badge">&#128274;</div>
+          <div class="stat-label">Medical Status</div>
+          <div class="stat-value stat-locked">Locked</div>
+          <div class="stat-note">Unlocks once you've passed the applicant examination.</div>
+        </div>
+
+        <div class="stat-card locked" data-stage="admission" data-required-step="6">
+          <div class="stat-lock-badge">&#128274;</div>
+          <div class="stat-label">Admission</div>
+          <div class="stat-value stat-locked">Locked</div>
+          <div class="stat-note">Unlocks once your exam results are released &mdash; Step 6: Track Result.</div>
+        </div>
+      </div>
+
+      <div class="tab-connector" id="tabConnector"><div class="tab-connector-arrow" id="tabConnectorArrow"></div></div>
+
+      <div class="card tab-content-card" id="stageContentCard">
+        <div class="card-title" id="stageContentTitle">Complete Your Profile <span class="tag">Required for matching</span></div>
+        <div id="stageContentBody">
+          <p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Fill out the sections below so Iskolusyon can automatically match you to scholarship programs you qualify for.</p>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot step-done">1</div>
+              <div class="timeline-body"><h4>Account Setup &amp; Personal Information</h4><p>Completed during sign up.</p></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot step-ongoing">2</div>
+              <div class="timeline-body"><h4>Educational Background</h4><p>Currently ongoing &mdash; <a href="#" onclick="showPanel('academic');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">continue &rarr;</a></p></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot step-notstarted">3</div>
+              <div class="timeline-body"><h4>Financial &amp; Employment</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('financial');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot step-notstarted">4</div>
+              <div class="timeline-body"><h4>Health &amp; Wellness</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('health');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ MESSAGES ══ -->
+    <section class="portal-panel" id="panel-messages">
+      <div class="portal-header">
+        <p class="portal-eyebrow eyebrow-yellow">Notifications</p>
+        <h1>Messages</h1>
+        <p>Updates on exam schedules, results, and requirements from the CCC Guidance and Testing Center.</p>
+      </div>
+
+      <div class="card">
+        <div class="post-type-toggle">
+          <button type="button" class="post-type-btn active" id="commFilterAllBtn" onclick="setMessagesFilter('all')">All</button>
+          <button type="button" class="post-type-btn" id="commFilterAnnBtn" onclick="setMessagesFilter('announcement')">Announcements</button>
+          <button type="button" class="post-type-btn" id="commFilterMsgBtn" onclick="setMessagesFilter('message')">Messages</button>
+        </div>
+        <div class="comm-scope-note" id="commsFilterNote">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+          <span id="commsFilterNoteText">Showing everything received &mdash; <b>Announcements</b> sent to all applicants (and posted on the guest page), plus <b>Messages</b> sent to you individually or to your applicant category.</span>
+        </div>
+        <div id="commsList"></div>
+      </div>
+    </section>
+
+    <!-- ══ PERSONAL INFORMATION ══ -->
+    <section class="portal-panel" id="panel-personal">
+      <div class="portal-header">
+        <p class="portal-eyebrow">Admission &middot; My Profile (Softcopy)</p>
+        <h1>Personal Information</h1>
+        <p>This section establishes your legal identity and residency to qualify as CCC's scholar.</p>
+      </div>
+
+      <div class="card topic-card">
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">1</span> Profile Picture</span></div>
+        <p class="topic-card-intro">This photo is used across your application and account.</p>
+        <div class="upload-row required" id="up-profilepic">
+          <div class="upload-icon"></div>
+          <div class="upload-info">
+            <div class="u-title">Profile Picture <span class="req-mark">*</span></div>
+            <div class="u-sub">A clear, recent 2x2 photo of yourself</div>
+            <div class="u-filename" id="up-profilepic-name"></div>
+          </div>
+          <label class="upload-btn-label">Upload<input type="file" accept="image/*" required onchange="handleDocUpload(this,'up-profilepic')"/></label>
+        </div>
+      </div>
+
+      <div class="card topic-card">
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">2</span> Identity &amp; Civil Status</span> <span class="tag">Editable</span></div>
+        <p class="topic-card-intro">These fields auto-fill once you upload your Birth Certificate below. Document text extraction isn't always perfect, so you can still correct any field manually.</p>
+        <div class="form-grid">
+          <div class="mfield"><label for="pi-firstname">First Name <span class="req-mark">*</span></label><input type="text" id="pi-firstname" placeholder="e.g. Juan" required oninput="syncProfileNameFromPersonalInfo()"/></div>
+          <div class="mfield"><label for="pi-middlename">Middle Name (if any)</label><input type="text" id="pi-middlename" placeholder="e.g. Santos"/></div>
+          <div class="mfield"><label for="pi-lastname">Last Name <span class="req-mark">*</span></label><input type="text" id="pi-lastname" placeholder="e.g. Dela Cruz" required oninput="syncProfileNameFromPersonalInfo()"/></div>
+          <div class="mfield"><label for="pi-suffix">Suffix (if any)</label><input type="text" id="pi-suffix" placeholder="e.g. Jr., III"/></div>
+          <div class="mfield"><label for="pi-dob">Date of Birth <span class="req-mark">*</span></label><input type="date" id="pi-dob" required/></div>
+          <div class="mfield"><label for="pi-pob">Place of Birth <span class="req-mark">*</span></label><input type="text" id="pi-pob" placeholder="e.g. Calamba City, Laguna" required/></div>
+          <div class="mfield">
+            <label for="pi-sex">Sex <span class="req-mark">*</span></label>
+            <select id="pi-sex" required><option value="">Select</option><option>Male</option><option>Female</option></select>
+          </div>
+          <div class="mfield"><label for="pi-citizenship">Citizenship <span class="req-mark">*</span></label><input type="text" id="pi-citizenship" placeholder="e.g. Filipino" required/></div>
+          <div class="mfield"><label for="pi-religion">Religion</label><input type="text" id="pi-religion" placeholder="e.g. Roman Catholic"/></div>
+          <div class="mfield">
+            <label for="pi-civilstatus">Civil Status <span class="req-mark">*</span></label>
+            <select id="pi-civilstatus" required onchange="toggleIfMarried(this)"><option value="">Select</option><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option></select>
+          </div>
+        </div>
+        <div class="form-grid" id="if-married-group" style="display:none">
+          <div class="mfield full"><hr style="border:none;border-top:1px solid var(--border);margin:.25rem 0 1rem"/></div>
+          <div class="mfield full" style="margin-bottom:.4rem">
+            <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.75rem;letter-spacing:.3px;text-transform:uppercase;color:var(--navy);margin:0">If Married</p>
+          </div>
+          <div class="mfield"><label for="pi-spouse-name">Spouse's Name</label><input type="text" id="pi-spouse-name" placeholder="e.g. Maria Dela Cruz"/></div>
+          <div class="mfield"><label for="pi-spouse-occupation">Spouse's Occupation</label><input type="text" id="pi-spouse-occupation" placeholder="e.g. Teacher"/></div>
+          <div class="mfield full"><label for="pi-spouse-contact">Spouse's Contact Number</label><input type="text" id="pi-spouse-contact" placeholder="e.g. 0917 123 4567"/></div>
+        </div>
+        <div class="topic-doc-section">
+          <div class="topic-doc-label">Verifying Document <span class="tdl-count">1 required</span></div>
+          <div class="upload-row required" id="up-birthcert">
+            <div class="upload-icon"></div>
+            <div class="upload-info">
+              <div class="u-title">Birth Certificate / PSA <span class="req-mark">*</span></div>
+              <div class="u-sub">Issued by the Philippine Statistics Authority</div>
+              <div class="u-filename" id="up-birthcert-name"></div>
+            </div>
+            <label class="upload-btn-label">Upload<input type="file" required onchange="handleDocUpload(this,'up-birthcert')"/></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card topic-card">
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">3</span> Contact &amp; Residency</span> <span class="tag">Editable</span></div>
+        <p class="topic-card-intro">Your address and precinct number auto-fill once you upload your Voter's ID below.</p>
+        <div class="form-grid">
+          <div class="mfield full">
+            <label for="pi-email">Email Address <span class="req-mark">*</span></label>
+            <input type="email" id="pi-email" placeholder="e.g. juandelacruz@gmail.com" required/>
+            <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.8rem;font-weight:400;text-transform:none;letter-spacing:normal;color:var(--text);cursor:pointer">
+              <input type="checkbox" id="pi-email-updates" style="width:15px;height:15px;margin:0;accent-color:var(--ccc-blue);cursor:pointer"/>
+              I want to receive email updates.
+            </label>
+          </div>
+          <div class="mfield full">
+            <label for="pi-contact">Contact Number <span class="req-mark">*</span></label>
+            <input type="text" id="pi-contact" placeholder="e.g. 0917 123 4567" required/>
+            <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.8rem;font-weight:400;text-transform:none;letter-spacing:normal;color:var(--text);cursor:pointer">
+              <input type="checkbox" id="pi-sms-updates" style="width:15px;height:15px;margin:0;accent-color:var(--ccc-blue);cursor:pointer"/>
+              I want to receive SMS updates.
+            </label>
+          </div>
+          <div class="mfield full"><label for="pi-address">Present Home Address <span class="req-mark">*</span></label><input type="text" id="pi-address" placeholder="House No., Street, Barangay, City, Province" required/></div>
+          <div class="mfield full"><label for="pi-precinct">Voter's Precinct No. <span class="req-mark">*</span></label><input type="text" id="pi-precinct" placeholder="e.g. 0142A" required/></div>
+        </div>
+        <div class="topic-doc-section">
+          <div class="topic-doc-label">Verifying Document <span class="tdl-count">1 required</span></div>
+          <div class="upload-row required" id="up-voterid">
+            <div class="upload-icon"></div>
+            <div class="upload-info">
+              <div class="u-title">Voter's ID / Certification <span class="req-mark">*</span></div>
+              <div class="u-sub">Issued by the Commission on Elections (COMELEC)</div>
+              <div class="u-filename" id="up-voterid-name"></div>
+            </div>
+            <label class="upload-btn-label">Upload<input type="file" required onchange="handleDocUpload(this,'up-voterid')"/></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card topic-card">
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">4</span> Additional Information</span> <span class="tag">Editable</span></div>
+        <p class="topic-card-intro">Used to help match you to special scholarship categories and accommodations. No document needed here.</p>
+        <div class="form-grid">
+          <div class="mfield">
+            <label for="pi-lgbtqi">Are you a LGBTQI+ community member? <span class="req-mark">*</span></label>
+            <select id="pi-lgbtqi" required><option value="">Select</option><option>Yes</option><option>No</option></select>
+          </div>
+          <div class="mfield"><label for="pi-disability">Do you have a physical or behavioral condition/disability? <span class="req-mark">*</span></label><input type="text" id="pi-disability" placeholder="e.g. None" required/></div>
+          <div class="mfield">
+            <label for="pi-working-student">Are you a working student? <span class="req-mark">*</span></label>
+            <select id="pi-working-student" required><option value="">Select</option><option>Yes</option><option>No</option></select>
+          </div>
+          <div class="mfield full"><label for="pi-hobbies">What are your hobbies and interests? <span class="req-mark">*</span></label><input type="text" id="pi-hobbies" placeholder="e.g. Reading, basketball, drawing" required/></div>
+        </div>
+      </div>
+
+      <div class="card topic-card">
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">5</span> Organizational Involvement</span> <span class="tag">Optional</span></div>
+        <p class="topic-card-intro">List any organization/s you are or were part of. This section is optional &mdash; leave it blank if not applicable.</p>
+        <div class="edu-table-wrap">
+          <table class="edu-table org-table" id="org-table">
+            <thead>
+              <tr>
+                <th>Name of Organization</th>
+                <th>Position in Organization</th>
+                <th>Nature of Organization</th>
+                <th>Year of Joining</th>
+                <th class="org-table-action-th"></th>
+              </tr>
+            </thead>
+            <tbody id="org-table-body">
+              <tr>
+                <td><input type="text" placeholder="e.g. Organization Name"/></td>
+                <td><input type="text" placeholder="e.g. President"/></td>
+                <td><input type="text" placeholder="e.g. Non-profit Organization"/></td>
+                <td><input type="text" placeholder="e.g. 2025-2026"/></td>
+                <td class="org-row-action"><button type="button" class="org-row-btn org-row-add" onclick="addOrgRow(this)" title="Add row">&plus;</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card topic-card">
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">6</span> Motivation and Aspirations Questions</span> <span class="tag">Editable</span></div>
+        <p class="topic-card-intro">Help us get to know you better. All questions in this section are required.</p>
+        <div class="form-grid">
+          <div class="mfield full">
+            <label for="pi-motivation">What motivates you to apply to this institution (City College of Calamba)? <span class="req-mark">*</span></label>
+            <textarea id="pi-motivation" placeholder="Share what motivates you to apply&hellip;" required></textarea>
+          </div>
+          <div class="mfield full">
+            <label for="pi-selfdescription">How would you describe yourself, including both your physical and personal characteristics? <span class="req-mark">*</span></label>
+            <textarea id="pi-selfdescription" placeholder="Describe yourself&hellip;" required></textarea>
+          </div>
+          <div class="mfield full">
+            <label for="pi-tenyears">Where do you see yourself 10 years from now, both personally and professionally? <span class="req-mark">*</span></label>
+            <textarea id="pi-tenyears" placeholder="Share your aspirations&hellip;" required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="mbtn mbtn-ghost" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary" onclick="submitSection(this,'Personal Information')">Submit Section</button>
+      </div>
+    </section>
+
+    <!-- ══ ACADEMIC PROFILE ══ -->
+    <section class="portal-panel" id="panel-academic">
+      <div class="portal-header">
+        <p class="portal-eyebrow">Admission &middot; My Profile (Softcopy)</p>
+        <h1>Educational Background</h1>
+        <p style="white-space:nowrap;max-width:none">This information is used for qualification matching and cross-referenced against your submitted documents.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">1</span> Program Application</span> <span class="tag">Editable</span></div>
+        <div class="form-grid">
+          <div class="mfield">
+            <label for="a-applyingas">Applying As <span class="req-mark">*</span></label>
+            <select id="a-applyingas" required>
+              <option value="">Select&hellip;</option>
+              <option>First Year</option>
+              <option>Transferee</option>
+              <option>Old Curriculum and ALS Completer</option>
+              <option>Executive Program</option>
+            </select>
+          </div>
+          <div class="mfield">
+            <label for="a-termapplying">Term Applying In <span class="req-mark">*</span></label>
+            <select id="a-termapplying" required>
+              <option value="">Select&hellip;</option>
+              <option>Term 1</option>
+              <option>Term 2</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">2</span> Preferred Program</span> <span class="tag">Editable</span></div>
+        <div class="form-grid">
+          <div class="mfield">
+            <label for="pi-choice1">First Priority Program <span class="req-mark">*</span></label>
+            <select id="pi-choice1" required>
+              <option value="">Select&hellip;</option>
+              <option>Bachelor of Science in Accounting Information System</option>
+              <option>Bachelor of Science in Accountancy</option>
+              <option>Bachelor of Early Childhood Education</option>
+              <option>Bachelor of Secondary Education Major in Filipino</option>
+              <option>Bachelor of Secondary Education Major in English</option>
+              <option>Bachelor of Elementary Education</option>
+              <option>Bachelor of Secondary Education Major in Social Studies</option>
+              <option>Bachelor of Secondary Education Major in Science</option>
+              <option>Bachelor of Secondary Education Major in Mathematics</option>
+              <option>Bachelor of Science in Computer Science</option>
+              <option>Bachelor of Science in Information Technology</option>
+              <option>Bachelor of Science in Psychology</option>
+            </select>
+          </div>
+          <div class="mfield">
+            <label for="pi-choice2">Second Priority Program <span class="req-mark">*</span></label>
+            <select id="pi-choice2" required>
+              <option value="">Select&hellip;</option>
+              <option>Bachelor of Science in Accounting Information System</option>
+              <option>Bachelor of Science in Accountancy</option>
+              <option>Bachelor of Early Childhood Education</option>
+              <option>Bachelor of Secondary Education Major in Filipino</option>
+              <option>Bachelor of Secondary Education Major in English</option>
+              <option>Bachelor of Elementary Education</option>
+              <option>Bachelor of Secondary Education Major in Social Studies</option>
+              <option>Bachelor of Secondary Education Major in Science</option>
+              <option>Bachelor of Secondary Education Major in Mathematics</option>
+              <option>Bachelor of Science in Computer Science</option>
+              <option>Bachelor of Science in Information Technology</option>
+              <option>Bachelor of Science in Psychology</option>
+              <option>None of the above</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card topic-card">
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">3</span> Educational Background</span> <span class="tag">Editable</span></div>
+        <p class="topic-card-intro">Fill in your school details for each level you've completed. <strong>Primary / Elementary is required for all applicants.</strong> Secondary / Senior High and Tertiary / College are optional (except Honors / Awards Received, which is optional for all levels).</p>
+        <div class="edu-table-wrap">
+          <table class="edu-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Primary / Elementary <span class="req-mark">*</span></th>
+                <th>Secondary / Senior High</th>
+                <th>Tertiary / College</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Name of School</th>
+                <td><input type="text" id="a-edu-prim-school" placeholder="e.g. Elementary School" required/></td>
+                <td><input type="text" id="a-edu-sec-school" placeholder="e.g. Integrated School"/></td>
+                <td><input type="text" id="a-edu-tert-school" placeholder="e.g. City College of Calamba"/></td>
+              </tr>
+              <tr>
+                <th>Address of School</th>
+                <td><input type="text" id="a-edu-prim-address" placeholder="e.g. Bunggo, Calamba City" required/></td>
+                <td><input type="text" id="a-edu-sec-address" placeholder="e.g. Bunggo, Calamba City"/></td>
+                <td><input type="text" id="a-edu-tert-address" placeholder="e.g. Calamba City, Laguna"/></td>
+              </tr>
+              <tr>
+                <th>Section / Strands / Program</th>
+                <td><input type="text" id="a-edu-prim-section" placeholder="e.g. Osme&ntilde;a" required/></td>
+                <td><input type="text" id="a-edu-sec-section" placeholder="e.g. HUMSS - Hope"/></td>
+                <td><input type="text" id="a-edu-tert-section" placeholder="e.g. BS Information Technology"/></td>
+              </tr>
+              <tr>
+                <th>Graduation / Completion Year</th>
+                <td><input type="text" id="a-edu-prim-year" placeholder="e.g. 2020" required/></td>
+                <td><input type="text" id="a-edu-sec-year" placeholder="e.g. 2026"/></td>
+                <td><input type="text" id="a-edu-tert-year" placeholder="e.g. 2030"/></td>
+              </tr>
+              <tr>
+                <th>Honors / Awards Received</th>
+                <td><input type="text" id="a-edu-prim-honors" placeholder="e.g. N/A"/></td>
+                <td><input type="text" id="a-edu-sec-honors" placeholder="e.g. Honors"/></td>
+                <td><input type="text" id="a-edu-tert-honors" placeholder="e.g. N/A"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mfield full">
+          <label for="a-techvoc">Have you taken a Technical or Vocational Course?</label>
+          <select id="a-techvoc" onchange="toggleIfTechVoc(this)">
+            <option value="">Select&hellip;</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+
+        <div class="form-grid" id="techvoc-details-group" style="margin-top:.25rem;display:none">
+          <div class="mfield"><label for="a-techvoc-school">Name of School in Technical/Vocational</label><input type="text" id="a-techvoc-school" placeholder="e.g. Calamba Technical Vocational School"/></div>
+          <div class="mfield"><label for="a-techvoc-course">Name of Course in Technical/Vocational</label><input type="text" id="a-techvoc-course" placeholder="e.g. Computer Systems Servicing NC II"/></div>
+          <div class="mfield full"><label for="a-techvoc-address">Address of School in Technical/Vocational</label><input type="text" id="a-techvoc-address" placeholder="e.g. Brgy. Real, Calamba City, Laguna"/></div>
+        </div>
+
+        <div class="topic-doc-section">
+          <div class="topic-doc-label">Verifying Documents <span class="tdl-count">Optional</span></div>
+          <div class="upload-row" id="up-form138">
+            <div class="upload-icon"></div>
+            <div class="upload-info">
+              <div class="u-title">Grades (Proof of Grades / Form 138 / Report Card)</div>
+              <div class="u-sub">Latest grading period, certified true copy</div>
+              <div class="u-filename" id="up-form138-name"></div>
+            </div>
+            <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-form138')"/></label>
+          </div>
+          <div class="upload-row" id="up-goodmoral">
+            <div class="upload-icon"></div>
+            <div class="upload-info">
+              <div class="u-title">Good Moral Character</div>
+              <div class="u-sub">Issued within the last 6 months</div>
+              <div class="u-filename" id="up-goodmoral-name"></div>
+            </div>
+            <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-goodmoral')"/></label>
+          </div>
+          <div class="upload-row" id="up-enrollment">
+            <div class="upload-icon"></div>
+            <div class="upload-info">
+              <div class="u-title">Certificate of Enrollment</div>
+              <div class="u-sub">Issued by your current or last school attended</div>
+              <div class="u-filename" id="up-enrollment-name"></div>
+            </div>
+            <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-enrollment')"/></label>
+          </div>
+          <div class="upload-row" id="up-currentscholarship">
+            <div class="upload-icon"></div>
+            <div class="upload-info">
+              <div class="u-title">Proof of Current Availed Scholarship/s</div>
+              <div class="u-sub">Certificate or documentation of any scholarship currently being availed, if applicable</div>
+              <div class="u-filename" id="up-currentscholarship-name"></div>
+            </div>
+            <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-currentscholarship')"/></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="mbtn mbtn-ghost" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary" onclick="submitSection(this,'Educational Background')">Submit Section</button>
+      </div>
+    </section>
+
+    <!-- ══ FINANCIAL & EMPLOYMENT ══ -->
+    <section class="portal-panel" id="panel-financial">
+      <div class="portal-header">
+        <p class="portal-eyebrow">Admission &middot; My Profile (Softcopy)</p>
+        <h1>Family &amp; Financial Information</h1>
+        <p>Used to assess financial need for scholarship qualification matching.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Family Information</div>
+
+        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.75rem;letter-spacing:.3px;text-transform:uppercase;color:var(--navy);margin:0 0 .85rem">Parent's / Guardian Information</p>
+        <div class="edu-table-wrap">
+          <table class="edu-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Mother</th>
+                <th>Father</th>
+                <th>Guardian</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Name</th>
+                <td><input type="text" id="fam-mother-name" placeholder="e.g. Juana Dela Cruz"/></td>
+                <td><input type="text" id="fam-father-name" placeholder="e.g. Juan Dela Cruz"/></td>
+                <td><input type="text" id="fam-guardian-name" placeholder="e.g. N/A"/></td>
+              </tr>
+              <tr>
+                <th>Citizenship</th>
+                <td><input type="text" id="fam-mother-citizenship" placeholder="e.g. Filipino"/></td>
+                <td><input type="text" id="fam-father-citizenship" placeholder="e.g. Filipino"/></td>
+                <td><input type="text" id="fam-guardian-citizenship" placeholder="e.g. N/A"/></td>
+              </tr>
+              <tr>
+                <th>Date of Birth</th>
+                <td><input type="text" id="fam-mother-dob" placeholder="e.g. MM/DD/YYYY"/></td>
+                <td><input type="text" id="fam-father-dob" placeholder="e.g. MM/DD/YYYY"/></td>
+                <td><input type="text" id="fam-guardian-dob" placeholder="e.g. N/A"/></td>
+              </tr>
+              <tr>
+                <th>Contact No.</th>
+                <td><input type="text" id="fam-mother-contact" placeholder="e.g. 0917 123 4567"/></td>
+                <td><input type="text" id="fam-father-contact" placeholder="e.g. 0917 123 4567"/></td>
+                <td><input type="text" id="fam-guardian-contact" placeholder="e.g. N/A"/></td>
+              </tr>
+              <tr>
+                <th>Highest Educational Attainment</th>
+                <td><input type="text" id="fam-mother-education" placeholder="e.g. College Graduate"/></td>
+                <td><input type="text" id="fam-father-education" placeholder="e.g. College Graduate"/></td>
+                <td><input type="text" id="fam-guardian-education" placeholder="e.g. N/A"/></td>
+              </tr>
+              <tr>
+                <th>Employment Status</th>
+                <td><input type="text" id="fam-mother-employment" placeholder="e.g. Employed"/></td>
+                <td><input type="text" id="fam-father-employment" placeholder="e.g. Employed"/></td>
+                <td><input type="text" id="fam-guardian-employment" placeholder="e.g. N/A"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:1.4rem 0 1.25rem"/>
+
+        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.75rem;letter-spacing:.3px;text-transform:uppercase;color:var(--navy);margin:0 0 .85rem">Sibling's Information</p>
+        <div class="form-grid">
+          <div class="mfield">
+            <label for="fam-onlychild">Are you an only child?</label>
+            <select id="fam-onlychild">
+              <option value="">Select&hellip;</option>
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+          <div class="mfield">
+            <label for="fam-numsiblings">Number of Siblings</label>
+            <input type="number" id="fam-numsiblings" min="0" placeholder="e.g. 2"/>
+          </div>
+        </div>
+        <div class="edu-table-wrap">
+          <table class="edu-table">
+            <tbody>
+              <tr>
+                <th style="white-space:normal">Do you have a brother or sister who is currently a student at the City College of Calamba?</th>
+                <td>
+                  <select id="fam-sibling-currentstudent">
+                    <option value="">Select&hellip;</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th style="white-space:normal">Do you have a brother or sister who graduated from the City College of Calamba?</th>
+                <td>
+                  <select id="fam-sibling-graduate">
+                    <option value="">Select&hellip;</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:1.4rem 0 1.25rem"/>
+
+        <div class="mfield full">
+          <label for="fam-emergency-contact">Person to be Notified in Case of Emergency</label>
+          <textarea id="fam-emergency-contact" placeholder="e.g. Full Name, Relationship, Address, Contact Number"></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Household &amp; Employment Details</div>
+        <div class="form-grid">
+          <div class="mfield full">
+            <label for="f-income">Household Monthly Income</label>
+            <select id="f-income">
+              <option value="">Select&hellip;</option>
+              <option>Below &#8369;10,000</option>
+              <option>&#8369;10,000 &ndash; &#8369;20,000</option>
+              <option>&#8369;20,001 &ndash; &#8369;40,000</option>
+              <option>Above &#8369;40,000</option>
+            </select>
+          </div>
+          <div class="mfield">
+            <label for="f-occupation">Parent / Guardian Occupation</label>
+            <input type="text" id="f-occupation" placeholder="e.g. Tricycle Driver"/>
+          </div>
+          <div class="mfield">
+            <label for="f-siblings">Number of Siblings</label>
+            <input type="number" id="f-siblings" min="0" placeholder="e.g. 2"/>
+          </div>
+          <div class="mfield full">
+            <label for="f-employment">Applicant's Employment Status</label>
+            <select id="f-employment">
+              <option value="">Select&hellip;</option>
+              <option>Not Employed</option>
+              <option>Part-time Employed</option>
+              <option>Full-time Employed</option>
+              <option>City Government of Calamba Employee</option>
+              <option>City College of Calamba Employee</option>
+              <option>DepEd Personnel</option>
+            </select>
+            <div class="field-note">Required if applying under an Executive Program.</div>
+          </div>
+          <div class="mfield">
+            <label for="f-grossincome">Annual Gross / Family Earning Requirement</label>
+            <input type="text" id="f-grossincome" placeholder="e.g. &#8369;120,000.00"/>
+          </div>
+          <div class="mfield">
+            <label for="f-allowance">Source of Allowance</label>
+            <select id="f-allowance">
+              <option value="">Select&hellip;</option>
+              <option>Provided by Parents</option>
+              <option>Working Independently</option>
+              <option>Financial Aid</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="mfield full">
+            <label for="f-scholarsinhh">Number of Scholars in the Household</label>
+            <input type="number" id="f-scholarsinhh" min="0" placeholder="e.g. 1"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Required Documents <span class="tag">Per CCC &amp; LGU requirements</span></div>
+        <div class="upload-row" id="up-indigency">
+          <div class="upload-icon"></div>
+          <div class="upload-info">
+            <div class="u-title">Proof of Income (Family / Guardian)</div>
+            <div class="u-sub">Certificate of Indigency / Income issued by your Barangay or the City Social Welfare Office</div>
+            <div class="u-filename" id="up-indigency-name"></div>
+          </div>
+          <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-indigency')"/></label>
+        </div>
+        <div class="upload-row" id="up-employment">
+          <div class="upload-icon"></div>
+          <div class="upload-info">
+            <div class="u-title">Certificate of Employment (if employed)</div>
+            <div class="u-sub">From your or your parent/guardian's employer</div>
+            <div class="u-filename" id="up-employment-name"></div>
+          </div>
+          <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-employment')"/></label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="mbtn mbtn-ghost" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary" onclick="submitSection(this,'Financial &amp; Employment')">Submit Section</button>
+      </div>
+    </section>
+
+    <!-- ══ HEALTH & WELLNESS ══ -->
+    <section class="portal-panel" id="panel-health">
+      <div class="portal-header">
+        <p class="portal-eyebrow">Admission &middot; My Profile (Softcopy)</p>
+        <h1>Health &amp; Wellness Information</h1>
+        <p>Used for emergency contact purposes and reasonable accommodations during examinations.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Health Details</div>
+        <div class="form-grid">
+          <div class="mfield full">
+            <label for="h-condition">Existing Medical Condition/s</label>
+            <textarea id="h-condition" placeholder="e.g. None, Asthma, etc."></textarea>
+          </div>
+          <div class="mfield full">
+            <label for="h-allergies">Allergies</label>
+            <input type="text" id="h-allergies" placeholder="e.g. None, Peanuts, etc."/>
+          </div>
+          <div class="mfield">
+            <label for="h-ec-name">Emergency Contact Person</label>
+            <input type="text" id="h-ec-name" placeholder="e.g. Maria Dela Cruz"/>
+          </div>
+          <div class="mfield">
+            <label for="h-ec-number">Emergency Contact Number</label>
+            <input type="tel" id="h-ec-number" placeholder="e.g. 09XX XXX XXXX"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Required Document <span class="tag">After applicant examination</span></div>
+        <div class="upload-row" id="up-medcert">
+          <div class="upload-icon"></div>
+          <div class="upload-info">
+            <div class="u-title">Current Medical Status</div>
+            <div class="u-sub">To be completed only once you have passed the applicant examination</div>
+            <div class="u-filename" id="up-medcert-name"></div>
+          </div>
+          <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-medcert')"/></label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="mbtn mbtn-ghost" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary" onclick="submitSection(this,'Health &amp; Wellness')">Submit Section</button>
+      </div>
+    </section>
+
+    <!-- ══ DOCUMENTS & STATUS ══ -->
+    <section class="portal-panel" id="panel-status">
+      <div class="portal-header">
+        <p class="portal-eyebrow">Admission &middot; Application</p>
+        <h1>Documents &amp; Verification Status</h1>
+        <p>Track the review status of every document you've submitted.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Document Verification Status</div>
+
+        <!-- Category: Personal Information -->
+        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 .5rem;padding:.6rem .5rem .3rem;border-bottom:2px solid var(--border);">Personal Information</p>
+        <table class="doc-table" style="margin-bottom:1.25rem">
+          <thead>
+            <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Birth Certificate / PSA</td>
+              <td><span class="badge badge-verified">Verified</span></td>
+              <td>Verified July 9, 2026</td>
+              <td>&mdash;</td>
+            </tr>
+            <tr>
+              <td>Voter's ID / COMELEC Certification</td>
+              <td><span class="badge badge-pending">Pending Review</span></td>
+              <td>Submitted July 8, 2026</td>
+              <td>&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Category: Educational Background -->
+        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 .5rem;padding:.6rem .5rem .3rem;border-bottom:2px solid var(--border);">Educational Background</p>
+        <table class="doc-table" style="margin-bottom:1.25rem">
+          <thead>
+            <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Grades / Form 138 / Report Card</td>
+              <td><span class="badge badge-pending">Pending Review</span></td>
+              <td>Submitted July 8, 2026</td>
+              <td>&mdash;</td>
+            </tr>
+            <tr>
+              <td>Certificate of Enrollment</td>
+              <td><span class="badge badge-deficient">Deficient</span></td>
+              <td>Image unreadable &mdash; please re-upload</td>
+              <td><button class="reupload-link" onclick="showPanel('academic');return false;">Re-upload</button></td>
+            </tr>
+            <tr>
+              <td>Good Moral Character</td>
+              <td><span class="badge badge-pending">Pending Review</span></td>
+              <td>Submitted July 8, 2026</td>
+              <td>&mdash;</td>
+            </tr>
+            <tr>
+              <td>Proof of Current Availed Scholarship/s</td>
+              <td><span class="badge badge-pending">Pending Review</span></td>
+              <td>Submitted July 8, 2026</td>
+              <td>&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Category: Financial & Employment -->
+        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 .5rem;padding:.6rem .5rem .3rem;border-bottom:2px solid var(--border);">Financial &amp; Employment</p>
+        <table class="doc-table" style="margin-bottom:1.25rem">
+          <thead>
+            <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Proof of Income (Certificate of Indigency / Income)</td>
+              <td><span class="badge badge-pending">Pending Review</span></td>
+              <td>Submitted July 8, 2026</td>
+              <td>&mdash;</td>
+            </tr>
+            <tr>
+              <td>Certificate of Employment (if applicable)</td>
+              <td><span class="badge badge-pending">Pending Review</span></td>
+              <td>Submitted July 8, 2026</td>
+              <td>&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Category: Health & Wellness -->
+        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 .5rem;padding:.6rem .5rem .3rem;border-bottom:2px solid var(--border);">Health &amp; Wellness</p>
+        <table class="doc-table">
+          <thead>
+            <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Current Medical Status / Medical Certificate</td>
+              <td><span class="badge badge-pending">Pending Review</span></td>
+              <td>To be submitted after passing the applicant exam</td>
+              <td>&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Application History &amp; Activity Log</div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot done"></div>
+            <div class="timeline-body"><h4>Account created and verified</h4><p>July 9, 2026 &middot; 10:12 AM</p></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot warn"></div>
+            <div class="timeline-body"><h4>Deficiency flagged on Barangay Certificate</h4><p>July 9, 2026 &middot; 2:47 PM</p></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot">&#8230;</div>
+            <div class="timeline-body"><h4>Awaiting remaining profile sections</h4><p>Complete your Academic, Financial, and Health profile to proceed.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ APPEALS & RESCHEDULING ══ -->
+    <section class="portal-panel" id="panel-appeals">
+      <div class="portal-header">
+        <p class="portal-eyebrow">Admission &middot; Application</p>
+        <h1>Appeals &amp; Rescheduling</h1>
+        <p>Submit an appeal for a re-take or re-application, or request to reschedule your exam if you'll be absent.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Submit a Request</div>
+        <div class="form-grid">
+          <div class="mfield full">
+            <label for="ap-type">Request Type</label>
+            <select id="ap-type">
+              <option value="">Select&hellip;</option>
+              <option>Appeal for Retake / Re-application</option>
+              <option>Reschedule Examination (Absence)</option>
+              <option>Other Concern</option>
+            </select>
+          </div>
+          <div class="mfield full">
+            <label for="ap-details">Details</label>
+            <textarea id="ap-details" placeholder="e.g. I was unable to attend the scheduled exam due to a medical emergency."></textarea>
+          </div>
+        </div>
+        <div class="upload-row" id="up-appeal">
+          <div class="upload-icon"></div>
+          <div class="upload-info">
+            <div class="u-title">Supporting Document (required)</div>
+            <div class="u-sub">e.g. Medical certificate, affidavit, or proof of conflict</div>
+            <div class="u-filename" id="up-appeal-name"></div>
+          </div>
+          <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-appeal')"/></label>
+        </div>
+        <div class="form-actions">
+          <button class="mbtn mbtn-primary" onclick="submitSection(this,'Appeal / Reschedule Request')">Submit Request</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ ALLOWANCE ══ -->
+    <section class="portal-panel" id="panel-allowance">
+      <div class="portal-header">
+        <p class="portal-eyebrow">Allowance</p>
+        <h1>Allowance</h1>
+        <p>Once your scholarship is approved, your allowance distribution schedule and history will appear here.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Distribution Status</div>
+        <p style="font-size:.85rem;color:var(--muted)">You don't have an active allowance disbursement yet. This becomes available once your application is approved and endorsed.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ══ LOGOUT CONFIRM MODAL ══ -->
+<div class="confirm-overlay" id="logoutOverlay" onclick="handleLogoutBackdrop(event)">
+  <div class="confirm-box" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="confirm-icon"></div>
+    <h3 id="logoutTitle">Log out of Iskolusyon?</h3>
+    <p>You'll need to sign in again to access your applicant page.</p>
+    <div class="confirm-actions">
+      <button class="mbtn mbtn-ghost" onclick="closeLogoutConfirm()">No, Stay</button>
+      <button class="mbtn mbtn-danger" onclick="confirmLogout()">Yes, Log Out</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── MESSAGES PANEL: Announcements (public) &amp; Messages (private) with filter ──
+   kind: 'announcement' (received by all applicants + guest page) or 'message'
+   (sent to you specifically, or to your applicant category). */
+const communications = [
+  {id:'c1', kind:'announcement', icon:'&#128197;', iconStyle:'', title:'Scholarship Examination Schedule Released', body:'The written examination for AY 2026&ndash;2027 applicants is set on August 15, 2026, 8:00 AM at the CCC Main Campus.', date:'Posted July 3, 2026'},
+  {id:'c2', kind:'message', icon:'&#9888;', iconStyle:'background:#FBE7E7;color:#902020;', title:'Deficiency Notice: Barangay Certificate', body:'Your uploaded Barangay Certificate of Residency needs to be re-uploaded &mdash; the copy submitted is unreadable.', date:'Posted July 5, 2026'},
+  {id:'c3', kind:'message', icon:'&#9989;', iconStyle:'background:#E6F4EC;color:#1B6B3A;', title:'Registration Confirmed', body:'Your Iskolusyon applicant account was successfully created and verified.', date:'Posted July 9, 2026'}
+];
+let commsFilter = 'all';
+function setMessagesFilter(filter){
+  commsFilter = filter;
+  document.getElementById('commFilterAllBtn').classList.toggle('active', filter==='all');
+  document.getElementById('commFilterAnnBtn').classList.toggle('active', filter==='announcement');
+  document.getElementById('commFilterMsgBtn').classList.toggle('active', filter==='message');
+  const noteText = document.getElementById('commsFilterNoteText');
+  if(filter==='announcement'){
+    noteText.innerHTML = 'Showing <b>Announcements</b> only &mdash; these are sent to all applicants and also posted on the guest (public) page.';
+  } else if(filter==='message'){
+    noteText.innerHTML = 'Showing <b>Messages</b> only &mdash; these are private, sent to you individually or to your applicant category, and never shown on the guest page.';
+  } else {
+    noteText.innerHTML = 'Showing everything received &mdash; <b>Announcements</b> sent to all applicants (and posted on the guest page), plus <b>Messages</b> sent to you individually or to your applicant category.';
+  }
+  renderComms();
+}
+function renderComms(){
+  const list = document.getElementById('commsList');
+  list.innerHTML = '';
+  communications
+    .filter(c => commsFilter==='all' || c.kind===commsFilter)
+    .forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'message-item';
+      const tag = c.kind==='announcement' ? 'Announcement' : 'Message';
+      div.innerHTML = `
+        <div class="message-dot" style="${c.iconStyle}">${c.icon}</div>
+        <div class="message-body">
+          <h4>${c.title} <span class="msg-kind-tag">${tag}</span></h4>
+          <p>${c.body}</p>
+          <span class="message-date">${c.date}</span>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+}
+renderComms();
+
+/* ── DASHBOARD: PROGRESS MILESTONE TABS ── */
+const STAGE_CONTENT = {
+  profile: {
+    title: 'Complete Your Profile',
+    tag: 'Required for matching',
+    body: `<p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Fill out the sections below so Iskolusyon can automatically match you to scholarship programs you qualify for.</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot done"></div>
+          <div class="timeline-body"><h4>Account Setup &amp; Personal Information</h4><p>Completed during sign up.</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">2</div>
+          <div class="timeline-body"><h4>Educational Background</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('academic');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">3</div>
+          <div class="timeline-body"><h4>Financial &amp; Employment</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('financial');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">4</div>
+          <div class="timeline-body"><h4>Health &amp; Wellness</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('health');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
+        </div>
+      </div>`
+  },
+  documents: {
+    title: 'Document Verification',
+    tag: 'Step 3 &middot; Upload Docs',
+    body: `<p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Once your profile sections are submitted, uploaded documents move through review here.</p>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-dot done">&#10003;</div><div class="timeline-body"><h4>Birth Certificate / PSA</h4><p>Verified.</p></div></div>
+        <div class="timeline-item"><div class="timeline-dot warn">&#9888;</div><div class="timeline-body"><h4>Barangay Certificate of Residency</h4><p>Deficient &mdash; needs re-upload.</p></div></div>
+        <div class="timeline-item"><div class="timeline-dot">3</div><div class="timeline-body"><h4>Income Documents</h4><p>Pending review.</p></div></div>
+      </div>`
+  },
+  exam: {
+    title: 'Exam Schedule',
+    tag: 'Step 5 &middot; Take Exam',
+    body: `<p style="font-size:.83rem;color:var(--muted)">Your qualifying exam details will appear here once your documents are verified, including venue, time, and requirements to bring.</p>`
+  },
+  medical: {
+    title: 'Medical Status',
+    tag: 'Post-Exam',
+    body: `<p style="font-size:.83rem;color:var(--muted)">Medical clearance requirements will appear here once you've passed the applicant examination.</p>`
+  },
+  admission: {
+    title: 'Admission',
+    tag: 'Step 6 &middot; Track Result',
+    body: `<p style="font-size:.83rem;color:var(--muted)">Your final scholarship decision will be posted here once exam results are released.</p>`
+  }
+};
+
+function selectStage(stage, cardEl){
+  const grid = document.getElementById('statGrid');
+  grid.querySelectorAll('.stat-card').forEach(c=>{
+    c.classList.remove('tab-active');
+    const hint = c.querySelector('.stat-card-hint');
+    if(hint) hint.remove();
+  });
+  cardEl.classList.add('tab-active');
+  const hint = document.createElement('div');
+  hint.className='stat-card-hint';
+  hint.innerHTML='&#9660; Viewing details below';
+  cardEl.appendChild(hint);
+
+  const content = STAGE_CONTENT[stage];
+  if(content){
+    document.getElementById('stageContentTitle').innerHTML = content.title+' <span class="tag">'+content.tag+'</span>';
+    document.getElementById('stageContentBody').innerHTML = content.body;
+  }
+  positionTabConnector(cardEl);
+}
+
+function lockedCardShake(cardEl){
+  cardEl.style.transition='transform .12s';
+  cardEl.style.transform='translateX(-3px)';
+  setTimeout(()=>{ cardEl.style.transform='translateX(3px)'; },100);
+  setTimeout(()=>{ cardEl.style.transform='translateX(0)'; },200);
+}
+
+function positionTabConnector(cardEl){
+  const grid = document.getElementById('statGrid');
+  const arrow = document.getElementById('tabConnectorArrow');
+  const gridRect = grid.getBoundingClientRect();
+  const cardRect = cardEl.getBoundingClientRect();
+  const centerPx = (cardRect.left + cardRect.width/2) - gridRect.left;
+  arrow.style.left = centerPx + 'px';
+  arrow.style.marginLeft = '-7.5px';
+}
+
+document.querySelectorAll('.stat-card.locked').forEach(c=>{
+  c.addEventListener('click', ()=>lockedCardShake(c));
+});
+window.addEventListener('resize', ()=>{
+  const active = document.querySelector('.stat-card.tab-active');
+  if(active) positionTabConnector(active);
+});
+window.addEventListener('DOMContentLoaded', ()=>{
+  const active = document.querySelector('.stat-card.tab-active');
+  if(active) positionTabConnector(active);
+});
+
+/* ── SIDEBAR NAVIGATION ── */
+function showPanel(name, btn){
+  document.querySelectorAll('.portal-panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+name));
+  document.querySelectorAll('.menu-btn').forEach(b=>b.classList.remove('active'));
+  const target = btn || document.querySelector('.menu-btn[data-panel="'+name+'"]');
+  if(target) target.classList.add('active');
+  document.querySelector('.portal-main').scrollTo({top:0,behavior:'smooth'});
+  if(name==='dashboard'){
+    const active = document.querySelector('.stat-card.tab-active');
+    if(active) setTimeout(()=>positionTabConnector(active), 50);
+  }
+}
+
+/* ── PROFILE NAME: derived from Personal Information > First/Last Name ── */
+function updateAvatarInitials(name){
+  const parts = name.trim().split(/\s+/);
+  const initials = (parts[0]?.[0]||'') + (parts[parts.length-1]?.[0]||'');
+  document.getElementById('avatarInitials').textContent = initials.toUpperCase();
+}
+function syncProfileNameFromPersonalInfo(){
+  const first = (document.getElementById('pi-firstname')?.value || '').trim();
+  const last = (document.getElementById('pi-lastname')?.value || '').trim();
+  const full = (first + ' ' + last).trim();
+  if(!full) return;
+  document.getElementById('profileNameDisplay').textContent = full;
+  document.getElementById('dashGreeting').textContent = 'Welcome back, ' + (first || full.split(' ')[0]) + '!';
+  updateAvatarInitials(full);
+}
+
+/* ── DOCUMENT UPLOAD ── */
+/* Mock data simulating what document text-extraction/hashing would pull from each
+   file. In production this comes from the OCR pass performed during submission;
+   it only fills EMPTY fields below so it never overwrites something the applicant
+   already typed, since extraction isn't always perfect. */
+const DOC_EXTRACTED_DATA = {
+  'up-birthcert': {'pi-firstname':'Juan','pi-middlename':'Santos','pi-lastname':'Dela Cruz','pi-dob':'2006-04-12','pi-pob':'Calamba City, Laguna','pi-sex':'Male'},
+  'up-voterid': {'pi-address':'123 Rizal St., Brgy. Real, Calamba City, Laguna','pi-precinct':'0142A'}
+};
+function handleDocUpload(input, rowId){
+  const file = input.files[0];
+  if(!file) return;
+  const row = document.getElementById(rowId);
+  const nameEl = document.getElementById(rowId+'-name');
+  row.classList.add('has-file');
+  nameEl.textContent = '✓ '+file.name;
+
+  if(rowId === 'up-profilepic'){
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      const img = document.getElementById('avatarImg');
+      img.src = ev.target.result;
+      img.style.display='block';
+      document.getElementById('avatarInitials').style.display='none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  const extracted = DOC_EXTRACTED_DATA[rowId];
+  if(extracted){
+    Object.entries(extracted).forEach(([fieldId, value])=>{
+      const field = document.getElementById(fieldId);
+      if(field && !field.value.trim()) field.value = value;
+    });
+    syncProfileNameFromPersonalInfo();
+  }
+}
+
+/* ── ORGANIZATIONAL INVOLVEMENT: expandable row table ── */
+function addOrgRow(btn){
+  /* the row that owns the "+" button becomes a removable row, since only the
+     newest (last) row should offer to add another */
+  const actionCell = btn.parentElement;
+  actionCell.innerHTML = '<button type="button" class="org-row-btn org-row-remove" onclick="removeOrgRow(this)" title="Remove row">&times;</button>';
+
+  const tbody = document.getElementById('org-table-body');
+  const tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><input type="text" placeholder="e.g. N/A"/></td>'+
+    '<td><input type="text" placeholder="e.g. N/A"/></td>'+
+    '<td><input type="text" placeholder="e.g. N/A"/></td>'+
+    '<td><input type="text" placeholder="e.g. N/A"/></td>'+
+    '<td class="org-row-action"><button type="button" class="org-row-btn org-row-add" onclick="addOrgRow(this)" title="Add row">&plus;</button></td>';
+  tbody.appendChild(tr);
+}
+function removeOrgRow(btn){
+  const tr = btn.closest('tr');
+  tr.remove();
+}
+
+/* ── IDENTITY & CIVIL STATUS: show spouse fields only when Married is selected ── */
+function toggleIfMarried(sel){
+  document.getElementById('if-married-group').style.display = (sel.value === 'Married') ? 'grid' : 'none';
+}
+
+/* ── EDUCATIONAL BACKGROUND: show tech/voc school details only when Yes is selected ── */
+function toggleIfTechVoc(sel){
+  document.getElementById('techvoc-details-group').style.display = (sel.value === 'Yes') ? 'grid' : 'none';
+}
+
+/* ── SAVE / SUBMIT ── */
+function saveDraft(btn){
+  const original = btn.textContent;
+  btn.textContent = 'Saved ✓';
+  setTimeout(()=>{ btn.textContent = original; }, 1600);
+  /* In production: POST /api/applicant/save-draft { section, data } */
+}
+function submitSection(btn, sectionName){
+  if(sectionName === 'Appeal / Reschedule Request'){
+    const appealRow = document.getElementById('up-appeal');
+    if(!appealRow.classList.contains('has-file')){
+      alert('Please upload a supporting document before submitting. This is required.');
+      return;
+    }
+  }
+  const original = btn.textContent;
+  btn.textContent = 'Submitted ✓';
+  btn.disabled = true;
+  setTimeout(()=>{ btn.textContent = original; btn.disabled=false; }, 1800);
+
+  /* Educational Background: editable while in progress, but locked for good
+     once submitted — matches the rest of the profile's "editable" fields,
+     which stay editable indefinitely. */
+  if(sectionName === 'Educational Background'){
+    lockPanelFields('panel-academic', btn);
+  }
+  /* In production: POST /api/applicant/submit-section { section, data } → triggers
+     document hashing + qualification cross-referencing against LGU/CCC requirements */
+}
+
+/* ── LOCK FIELDS AFTER SUBMISSION (Educational Background only) ── */
+function lockPanelFields(panelId, submitBtn){
+  const panel = document.getElementById(panelId);
+  if(!panel) return;
+  panel.querySelectorAll('input, select, textarea').forEach(el=>{ el.disabled = true; });
+  panel.querySelectorAll('.upload-btn-label').forEach(el=>{ el.classList.add('disabled'); el.style.pointerEvents='none'; el.style.opacity='.5'; });
+  panel.querySelectorAll('.mbtn-ghost').forEach(el=>{ el.disabled = true; el.style.opacity='.5'; el.style.cursor='not-allowed'; });
+  if(submitBtn){
+    setTimeout(()=>{
+      submitBtn.textContent = 'Submitted — Locked';
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '.7';
+      submitBtn.style.cursor = 'not-allowed';
+    }, 1800);
+  }
+  const header = panel.querySelector('.portal-header p');
+  if(header){
+    const note = document.createElement('p');
+    note.style.cssText = 'color:var(--red);font-weight:600;margin-top:.5rem';
+    note.textContent = 'This section has been submitted and can no longer be edited.';
+    header.parentNode.appendChild(note);
+  }
+}
+
+/* ── LOGOUT CONFIRMATION ── */
+function openLogoutConfirm(){
+  document.getElementById('logoutOverlay').classList.add('open');
+}
+function closeLogoutConfirm(){
+  document.getElementById('logoutOverlay').classList.remove('open');
+}
+function handleLogoutBackdrop(e){
+  if(e.target.id==='logoutOverlay') closeLogoutConfirm();
+}
+function confirmLogout(){
+  /* In production: POST /api/auth/logout → clear session/JWT */
+  window.location.href='login.html';
+}
+</script>
+</body>
+</html>
