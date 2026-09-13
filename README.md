@@ -1,1 +1,0 @@
-# iskolusyon_front-end
