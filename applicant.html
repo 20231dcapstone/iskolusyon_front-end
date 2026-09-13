@@ -353,8 +353,8 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       <div class="profile-name-row" id="profileNameRow">
         <span class="profile-name" id="profileNameDisplay">Juan Dela Cruz</span>
       </div>
-      <div class="profile-role">Applicant</div>
-      <div class="profile-id">Applicant ID: CCC-2026-00214</div>
+      <div class="profile-role">Applicant No.:</div>
+      <div class="profile-id">(Application Number will be provided once your documents are submitted and verified)</div>
     </div>
 
     <div class="sidebar-menu">
@@ -372,7 +372,6 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
         <li><button class="menu-btn" data-panel="personal" onclick="showPanel('personal',this)"><span class="menu-icon"></span> Personal Information</button></li>
         <li><button class="menu-btn" data-panel="academic" onclick="showPanel('academic',this)"><span class="menu-icon"></span> Educational Background</button></li>
         <li><button class="menu-btn" data-panel="financial" onclick="showPanel('financial',this)"><span class="menu-icon"></span> Family &amp; Financial Information</button></li>
-        <li><button class="menu-btn" data-panel="health" onclick="showPanel('health',this)"><span class="menu-icon"></span> Health &amp; Wellness</button></li>
         <li class="sidebar-subgroup-divider" aria-hidden="true"></li>
         <li class="sidebar-menu-label">Application</li>
         <li><button class="menu-btn" data-panel="status" onclick="showPanel('status',this)"><span class="menu-icon"></span> Documents &amp; Status</button></li>
@@ -380,8 +379,12 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       </ul>
 
       <ul class="sidebar-group">
-        <li class="sidebar-section-label">Allowance</li>
+        <li class="sidebar-section-label">Scholarship Services</li>
         <li class="sidebar-label-divider" aria-hidden="true"></li>
+        <li class="sidebar-menu-label">During Enrollment</li>
+        <li><button class="menu-btn" data-panel="health" onclick="showPanel('health',this)"><span class="menu-icon"></span> Health &amp; Wellness</button></li>
+        <li class="sidebar-subgroup-divider" aria-hidden="true"></li>
+        <li class="sidebar-menu-label">Enrolled</li>
         <li><button class="menu-btn" data-panel="allowance" onclick="showPanel('allowance',this)"><span class="menu-icon"></span> Allowance</button></li>
       </ul>
     </div>
@@ -490,7 +493,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       <div class="portal-header">
         <p class="portal-eyebrow eyebrow-yellow">Notifications</p>
         <h1>Messages</h1>
-        <p>Updates on exam schedules, results, and requirements from the CCC Guidance and Testing Center.</p>
+        <p>Updates on exam schedules, results, and requirements from the Guidance (GCTCDO) office. And allowance from the Office of the Registrar.</p>
       </div>
 
       <div class="card">
@@ -522,7 +525,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
           <div class="upload-icon"></div>
           <div class="upload-info">
             <div class="u-title">Profile Picture <span class="req-mark">*</span></div>
-            <div class="u-sub">A clear, recent 2x2 photo of yourself</div>
+            <div class="u-sub">A clear, recent 2x2 photo of yourself (with white background)</div>
             <div class="u-filename" id="up-profilepic-name"></div>
           </div>
           <label class="upload-btn-label">Upload<input type="file" accept="image/*" required onchange="handleDocUpload(this,'up-profilepic')"/></label>
@@ -564,7 +567,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
           <div class="upload-row required" id="up-birthcert">
             <div class="upload-icon"></div>
             <div class="upload-info">
-              <div class="u-title">Birth Certificate / PSA <span class="req-mark">*</span></div>
+              <div class="u-title">Birth Certificate / PSA / NSO <span class="req-mark">*</span></div>
               <div class="u-sub">Issued by the Philippine Statistics Authority</div>
               <div class="u-filename" id="up-birthcert-name"></div>
             </div>
@@ -601,7 +604,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
           <div class="upload-row required" id="up-voterid">
             <div class="upload-icon"></div>
             <div class="upload-info">
-              <div class="u-title">Voter's ID / Certification <span class="req-mark">*</span></div>
+              <div class="u-title">Voter's ID / Certification of Applicant <span class="req-mark">*</span></div>
               <div class="u-sub">Issued by the Commission on Elections (COMELEC)</div>
               <div class="u-filename" id="up-voterid-name"></div>
             </div>
@@ -693,7 +696,6 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
               <option>First Year</option>
               <option>Transferee</option>
               <option>Old Curriculum and ALS Completer</option>
-              <option>Executive Program</option>
             </select>
           </div>
           <div class="mfield">
@@ -819,37 +821,10 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
             <div class="upload-icon"></div>
             <div class="upload-info">
               <div class="u-title">Grades (Proof of Grades / Form 138 / Report Card)</div>
-              <div class="u-sub">Latest grading period, certified true copy</div>
+              <div class="u-sub">Latest grading period / semester, certified true copy</div>
               <div class="u-filename" id="up-form138-name"></div>
             </div>
             <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-form138')"/></label>
-          </div>
-          <div class="upload-row" id="up-goodmoral">
-            <div class="upload-icon"></div>
-            <div class="upload-info">
-              <div class="u-title">Good Moral Character</div>
-              <div class="u-sub">Issued within the last 6 months</div>
-              <div class="u-filename" id="up-goodmoral-name"></div>
-            </div>
-            <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-goodmoral')"/></label>
-          </div>
-          <div class="upload-row" id="up-enrollment">
-            <div class="upload-icon"></div>
-            <div class="upload-info">
-              <div class="u-title">Certificate of Enrollment</div>
-              <div class="u-sub">Issued by your current or last school attended</div>
-              <div class="u-filename" id="up-enrollment-name"></div>
-            </div>
-            <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-enrollment')"/></label>
-          </div>
-          <div class="upload-row" id="up-currentscholarship">
-            <div class="upload-icon"></div>
-            <div class="upload-info">
-              <div class="u-title">Proof of Current Availed Scholarship/s</div>
-              <div class="u-sub">Certificate or documentation of any scholarship currently being availed, if applicable</div>
-              <div class="u-filename" id="up-currentscholarship-name"></div>
-            </div>
-            <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-currentscholarship')"/></label>
           </div>
         </div>
       </div>
@@ -979,6 +954,18 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
             <input type="tel" id="h-ec-number" placeholder="e.g. 09XX XXX XXXX"/>
           </div>
         </div>
+        <div class="topic-doc-section">
+          <div class="topic-doc-label">Verifying Document <span class="tdl-count">1 required</span></div>
+          <div class="upload-row required" id="up-voterid-guardian">
+            <div class="upload-icon"></div>
+            <div class="upload-info">
+              <div class="u-title">Voter's ID / Certification of Parent/Guardian <span class="req-mark">*</span></div>
+              <div class="u-sub">Issued by the Commission on Elections (COMELEC)</div>
+              <div class="u-filename" id="up-voterid-guardian-name"></div>
+            </div>
+            <label class="upload-btn-label">Upload<input type="file" required onchange="handleDocUpload(this,'up-voterid-guardian')"/></label>
+          </div>
+        </div>
       </div>
 
       <div class="card" id="fam-employment-card">
@@ -1074,7 +1061,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
     <!-- ══ HEALTH & WELLNESS ══ -->
     <section class="portal-panel" id="panel-health">
       <div class="portal-header">
-        <p class="portal-eyebrow">Admission &middot; My Profile (Softcopy)</p>
+        <p class="portal-eyebrow">Scholarship Services &middot; During Enrollment</p>
         <h1>Health &amp; Wellness Information</h1>
         <p>Used for emergency contact purposes and reasonable accommodations during examinations.</p>
       </div>
@@ -1083,12 +1070,8 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
         <div class="card-title">Health Details</div>
         <div class="form-grid">
           <div class="mfield full">
-            <label for="h-condition">Existing Medical Condition/s</label>
-            <textarea id="h-condition" placeholder="e.g. None, Asthma, etc."></textarea>
-          </div>
-          <div class="mfield full">
-            <label for="h-allergies">Allergies</label>
-            <input type="text" id="h-allergies" placeholder="e.g. None, Peanuts, etc."/>
+            <label for="h-condition">Medical Status</label>
+            <textarea id="h-condition" placeholder="e.g. Physically fit for any work, unfit or unsafe for any type of employment, etc." rows="6"></textarea>
           </div>
         </div>
       </div>
@@ -1098,7 +1081,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
         <div class="upload-row" id="up-medcert">
           <div class="upload-icon"></div>
           <div class="upload-info">
-            <div class="u-title">Current Medical Status</div>
+            <div class="u-title">Medical Examination Results / Certificate</div>
             <div class="u-sub">To be completed only once you have passed the applicant examination</div>
             <div class="u-filename" id="up-medcert-name"></div>
           </div>
@@ -1131,13 +1114,19 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
           </thead>
           <tbody>
             <tr>
-              <td>Birth Certificate / PSA</td>
+              <td>Profile Picture</td>
               <td><span class="badge badge-verified">Verified</span></td>
               <td>Verified July 9, 2026</td>
               <td>&mdash;</td>
             </tr>
             <tr>
-              <td>Voter's ID / COMELEC Certification</td>
+              <td>Birth Certificate / PSA / NSO</td>
+              <td><span class="badge badge-verified">Verified</span></td>
+              <td>Verified July 9, 2026</td>
+              <td>&mdash;</td>
+            </tr>
+            <tr>
+              <td>Voter's ID / Certification of Applicant</td>
               <td><span class="badge badge-pending">Pending Review</span></td>
               <td>Submitted July 8, 2026</td>
               <td>&mdash;</td>
@@ -1153,25 +1142,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
           </thead>
           <tbody>
             <tr>
-              <td>Grades / Form 138 / Report Card</td>
-              <td><span class="badge badge-pending">Pending Review</span></td>
-              <td>Submitted July 8, 2026</td>
-              <td>&mdash;</td>
-            </tr>
-            <tr>
-              <td>Certificate of Enrollment</td>
-              <td><span class="badge badge-deficient">Deficient</span></td>
-              <td>Image unreadable &mdash; please re-upload</td>
-              <td><button class="reupload-link" onclick="showPanel('academic');return false;">Re-upload</button></td>
-            </tr>
-            <tr>
-              <td>Good Moral Character</td>
-              <td><span class="badge badge-pending">Pending Review</span></td>
-              <td>Submitted July 8, 2026</td>
-              <td>&mdash;</td>
-            </tr>
-            <tr>
-              <td>Proof of Current Availed Scholarship/s</td>
+              <td>Grades (Proof of Grades / Form 138 / Report Card)</td>
               <td><span class="badge badge-pending">Pending Review</span></td>
               <td>Submitted July 8, 2026</td>
               <td>&mdash;</td>
@@ -1181,37 +1152,27 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 
         <!-- Category: Financial & Employment -->
         <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 .5rem;padding:.6rem .5rem .3rem;border-bottom:2px solid var(--border);">Family &amp; Financial Information</p>
-        <table class="doc-table" style="margin-bottom:1.25rem">
-          <thead>
-            <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Proof of Income (Certificate of Indigency / Income)</td>
-              <td><span class="badge badge-pending">Pending Review</span></td>
-              <td>Submitted July 8, 2026</td>
-              <td>&mdash;</td>
-            </tr>
-            <tr>
-              <td>Certificate of Employment (if applicable)</td>
-              <td><span class="badge badge-pending">Pending Review</span></td>
-              <td>Submitted July 8, 2026</td>
-              <td>&mdash;</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- Category: Health & Wellness -->
-        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 .5rem;padding:.6rem .5rem .3rem;border-bottom:2px solid var(--border);">Health &amp; Wellness</p>
         <table class="doc-table">
           <thead>
             <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
           </thead>
           <tbody>
             <tr>
-              <td>Current Medical Status / Medical Certificate</td>
+              <td>Voter's ID / Certification of Parent/Guardian</td>
               <td><span class="badge badge-pending">Pending Review</span></td>
-              <td>To be submitted after passing the applicant exam</td>
+              <td>Submitted July 8, 2026</td>
+              <td>&mdash;</td>
+            </tr>
+            <tr>
+              <td>Proof of Employment</td>
+              <td><span class="badge badge-deficient">Deficient</span></td>
+              <td>Image unreadable &mdash; please re-upload</td>
+              <td><button class="reupload-link" onclick="showPanel('financial');return false;">Re-upload</button></td>
+            </tr>
+            <tr>
+              <td>Proof of Income (Family / Guardian)</td>
+              <td><span class="badge badge-pending">Pending Review</span></td>
+              <td>Submitted July 8, 2026</td>
               <td>&mdash;</td>
             </tr>
           </tbody>
@@ -1227,11 +1188,11 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
           </div>
           <div class="timeline-item">
             <div class="timeline-dot warn"></div>
-            <div class="timeline-body"><h4>Deficiency flagged on Barangay Certificate</h4><p>July 9, 2026 &middot; 2:47 PM</p></div>
+            <div class="timeline-body"><h4>Deficiency flagged on Proof of Employment</h4><p>July 9, 2026 &middot; 2:47 PM</p></div>
           </div>
           <div class="timeline-item">
             <div class="timeline-dot">&#8230;</div>
-            <div class="timeline-body"><h4>Awaiting remaining profile sections</h4><p>Complete your Academic, Financial, and Health profile to proceed.</p></div>
+            <div class="timeline-body"><h4>Awaiting remaining profile sections</h4><p>Complete your Educational Background and Family &amp; Financial Information sections to proceed.</p></div>
           </div>
         </div>
       </div>
@@ -1262,14 +1223,14 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
             <textarea id="ap-details" placeholder="e.g. I was unable to attend the scheduled exam due to a medical emergency."></textarea>
           </div>
         </div>
-        <div class="upload-row" id="up-appeal">
+        <div class="upload-row required" id="up-appeal">
           <div class="upload-icon"></div>
           <div class="upload-info">
-            <div class="u-title">Supporting Document (required)</div>
+            <div class="u-title">Supporting Document <span class="req-mark">*</span></div>
             <div class="u-sub">e.g. Medical certificate, affidavit, or proof of conflict</div>
             <div class="u-filename" id="up-appeal-name"></div>
           </div>
-          <label class="upload-btn-label">Upload<input type="file" onchange="handleDocUpload(this,'up-appeal')"/></label>
+          <label class="upload-btn-label">Upload<input type="file" required onchange="handleDocUpload(this,'up-appeal')"/></label>
         </div>
         <div class="form-actions">
           <button class="mbtn mbtn-primary" onclick="submitSection(this,'Appeal / Reschedule Request')">Submit Request</button>
@@ -1280,7 +1241,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
     <!-- ══ ALLOWANCE ══ -->
     <section class="portal-panel" id="panel-allowance">
       <div class="portal-header">
-        <p class="portal-eyebrow">Allowance</p>
+        <p class="portal-eyebrow">Scholarship Services &middot; Enrolled</p>
         <h1>Allowance</h1>
         <p>Once your scholarship is approved, your allowance distribution schedule and history will appear here.</p>
       </div>
