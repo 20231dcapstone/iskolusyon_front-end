@@ -1,4 +1,4 @@
-# iskolusyon_front-end
+# FRONT-END PATCH 2:
 
 # To Pau, reading / checking priority:
 #    - (REQUIRED FOR CONTEXT, OPTIONAL TO DOWNLOAD) index.html > pull description (for summary) / code (if needed)
