@@ -83,7 +83,9 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .menu-btn:hover{background:rgba(255,255,255,.1);color:#fff}
 .menu-btn.active{background:#fff;color:var(--ccc-blue)}
 .menu-icon{width:18px;text-align:center;flex-shrink:0;font-size:.9rem}
-.menu-badge{margin-left:auto;background:var(--yellow);color:var(--navy);font-size:.62rem;font-weight:800;padding:1px 7px;border-radius:10px;flex-shrink:0}
+.menu-badge{margin-left:auto;background:var(--yellow);color:var(--navy);font-size:.62rem;font-weight:800;line-height:1;min-width:18px;height:18px;padding:0 5px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.menu-badge.is-empty,.count-badge.is-empty{display:none}
+.count-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;margin-left:8px;background:var(--yellow);color:var(--navy);font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:800;line-height:1;border-radius:999px;flex-shrink:0;vertical-align:middle}
 
 .sidebar-logout{margin-top:1.25rem;padding-top:1.1rem;border-top:1px solid rgba(255,255,255,.15)}
 .logout-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.79rem;color:rgba(255,255,255,.85);width:100%;transition:background .2s,color .2s}
@@ -362,7 +364,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
         <li class="sidebar-section-label">Overview</li>
         <li class="sidebar-label-divider" aria-hidden="true"></li>
         <li><button class="menu-btn active" data-panel="dashboard" onclick="showPanel('dashboard',this)"><span class="menu-icon"></span> Dashboard</button></li>
-        <li><button class="menu-btn" data-panel="messages" onclick="showPanel('messages',this)"><span class="menu-icon"></span> Messages <span class="menu-badge">3</span></button></li>
+        <li><button class="menu-btn" data-panel="messages" onclick="showPanel('messages',this)"><span class="menu-icon"></span> Messages <span class="menu-badge is-empty" id="messagesBadge" title="Unread messages">0</span></button></li>
       </ul>
 
       <ul class="sidebar-group">
@@ -673,7 +675,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       </div>
 
       <div class="form-actions">
-        <button class="mbtn mbtn-ghost" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary save-draft-btn" onclick="saveDraft(this)">Save as Draft</button>
         <button class="mbtn mbtn-primary" onclick="submitSection(this,'Personal Information')">Submit Section</button>
       </div>
     </section>
@@ -830,7 +832,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       </div>
 
       <div class="form-actions">
-        <button class="mbtn mbtn-ghost" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary save-draft-btn" onclick="saveDraft(this)">Save as Draft</button>
         <button class="mbtn mbtn-primary" onclick="submitSection(this,'Educational Background')">Submit Section</button>
       </div>
     </section>
@@ -1053,7 +1055,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       </div>
 
       <div class="form-actions">
-        <button class="mbtn mbtn-ghost" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary save-draft-btn" onclick="saveDraft(this)">Save as Draft</button>
         <button class="mbtn mbtn-primary" onclick="submitSection(this,'Financial &amp; Employment')">Submit Section</button>
       </div>
     </section>
@@ -1090,7 +1092,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       </div>
 
       <div class="form-actions">
-        <button class="mbtn mbtn-ghost" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary save-draft-btn" onclick="saveDraft(this)">Save as Draft</button>
         <button class="mbtn mbtn-primary" onclick="submitSection(this,'Health &amp; Wellness')">Submit Section</button>
       </div>
     </section>
@@ -1276,6 +1278,63 @@ const communications = [
   {id:'c2', kind:'message', icon:'&#9888;', iconStyle:'background:#FBE7E7;color:#902020;', title:'Deficiency Notice: Barangay Certificate', body:'Your uploaded Barangay Certificate of Residency needs to be re-uploaded &mdash; the copy submitted is unreadable.', date:'Posted July 5, 2026'},
   {id:'c3', kind:'message', icon:'&#9989;', iconStyle:'background:#E6F4EC;color:#1B6B3A;', title:'Registration Confirmed', body:'Your Iskolusyon applicant account was successfully created and verified.', date:'Posted July 9, 2026'}
 ];
+/* This demo portal represents applicant record "a1" (Juan Dela Cruz) on the
+   Admin console. Compiled messages the admin sends when they edit or flag
+   something in that applicant's reviewed record (see admin.html >
+   logApplicantChangeMessage) are written to the same-origin localStorage
+   key below, one compiled message per calendar day the admin made changes
+   (a new thread starts the first time changes/flags happen on a new day). */
+const CURRENT_APPLICANT_ID = 'a1';
+const MSG_STORAGE_KEY = 'iskolusyon_messages';
+try {
+  const storedMsgs = localStorage.getItem(MSG_STORAGE_KEY);
+  if (storedMsgs) {
+    const adminMessages = JSON.parse(storedMsgs)
+      .filter(m => m.applicantId === CURRENT_APPLICANT_ID)
+      .map(m => ({
+        id: m.id,
+        kind: 'message',
+        icon: '&#9993;',
+        iconStyle: '',
+        title: m.title,
+        body: m.body,
+        date: m.date
+      }));
+    communications.push(...adminMessages);
+  }
+} catch (e) { /* ignore malformed/blocked storage, keep the defaults above */ }
+/* ══ UNREAD STATE FOR ANNOUNCEMENTS & MESSAGES ══
+   Tracks which communications this applicant has already seen, so the sidebar
+   shows a count badge of new/unread items at a glance. Opening the Messages
+   panel marks everything currently listed as read. */
+const COMMS_READ_STORAGE_KEY = 'iskolusyon_applicant_comms_read';
+let commsReadState = {}; // { [commId]: true }
+try {
+  const storedCommsRead = localStorage.getItem(COMMS_READ_STORAGE_KEY);
+  if (storedCommsRead) commsReadState = JSON.parse(storedCommsRead);
+} catch (e) { /* ignore malformed/blocked storage */ }
+function saveCommsReadState(){
+  try { localStorage.setItem(COMMS_READ_STORAGE_KEY, JSON.stringify(commsReadState)); } catch (e) { /* storage unavailable */ }
+}
+function countUnreadComms(){
+  return communications.filter(c => !commsReadState[c.id]).length;
+}
+/* Small circular indicator: shows the count, hides itself at zero. */
+function updateMessagesBadge(){
+  const badge = document.getElementById('messagesBadge');
+  if(!badge) return;
+  const n = countUnreadComms();
+  badge.textContent = n > 99 ? '99+' : n;
+  badge.classList.toggle('is-empty', n <= 0);
+}
+function markAllCommsRead(){
+  let changed = false;
+  communications.forEach(c => {
+    if(!commsReadState[c.id]){ commsReadState[c.id] = true; changed = true; }
+  });
+  if(changed) saveCommsReadState();
+  updateMessagesBadge();
+}
 let commsFilter = 'all';
 function setMessagesFilter(filter){
   commsFilter = filter;
@@ -1311,8 +1370,10 @@ function renderComms(){
       `;
       list.appendChild(div);
     });
+  updateMessagesBadge();
 }
 renderComms();
+updateMessagesBadge();
 
 /* ── DASHBOARD: PROGRESS MILESTONE TABS ── */
 const STAGE_CONTENT = {
@@ -1423,6 +1484,7 @@ function showPanel(name, btn){
   const target = btn || document.querySelector('.menu-btn[data-panel="'+name+'"]');
   if(target) target.classList.add('active');
   document.querySelector('.portal-main').scrollTo({top:0,behavior:'smooth'});
+  if(name==='messages') markAllCommsRead();
   if(name==='dashboard'){
     const active = document.querySelector('.stat-card.tab-active');
     if(active) setTimeout(()=>positionTabConnector(active), 50);
@@ -1568,9 +1630,29 @@ function toggleIfTechVoc(sel){
 }
 
 /* ── SAVE / SUBMIT ── */
+/* Save-as-Draft buttons are blue by default, turn green the moment any
+   field in that section is touched, then revert to blue once saved. */
+function setSaveDraftDirty(btn, dirty){
+  if(!btn) return;
+  btn.classList.toggle('mbtn-primary', !dirty);
+  btn.classList.toggle('mbtn-secondary', dirty);
+}
+function initSaveDraftDirtyTracking(){
+  document.querySelectorAll('.portal-panel').forEach(panel=>{
+    const saveBtn = panel.querySelector('.save-draft-btn');
+    if(!saveBtn) return;
+    const markDirty = ()=> setSaveDraftDirty(saveBtn, true);
+    panel.querySelectorAll('input, select, textarea').forEach(el=>{
+      el.addEventListener('input', markDirty);
+      el.addEventListener('change', markDirty);
+    });
+  });
+}
+initSaveDraftDirtyTracking();
 function saveDraft(btn){
   const original = btn.textContent;
   btn.textContent = 'Saved ✓';
+  setSaveDraftDirty(btn, false);
   setTimeout(()=>{ btn.textContent = original; }, 1600);
   /* In production: POST /api/applicant/save-draft { section, data } */
 }
@@ -1610,6 +1692,8 @@ function submitSection(btn, sectionName){
   btn.textContent = 'Submitted ✓';
   btn.disabled = true;
   setTimeout(()=>{ btn.textContent = original; btn.disabled=false; }, 1800);
+  const ownerPanel = btn.closest('.portal-panel');
+  if(ownerPanel) setSaveDraftDirty(ownerPanel.querySelector('.save-draft-btn'), false);
 
   /* Educational Background: editable while in progress, but locked for good
      once submitted — matches the rest of the profile's "editable" fields,
@@ -1627,7 +1711,7 @@ function lockPanelFields(panelId, submitBtn){
   if(!panel) return;
   panel.querySelectorAll('input, select, textarea').forEach(el=>{ el.disabled = true; });
   panel.querySelectorAll('.upload-btn-label').forEach(el=>{ el.classList.add('disabled'); el.style.pointerEvents='none'; el.style.opacity='.5'; });
-  panel.querySelectorAll('.mbtn-ghost').forEach(el=>{ el.disabled = true; el.style.opacity='.5'; el.style.cursor='not-allowed'; });
+  panel.querySelectorAll('.save-draft-btn').forEach(el=>{ el.disabled = true; el.style.opacity='.5'; el.style.cursor='not-allowed'; });
   if(submitBtn){
     setTimeout(()=>{
       submitBtn.textContent = 'Submitted — Locked';
