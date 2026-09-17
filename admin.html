@@ -2217,15 +2217,13 @@ function goToApplicantsFiltered(status){
   document.getElementById('applicantTableBody').closest('.card').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-/* ══ MOCK DATA ══ */
-let applicants = [
-  {id:'a1', applicantId:null, name:'Juan Dela Cruz', email:'juan.delacruz@example.com', phone:'09171234567', address:'Brgy. Real, Calamba City, Laguna', residency:'12 years', profile:'2 of 4 sections done (50%)', docs:'2 Verified · 2 Pending · 0 Deficient', status:'pending', submittedDate:'2026-06-15', lockedBy:null, approvedProgram:null},
-  {id:'a2', applicantId:'2026A-00001', name:'Maria Santos', email:'maria.santos@example.com', phone:'09182345678', address:'Brgy. Canlubang, Calamba City, Laguna', residency:'20 years', profile:'4 of 4 sections done (100%)', docs:'8 Verified · 0 Pending · 0 Deficient', status:'qualified', submittedDate:'2026-06-10', lockedBy:null, approvedProgram:null},
-  {id:'a3', applicantId:null, name:'Pedro Reyes', email:'pedro.reyes@example.com', phone:'09193456789', address:'Brgy. Bucal, Calamba City, Laguna', residency:'9 years', profile:'4 of 4 sections done (100%)', docs:'7 Verified · 1 Pending · 0 Deficient', status:'waitlisted', submittedDate:'2026-06-18', lockedBy:'Mark Osorio', approvedProgram:null},
-  {id:'a4', applicantId:null, name:'Ana Lim', email:'ana.lim@example.com', phone:'09204567890', address:'Brgy. Parian, Calamba City, Laguna', residency:'15 years', profile:'4 of 4 sections done (100%)', docs:'6 Verified · 0 Pending · 2 Deficient', status:'not-qualified', submittedDate:'2026-06-20', lockedBy:null, approvedProgram:null},
-  {id:'a5', applicantId:null, name:'Carlo Ramos', email:'carlo.ramos@example.com', phone:'09215678901', address:'Brgy. Sucol, Calamba City, Laguna', residency:'6 years', profile:'3 of 4 sections done (75%)', docs:'5 Verified · 2 Pending · 0 Deficient', status:'pending', submittedDate:'2026-06-25', lockedBy:null, approvedProgram:null},
-  {id:'a6', applicantId:null, name:'Bea Fernandez', email:'bea.fernandez@example.com', phone:'09226789012', address:'Brgy. Mayapa, Calamba City, Laguna', residency:'18 years', profile:'1 of 4 sections done (25%)', docs:'1 Verified · 2 Pending · 0 Deficient', status:'pending', submittedDate:'2026-07-02', lockedBy:null, approvedProgram:null}
-];
+/* ══ APPLICANT RECORDS ══
+   Empty by design. The upcoming database integration replaces this array with
+   the real applicant rows (same shape as the fields consumed below:
+   id, applicantId, name, email, phone, address, residency, profile, docs,
+   status, submittedDate, lockedBy, approvedProgram). Every renderer below
+   already handles a zero-length list with its own empty state. */
+let applicants = [];
 
 /* ══ APPLICANT NUMBER DISSEMINATION ══
    Format: [Year of application][Letter for which "Applications Open" cycle it
@@ -2235,7 +2233,7 @@ let applicants = [
    "Qualified" — otherwise the UI shows "Pending for review". */
 let applicationCycleCount = 1; // the console starts with Applications Open already on = cycle 1 ("A")
 let applicationCycleYear = 2026;
-let cycleSeqCounters = {1: 1}; // cycle number -> last sequence number issued in that cycle (Maria Santos already holds 2026A-00001)
+let cycleSeqCounters = {}; // cycle number -> last sequence number issued in that cycle (seeded from the database on load)
 function cycleLetter(n){
   let s = '';
   while(n > 0){
@@ -2296,12 +2294,12 @@ function saveAllowanceDistributionsToStorage() {
   try { localStorage.setItem(ALLOWANCE_STORAGE_KEY, JSON.stringify(allowanceDistributions)); } catch (e) { /* storage unavailable */ }
 }
 
-let adminAccounts = [
-  {id:'d1', name:'Guidance & Testing Office', email:'gctcdo@ccc.edu.ph', role:'super', password:'CCC-SuperAdmin-2026', status:'active', inviteToken:null, inviteExpiry:null, inviteType:null, protected:true},
-  {id:'d2', name:'Grace Villanueva', email:'g.villanueva@ccc.edu.ph', role:'admin', password:'CCC-Admin-2026', status:'active', inviteToken:null, inviteExpiry:null, inviteType:null},
-  {id:'d3', name:'Mark Osorio', email:'m.osorio@ccc.edu.ph', role:'admin', password:'CCC-Admin-2026', status:'active', inviteToken:null, inviteExpiry:null, inviteType:null},
-  {id:'d4', name:'Office of the Registrar', email:'registrar@ccc.edu.ph', role:'registrar', password:'CCC-Registrar-2026', status:'active', inviteToken:null, inviteExpiry:null, inviteType:null, protected:true}
-];
+/* ══ ADMIN / STAFF ACCOUNTS ══
+   Empty by design. Populated by the upcoming database integration with the
+   real staff accounts. Expected shape per row:
+   {id, name, email, role:'super'|'admin'|'registrar', password, status,
+    inviteToken, inviteExpiry, inviteType, protected} */
+let adminAccounts = [];
 
 /* ── Recent Activity / Notifications: SVG icon set (same stroke style as the
    sidebar icons) — swapped in per notif type instead of emoji glyphs. ── */
@@ -2601,79 +2599,12 @@ const CATEGORY_DEFS = {
     ]
   }
 };
-const FIELD_SAMPLE_VALUES = {
-  firstname:['Juan','Maria','Pedro'],
-  middlename:['Santos','Reyes','Cruz'],
-  lastname:['Dela Cruz','Santos','Reyes'],
-  suffix:['\u2014','Jr.','III'],
-  dob:['01/15/2007','03/22/2008','07/09/2006'],
-  pob:['Calamba City, Laguna','Los Ba\u00f1os, Laguna','Santa Rosa, Laguna'],
-  sex:['Male','Female'],
-  citizenship:['Filipino'],
-  religion:['Roman Catholic','Iglesia ni Cristo','Islam'],
-  civilstatus:['Single','Married'],
-  email:['juandelacruz@gmail.com','mariasantos@gmail.com','pedroreyes@gmail.com'],
-  contact:['09171234567','09182345678','09193456789'],
-  address:['Brgy. Real, Calamba City, Laguna','Brgy. Canlubang, Calamba City, Laguna','Brgy. Bucal, Calamba City, Laguna'],
-  precinct:['0142A','0089B','0231C'],
-  lgbtqi:['Yes','No'],
-  disability:['None','Visual Impairment','None'],
-  hobbies:['Reading, basketball, drawing','Singing, cooking','Volleyball, photography'],
-  orginvolvement:['Supreme Student Government \u2014 President, School Organization, 2024\u20132025','Youth for Christ \u2014 Member, Non-profit Organization, 2023\u20132024','None'],
-  motivation:['I want to help my family and give back to my community through education.','This scholarship will let me focus on my studies without financial worry.','I aim to become the first college graduate in my family.'],
-  selfdescription:['Hardworking and determined, with a passion for helping others.','Curious and disciplined, always eager to learn new things.','Patient and resourceful, especially when supporting my family.'],
-  tenyears:['A licensed professional working in my field and supporting my family.','Running my own small business here in Calamba.','Working abroad while helping fund my siblings\u2019 education.'],
-  applyingas:['First Year','Transferee','Old Curriculum and ALS Completer'],
-  termapplying:['Term 1','Term 2'],
-  choice1:['Bachelor of Science in Information Technology','Bachelor of Science in Computer Science','Bachelor of Science in Accountancy'],
-  choice2:['Bachelor of Science in Psychology','Bachelor of Elementary Education','None of the above'],
-  primschool:['Calamba Elementary School','Real Elementary School','Canlubang Elementary School'],
-  primaddress:['Bunggo, Calamba City','Real, Calamba City','Canlubang, Calamba City'],
-  primsection:['Osme\u00f1a','Rizal','Bonifacio'],
-  primyear:['2018','2019','2020'],
-  primhonors:['With Honors','N/A','With High Honors'],
-  secschool:['Calamba National High School','Real National High School','Canlubang National High School'],
-  secaddress:['Bunggo, Calamba City','Real, Calamba City','Canlubang, Calamba City'],
-  secsection:['HUMSS - Hope','STEM - Faith','ABM - Charity'],
-  secyear:['2024','2025','2026'],
-  sechonors:['Honors','N/A','With Honors'],
-  tertschool:['City College of Calamba','\u2014','\u2014'],
-  tertaddress:['Calamba City, Laguna','\u2014','\u2014'],
-  tertsection:['BS Information Technology','\u2014','\u2014'],
-  tertyear:['2028','\u2014','\u2014'],
-  terthonors:['N/A','\u2014','\u2014'],
-  techvoc:['No','Yes'],
-  techvocschool:['\u2014','Calamba Technical Vocational School'],
-  techvoccourse:['\u2014','Computer Systems Servicing NC II'],
-  techvocaddress:['\u2014','Brgy. Real, Calamba City, Laguna'],
-  mothername:['Juana Dela Cruz','Elena Santos','Rosa Reyes'],
-  mothercitizenship:['Filipino'],
-  motherdob:['MM/DD/YYYY'],
-  mothercontact:['0917 123 4567','0918 234 5678','0919 345 6789'],
-  mothereducation:['College Graduate','High School Graduate','College Graduate'],
-  motheremployment:['Employed','Unemployed','Employed'],
-  fathername:['Juan Dela Cruz','Pedro Santos','Mario Reyes'],
-  fathercitizenship:['Filipino'],
-  fatherdob:['MM/DD/YYYY'],
-  fathercontact:['0917 123 4567','0918 234 5678','0919 345 6789'],
-  fathereducation:['College Graduate','High School Graduate','College Graduate'],
-  fatheremployment:['Employed','Unemployed','Employed'],
-  guardianname:['N/A','N/A','Lola Nena'],
-  guardiancitizenship:['N/A','N/A','Filipino'],
-  guardiandob:['N/A','N/A','MM/DD/YYYY'],
-  guardiancontact:['N/A','N/A','0920 456 7890'],
-  guardianeducation:['N/A','N/A','High School Graduate'],
-  guardianemployment:['N/A','N/A','Retired'],
-  onlychild:['No','Yes'],
-  numsiblings:['2','0','3'],
-  siblingcurrentstudent:['No','Yes'],
-  siblinggraduate:['No','Yes'],
-  emergencycontact:['Juana Dela Cruz, Mother, Brgy. Real, Calamba City, 0917 123 4567','Elena Santos, Mother, Brgy. Canlubang, Calamba City, 0918 234 5678','Rosa Reyes, Mother, Brgy. Bucal, Calamba City, 0919 345 6789'],
-  ecnumber:['0917 123 4567','0918 234 5678','0919 345 6789'],
-  workingstudent:['No','Yes'],
-  siblingincome:['Ana Dela Cruz (b. 2010) \u2014 Single, College Undergraduate','Mark Santos (b. 2012) \u2014 Single, Senior High School','N/A'],
-  condition:['Physically fit for any work','None reported','Under maintenance medication for asthma']
-};
+/* Field values are supplied per-applicant by the database integration.
+   Until a record carries real values, every field renders as an empty-state
+   placeholder instead of sample text. */
+const FIELD_EMPTY_VALUE = '\u2014';
+const FIELD_NOT_SUBMITTED = 'Not yet submitted';
+
 /* ══ FIELD DROPDOWN OPTIONS ══
    Mirrors every <select> that exists on applicant.html for the same field, so
    a field the applicant picks from a dropdown is also edited here as a
@@ -2742,9 +2673,10 @@ function parseDocCounts(docsStr){
   };
 }
 
-/* Builds each applicant's per-category documents & profile data from their
-   mock summary fields, so the Admin console has something real to show
-   and edit under each "My Profile" category. */
+/* Builds each applicant's per-category documents & profile scaffold from their
+   summary fields. Values come from the record itself once the database
+   integration supplies them; anything missing renders as an empty-state
+   placeholder rather than sample text. */
 function buildApplicantCategories(a, idx){
   const sectionsDone = parseSectionsDone(a.profile);
   const completedCats = CATEGORY_ORDER.slice(0, sectionsDone);
@@ -2768,8 +2700,7 @@ function buildApplicantCategories(a, idx){
         flagNote:''
       }));
       const fields = stackDef.fields.map(fd=>{
-        const pool = FIELD_SAMPLE_VALUES[fd.key] || ['\u2014'];
-        const value = isDone ? pool[(idx+fi)%pool.length] : 'Not yet submitted';
+        const value = isDone ? (fd.value || FIELD_EMPTY_VALUE) : FIELD_NOT_SUBMITTED;
         fi++;
         return {key:fd.key, label:fd.label, value, flagged:false, flagNote:''};
       });
@@ -3913,6 +3844,11 @@ function deleteMessage(id){
 function renderAdmins(){
   const list = document.getElementById('adminList');
   list.innerHTML='';
+  if(!adminAccounts.length){
+    list.innerHTML = '<p style="font-size:.82rem;color:var(--muted)">No admin accounts yet.</p>';
+    document.getElementById('adminCount').textContent = '0 accounts';
+    return;
+  }
   adminAccounts.forEach(ac=>{
     const row = document.createElement('div');
     row.className='admin-row';
