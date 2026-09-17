@@ -646,22 +646,16 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
   <div class="section-heading">Announcements</div>
   <div class="carousel-outer">
     <div class="carousel-track-wrap">
+      <!-- Slides are rendered by loadCarouselFromAdmin() from published
+           announcements. This is the empty state shown when none exist yet. -->
       <div class="carousel-track" id="carouselTrack">
-        <div class="carousel-slide"><img src="Admissions_Announcement-1.png" alt="Admission Announcement 1 — Admission Guidelines and Processes"/></div>
-        <div class="carousel-slide"><img src="Admissions_Announcement-2.png" alt="Admission Announcement 2 — Campus Map and Flow"/></div>
-        <div class="carousel-slide"><img src="Admissions_Announcement-3.png" alt="Admission Announcement 3 — Online Application Steps"/></div>
-        <div class="carousel-slide"><img src="Admissions_Announcement-4.png" alt="Admission Announcement 4 — QR Codes Scan Browse Read Submit"/></div>
+        <div class="carousel-slide"><div class="carousel-text-slide"><h3>No announcements yet</h3><p>Official announcements such as qualifications, steps, and exam schedules will appear here once they are posted.</p></div></div>
       </div>
     </div>
     <button class="carousel-btn carousel-prev" onclick="moveCarousel(-1)" aria-label="Previous slide">&#8592;</button>
     <button class="carousel-btn carousel-next" onclick="moveCarousel(1)" aria-label="Next slide">&#8594;</button>
-    <div class="carousel-dots" id="carouselDots">
-      <button class="carousel-dot active" onclick="goSlide(0)" aria-label="Slide 1"></button>
-      <button class="carousel-dot" onclick="goSlide(1)" aria-label="Slide 2"></button>
-      <button class="carousel-dot" onclick="goSlide(2)" aria-label="Slide 3"></button>
-      <button class="carousel-dot" onclick="goSlide(3)" aria-label="Slide 4"></button>
-    </div>
-    <div class="carousel-counter" id="carouselCounter">1 / 4</div>
+    <div class="carousel-dots" id="carouselDots"></div>
+    <div class="carousel-counter" id="carouselCounter">0 / 0</div>
   </div>
 </div>
 
@@ -1312,7 +1306,7 @@ function closeGuide(e) {
 // ── CAROUSEL ──
 const ANN_STORAGE_KEY = 'iskolusyon_announcements';
 let currentSlide = 0;
-let totalSlides = 4;
+let totalSlides = 0; // set by loadCarouselFromAdmin() from published announcements
 let autoTimer;
 
 function escapeHtml(str) {
@@ -1354,6 +1348,10 @@ function loadCarouselFromAdmin() {
 loadCarouselFromAdmin();
 
 function goSlide(n) {
+  if (!totalSlides) {
+    document.getElementById('carouselCounter').textContent = '0 / 0';
+    return;
+  }
   currentSlide = (n + totalSlides) % totalSlides;
   document.getElementById('carouselTrack').style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
   document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
