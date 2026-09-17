@@ -1,3 +1,6 @@
+# FRONT-END PATCH 4 (Sept. 17, 2026):
+# (lagyan q mmaya deets. pero basically polishing na)
+
 # FRONT-END PATCH 3 (Sept. 16, 2026):
 
 # To Pau, reading / checking priority:
