@@ -53,7 +53,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .portal-shell{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 108px);align-items:stretch}
 
 /* ── SIDEBAR ── */
-.sidebar{background:linear-gradient(180deg,var(--navy) 0%,#081F49 100%);color:#fff;padding:2rem 1.35rem 1.5rem;display:flex;flex-direction:column;position:sticky;top:108px;height:calc(100vh - 108px);overflow-y:auto}
+.sidebar{background:linear-gradient(180deg,var(--navy) 0%,#081F49 100%);color:#fff;padding:2rem 1.35rem 1.5rem;display:flex;flex-direction:column;position:sticky;top:var(--sticky-top,75px);height:calc(100vh - var(--sticky-top,75px));overflow-y:auto}
 .sidebar-profile{text-align:center;margin-bottom:1.75rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,.15)}
 .admin-avatar{width:74px;height:74px;border-radius:50%;margin:0 auto .85rem;border:3px solid var(--gold);background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:1.5rem;position:relative;cursor:pointer;overflow:hidden;transition:border-color .2s;flex-shrink:0}
 .admin-avatar:hover{border-color:#fff}
@@ -111,6 +111,8 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .stat-card .stat-value{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.85rem;color:var(--navy)}
 .stat-card .stat-note{font-size:.72rem;color:var(--muted);margin-top:.5rem;line-height:1.5}
 .stat-card-hint{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.4px;text-transform:uppercase;color:var(--ccc-blue);margin-top:.6rem;display:flex;align-items:center;gap:4px}
+body.role-is-registrar .stat-card-hint{display:none}
+body.role-is-registrar .stat-card{cursor:default;pointer-events:none}
 .stat-card.stat-all{border-top:4px solid var(--navy)}
 .stat-card.stat-pending{border-top:4px solid var(--pending-light)}
 .stat-card.stat-qualified{border-top:4px solid var(--qualified-light)}
@@ -149,6 +151,9 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .qualified-breakdown-columns{display:grid;grid-template-columns:1fr 1fr;gap:0 2rem}
 .qualified-breakdown-col{min-width:0}
 .dept-helper-text{font-family:'Open Sans',sans-serif;font-size:.74rem;color:var(--muted);line-height:1.5;margin:0 0 1rem}
+body.role-is-registrar .dept-divider{cursor:default;pointer-events:none}
+body.role-is-registrar .dept-divider-arrow{display:none}
+body.role-is-registrar .dept-helper-text{display:none}
 
 .mbtn{padding:10px 22px;border:none;border-radius:6px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;transition:all .2s}
 .mbtn-primary{background:var(--ccc-blue);color:#fff}
@@ -160,6 +165,10 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .mbtn-danger{background:#C0392B;color:#fff}
 .mbtn-danger:hover{background:#992d22}
 .mbtn:disabled{opacity:.5;cursor:not-allowed}
+/* Shared state for every send/publish/submit/save button — gray + unclickable
+   while a required field is still empty or there is simply nothing to send. */
+.mbtn-idle,.mbtn:disabled{background:#D5D9DF !important;color:#8A9199 !important;cursor:not-allowed !important;box-shadow:none;opacity:1}
+.mbtn-idle:hover,.mbtn:disabled:hover{background:#D5D9DF !important;color:#8A9199 !important}
 .mbtn-sm{padding:7px 14px;font-size:.7rem}
 
 /* ── PASSWORD GATE ── */
@@ -181,10 +190,26 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .gate-foot{font-size:.68rem;color:var(--muted);margin-top:1.25rem}
 .gate-view{display:none}
 .gate-view.active{display:block}
-.gate-forgot{display:block;text-align:center;font-size:.75rem;font-weight:700;color:var(--ccc-blue);margin-top:.9rem;text-decoration:none;font-family:'Montserrat',sans-serif;cursor:pointer}
+.gate-forgot{font-size:.75rem;font-weight:700;color:var(--ccc-blue);text-decoration:none;font-family:'Montserrat',sans-serif;cursor:pointer}
 .gate-forgot:hover{text-decoration:underline}
+.gate-remember-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:.85rem 0 1.1rem}
+.gate-remember{display:flex;align-items:center;gap:7px;font-size:.75rem;color:var(--muted);cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:600}
+.gate-remember input{width:15px;height:15px;margin:0;accent-color:var(--ccc-blue);cursor:pointer;flex-shrink:0}
 .gate-back{display:inline-block;font-size:.72rem;font-weight:700;color:var(--muted);margin-top:1.1rem;text-decoration:none;font-family:'Montserrat',sans-serif;cursor:pointer}
 .gate-back:hover{color:var(--navy)}
+.gate-box .modal-alert{border-radius:6px;padding:.7rem 1rem;font-size:.78rem;margin-bottom:1rem;text-align:left;background:#E8F0FA;color:#0D2F6E;border:1px solid #B5D0F0}
+.gate-box .field-err{font-size:.72rem;color:#C0392B;margin:4px 0 0;display:none}
+.otp-wrap{display:flex;gap:8px;justify-content:center;margin:1rem 0}
+.otp-box{width:46px;height:54px;border:2px solid var(--border);border-radius:8px;text-align:center;font-size:1.3rem;font-weight:700;font-family:'Montserrat',sans-serif;color:var(--navy);outline:none;transition:border-color .2s,box-shadow .2s}
+.otp-box:focus{border-color:var(--ccc-blue);box-shadow:0 0 0 3px rgba(0,60,208,.12)}
+.resend-btn{background:none;border:none;color:var(--ccc-blue);font-size:.75rem;font-weight:700;cursor:pointer;padding:0;text-decoration:underline;font-family:'Montserrat',sans-serif}
+.resend-btn:disabled{color:var(--muted);text-decoration:none;cursor:default}
+.resend-btn.is-cooldown{color:var(--muted);text-decoration:none}
+.timer-text{font-size:.72rem;color:var(--muted);text-align:center;margin-top:.25rem}
+.resend-wrap{position:relative;display:inline-block}
+.resend-tooltip{position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%) translateY(4px);background:var(--navy);color:#fff;font-size:.7rem;font-weight:600;line-height:1.4;padding:7px 12px;border-radius:6px;white-space:nowrap;box-shadow:0 6px 18px rgba(13,47,110,.3);opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;z-index:40}
+.resend-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--navy)}
+.resend-tooltip.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
 
 .app-content{display:none}
 .app-content.unlocked{display:block}
@@ -200,6 +225,8 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .filter-divider{width:1px;height:22px;background:var(--border);flex-shrink:0}
 .filter-clear{all:unset;cursor:pointer;color:var(--ccc-blue);font-family:'Montserrat',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.2px;padding:8px 6px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;border-radius:6px}
 .filter-clear:hover{background:var(--off);text-decoration:underline}
+.filter-clear-icon{margin-left:auto;width:34px;height:34px;padding:0;justify-content:center;flex-shrink:0}
+.filter-clear-icon:hover{text-decoration:none}
 .notif-bulk-actions{display:flex;gap:.4rem;padding-top:2px}
 .applicant-table{width:100%;border-collapse:collapse;font-size:.84rem}
 .applicant-table th{text-align:left;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.66rem;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border)}
@@ -328,7 +355,7 @@ textarea.email-field-input{min-height:64px;line-height:1.5}
 .doc-view-placeholder{text-align:center;max-width:430px}
 .doc-view-placeholder h4{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.85rem;color:var(--navy);margin-bottom:.45rem}
 .doc-view-placeholder p{font-size:.8rem;color:var(--muted);line-height:1.6}
-.doc-row .doc-row-status{width:130px;flex-shrink:0}
+.doc-row .doc-row-status{width:auto;flex-shrink:0}
 .doc-row select{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);background:#fff;width:100%}
 .doc-row select:disabled{border:none;background:none;appearance:none;-webkit-appearance:none;padding:4px 0;color:inherit}
 .doc-cat-divider{border:none;border-top:1px dashed var(--border);margin:1.1rem 0}
@@ -376,6 +403,12 @@ textarea.email-field-input{min-height:64px;line-height:1.5}
 .status-requirement-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--navy)}
 .status-action-wrap.locked:hover .status-requirement-tooltip{visibility:visible;opacity:1;transition:opacity .15s ease 1.6s,visibility 0s linear 1.6s}
 
+/* ── Approved Program readiness gating: the select is fully disabled
+   (unclickable) — matching .efield select:disabled styling — until the
+   applicant's info is completely submitted & system-verified. ── */
+.approved-program-wrap{position:relative}
+.approved-program-wrap.locked:hover .status-requirement-tooltip{visibility:visible;opacity:1;transition:opacity .15s ease 1.6s,visibility 0s linear 1.6s}
+
 /* ── Missing-required-item markers (asterisks on tabs & individual fields/docs) ── */
 .cat-required-asterisk{color:var(--red);font-weight:800;margin-left:1px}
 .missing-required-asterisk{color:var(--red);font-weight:800;margin-left:3px}
@@ -404,14 +437,6 @@ span.flag-btn{cursor:default}
 .confirm-inline .email-preview{background:#fff;border:1px solid var(--border);border-radius:7px;padding:.7rem .85rem;font-size:.74rem;color:var(--muted);margin-bottom:.85rem}
 .confirm-inline .email-preview b{color:var(--text)}
 .confirm-inline-actions{display:flex;gap:.6rem}
-
-/* ── TOAST ── */
-.toast-stack{position:fixed;bottom:1.5rem;right:1.5rem;z-index:3000;display:flex;flex-direction:column;gap:.6rem}
-.toast{background:var(--navy);color:#fff;font-family:'Montserrat',sans-serif;font-weight:600;font-size:.8rem;padding:12px 18px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.25);display:flex;align-items:center;gap:10px;max-width:340px;animation:toastIn .25s ease}
-.toast.success{background:var(--green-dark)}
-@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.toast.fadeout{animation:toastOut .3s ease forwards}
-@keyframes toastOut{to{opacity:0;transform:translateY(6px)}}
 
 /* ── ANNOUNCEMENTS PANEL ── */
 .announce-form .mfield{margin-bottom:1rem}
@@ -455,6 +480,9 @@ span.flag-btn{cursor:default}
 .announce-form select.filter-select-compact{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:7px;font-size:.82rem;font-family:'Montserrat',sans-serif;font-weight:600;color:var(--text);background:#fff;cursor:pointer}
 .announce-form select.filter-select-compact:focus{border-color:var(--ccc-blue);box-shadow:0 0 0 3px rgba(0,60,208,.1)}
 #activityFeedSelect{width:100%;padding:10px 14px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer}
+/* The bulk-toggle column doesn't stretch with the dropdowns, so it settles
+   against the row's right edge on its own. */
+.activity-filter-row .mfield-actions{flex:0 0 auto;margin-left:auto}
 
 /* ── Read/unread notification indicators ── */
 .timeline-item,.announce-item,.message-item{cursor:pointer}
@@ -491,9 +519,11 @@ span.flag-btn{cursor:default}
 .role-tag{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.4px;text-transform:uppercase;padding:4px 11px;border-radius:20px;flex-shrink:0}
 .role-tag.super{background:#F3ECD9;color:#8A5A10}
 .role-tag.admin{background:#EEF3FD;color:var(--ccc-blue)}
+.role-tag.registrar{background:#E9F7EF;color:#1E7B45}
 .status-pill{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.6rem;letter-spacing:.4px;text-transform:uppercase;padding:3px 9px;border-radius:20px;flex-shrink:0;background:#FEF3E8;color:#7A4210}
 .admin-row-del{all:unset;cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px;border-radius:50%;flex-shrink:0}
 .admin-row-del:hover{background:var(--off);color:var(--red)}
+.admin-row-del.is-disabled{color:#C6CBD2;cursor:not-allowed;pointer-events:none}
 .add-admin-form{display:grid;grid-template-columns:1.4fr 1.6fr 1fr auto;gap:.7rem;align-items:end}
 .add-admin-form .efield{margin-bottom:0}
 
@@ -547,11 +577,223 @@ span.flag-btn{cursor:default}
   .toggle-detail-panel{grid-template-columns:1fr;max-height:400px}
   .applicant-table{display:block;overflow-x:auto;white-space:nowrap}
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE LAYER — fluid layout hardening
+   Appended last so it only ever refines the rules above it. Everything here
+   is either a no-op at desktop widths or lives inside a media query, so all
+   existing colours, component styling and behaviour are untouched.
+   Note: overflow-x:hidden is deliberately NOT used on html/body — it breaks
+   the sticky navbar and sticky sidebar. Overflow is fixed at its source.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+img,svg,video,canvas{max-width:100%}
+/* Flex/grid children default to min-width:auto and so refuse to shrink below
+   their content — the usual cause of a row blowing past its container. */
+.portal-shell>*,.nav-inner>*,.stat-grid>*,.edit-grid>*,.status-action-grid>*,
+.mini-summary-grid>*,.add-admin-form>*,.filter-bar>*,.portal-header>*,
+.modal-head-top>*,.modal-head-info>*,.admin-row>*,.toggle-row>*,
+.activity-filter-row>*,.qualified-breakdown-columns>*,.req-info-layout>*{min-width:0}
+/* Long unbroken strings (emails, filenames, applicant IDs) wrap instead of
+   forcing a horizontal scrollbar. */
+.card,.portal-header,.modal-head,.modal-body,.doc-row-main,.doc-row-filename,
+.admin-row,.timeline-body,.announce-body,.message-body,.stat-card,
+.confirm-box,.toggle-row{overflow-wrap:break-word;word-break:break-word}
+/* Strips that already scroll get smooth touch scrolling. */
+.breakdown-table-wrap,.doc-cat-tabs{-webkit-overflow-scrolling:touch}
+/* The rich-text editor is a fixed-width third-party widget; keep it boxed. */
+.rte-wrap{max-width:100%}
+.rte-wrap .ql-editor{overflow-wrap:break-word;word-break:break-word}
+
+/* ── ≤1080px: nav bar breathing room before anything collides ── */
+@media(max-width:1080px){
+  .nav-inner{padding:0 1.5rem;gap:.85rem}
+  .brand-logos img{height:44px}
+  .brand-text .main{font-size:.92rem}
+}
+
+/* ── ≤960px: the existing breakpoint turns the sidebar into a horizontal
+   strip. Let that strip scroll rather than pile up when it runs out of
+   room, and keep the shell from being forced wide by it. ── */
+@media(max-width:960px){
+  .portal-shell{min-height:0}
+  .sidebar{gap:.5rem;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch}
+  .sidebar-menu{gap:4px;margin-left:.75rem;min-width:0}
+  .menu-btn{white-space:nowrap}
+  .portal-header{align-items:flex-start}
+  /* The applicant table already switches to a scrolling block here; make sure
+     its horizontal scroll is reachable by touch. */
+  .applicant-table{-webkit-overflow-scrolling:touch}
+}
+
+/* ── ≤860px: nav bar stacks onto two rows; modals reclaim edge space ── */
+@media(max-width:860px){
+  .nav-inner{flex-wrap:wrap;height:auto;padding:.7rem 1.25rem;row-gap:.5rem}
+  .topbar .inner{flex-wrap:wrap;gap:.5rem;padding:0 1.25rem}
+  .portal-main{padding:1.5rem 1.1rem 2.5rem}
+  .card{padding:1.4rem 1.2rem}
+  .stat-grid{grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:.85rem}
+  .mini-summary-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .status-action-grid{grid-template-columns:1fr 1fr}
+  .modal-overlay{padding:1.15rem 1rem}
+  .modal-box{width:100%;height:94vh;max-height:94vh}
+  .modal-head{padding:1.15rem 1.25rem 1rem}
+  .modal-body{padding:1.35rem 1.25rem}
+  .doc-view-box{width:100%;height:90vh}
+}
+
+/* ── ≤640px ── */
+@media(max-width:640px){
+  .nav-inner{padding:.6rem 1rem}
+  .brand-logos{gap:4px}
+  .brand-logos img{height:36px}
+  .brand-text{padding-left:8px}
+  .brand-text .main{font-size:.82rem;letter-spacing:.3px}
+  .brand-text .sub{font-size:.52rem;letter-spacing:.8px}
+  .nav-portal-badge{display:none}
+  .sidebar{flex-direction:column;align-items:stretch;padding:1rem}
+  .sidebar-profile{margin-bottom:.85rem;align-self:center}
+  .sidebar-menu{margin-left:0;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .sidebar-menu::-webkit-scrollbar{display:none}
+  .sidebar-logout{margin-left:0;margin-top:.75rem;align-self:stretch}
+  .portal-main{padding:1.25rem .9rem 2.25rem}
+  .card{padding:1.2rem 1rem}
+  .stat-grid{grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem}
+  .status-action-grid{grid-template-columns:1fr}
+  /* Filter and action rows wrap onto their own lines instead of squeezing. */
+  .filter-bar{gap:.55rem}
+  .filter-bar>*{flex:1 1 auto}
+  .filter-divider{display:none}
+  .activity-filter-row{gap:.75rem}
+  .notif-bulk-actions{flex-wrap:wrap}
+  .add-admin-form{grid-template-columns:1fr}
+  .admin-row{flex-wrap:wrap}
+  .toggle-row{flex-direction:column;align-items:flex-start;gap:.6rem}
+  .efield-row{flex-wrap:wrap}
+  .doc-row{flex-wrap:wrap}
+  .edit-save-row,.cycle-settings-actions,.confirm-actions,.confirm-inline-actions,.mfield-actions{flex-wrap:wrap}
+  .confirm-actions>*,.cycle-settings-actions>*{flex:1 1 auto;justify-content:center}
+  .modal-overlay{padding:.75rem .6rem}
+  .modal-box{height:96vh;max-height:96vh;border-radius:10px}
+  .modal-head{padding:1rem 1rem .9rem}
+  .modal-head-top{align-items:flex-start;gap:.6rem}
+  .modal-body{padding:1.15rem 1rem}
+  .modal-avatar{width:42px;height:42px;font-size:.85rem}
+  .doc-cat-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .doc-cat-tabs::-webkit-scrollbar{display:none}
+  .req-info-photo{align-self:center}
+  .gate-box{padding:2rem 1.35rem}
+  .toggle-detail-panel{max-height:none}
+}
+
+/* ── ≤480px ── */
+@media(max-width:480px){
+  .nav-inner{padding:.55rem .85rem;gap:.5rem}
+  .brand-text{display:none}
+  .topbar .inner{padding:0 .85rem;font-size:.68rem}
+  .portal-main{padding:1.1rem .75rem 2rem}
+  .card{padding:1.05rem .85rem}
+  .stat-grid,.mini-summary-grid{grid-template-columns:1fr}
+  .modal-box{height:97vh;max-height:97vh}
+  .confirm-box{padding:1.5rem 1.15rem}
+  .gate-box{padding:1.75rem 1.1rem}
+  .otp-wrap{gap:6px}
+  .otp-box{width:clamp(34px,13vw,46px)}
+}
+
+/* ── PASS 2: remaining nowrap overflow ── */
+@media(max-width:640px){
+  /* Both tooltips are nowrap and centred on their trigger, so near a screen
+     edge they ran off-screen. Let them wrap and cap to the viewport. */
+  .resend-tooltip{white-space:normal;width:max-content;max-width:min(260px,calc(100vw - 32px));text-align:center}
+  .status-requirement-tooltip{white-space:normal;width:max-content;max-width:min(240px,calc(100vw - 32px));text-align:center}
+  .filter-bar-label{white-space:normal}
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.min.css" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   ACTION-BUTTON STATE ENGINE
+   One shared rule for every send / publish / submit / save button:
+     • GRAY + unclickable      — required fields aren't filled in yet, or
+                                 there's simply nothing to send
+     • BLUE  (mbtn-primary)    — ready to go, but nothing has been touched
+     • GREEN (mbtn-secondary)  — information changed, waiting to be sent
+     • back to BLUE            — the moment the action goes through
+   Register a button with abRegister(btn, scope, isReadyFn) and call
+   abDone(btn) after the action succeeds.
+   ══════════════════════════════════════════════════════════════════════════ */
+var AB_RECS = [];
+function abRegister(btn, scope, isReady, opts){
+  if(!btn) return null;
+  opts = opts || {};
+  var existing = abFind(btn);
+  if(existing){
+    existing.scope = scope || null;
+    if(isReady) existing.isReady = isReady;
+    abPaint(existing);
+    return existing;
+  }
+  var base = opts.base || (btn.classList.contains('mbtn-danger') ? 'mbtn-danger' : 'mbtn-primary');
+  var rec = {
+    btn: btn,
+    scope: scope || null,
+    isReady: isReady || function(){ return true; },
+    dirty: !!opts.startDirty,
+    live: !!opts.live,          /* live buttons are green whenever actionable */
+    base: base
+  };
+  btn.classList.remove('mbtn-secondary');
+  AB_RECS.push(rec);
+  abPaint(rec);
+  return rec;
+}
+function abFind(btn){
+  for(var i=0;i<AB_RECS.length;i++){ if(AB_RECS[i].btn === btn) return AB_RECS[i]; }
+  return null;
+}
+function abSetBase(btn, cls){ var r = abFind(btn); if(r){ r.base = cls; abPaint(r); } }
+function abPaint(rec){
+  var b = rec.btn;
+  if(!b || !b.isConnected) return;
+  var ready = false;
+  try { ready = !!rec.isReady(); } catch(e){ ready = false; }
+  if(b.dataset.abLocked === '1') ready = false;
+  var dirty = ready && (rec.live || rec.dirty);
+  b.disabled = !ready;
+  b.classList.toggle('mbtn-idle', !ready);
+  b.classList.toggle('mbtn-secondary', dirty);
+  b.classList.toggle(rec.base, ready && !dirty);
+}
+function abRefresh(){
+  for(var i=AB_RECS.length-1;i>=0;i--){
+    if(!AB_RECS[i].btn || !AB_RECS[i].btn.isConnected) AB_RECS.splice(i,1);
+    else abPaint(AB_RECS[i]);
+  }
+}
+function abTouch(target){
+  AB_RECS.forEach(function(rec){
+    if(rec.scope && target && rec.scope.contains && rec.scope.contains(target)) rec.dirty = true;
+  });
+  abRefresh();
+}
+function abDone(btn){ var r = abFind(btn); if(r) r.dirty = false; abRefresh(); }
+function abResetAll(){ AB_RECS.forEach(function(r){ r.dirty = false; }); abRefresh(); }
+function abLock(btn, locked){ if(btn){ btn.dataset.abLocked = locked ? '1' : '0'; abRefresh(); } }
+/* ── small readiness helpers ── */
+function abFilled(id){ var el = document.getElementById(id); return !!(el && String(el.value||'').trim()); }
+function abAllFilled(ids){ return ids.every(abFilled); }
+function abChecked(id){ var el = document.getElementById(id); return !!(el && el.checked); }
+function abOtpFilled(prefix){ for(var i=0;i<6;i++){ if(!abFilled(prefix+i)) return false; } return true; }
+/* Any edit anywhere marks the owning button green; any click re-evaluates. */
+['input','change','paste','keyup'].forEach(function(ev){
+  document.addEventListener(ev, function(e){ var t = e.target; setTimeout(function(){ abTouch(t); }, 0); }, true);
+});
+document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true);
+</script>
 </head>
 <body>
 
@@ -572,26 +814,57 @@ span.flag-btn{cursor:default}
         <label for="gatePassword">Password</label>
         <input type="password" id="gatePassword" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="off"/>
       </div>
+      <div class="gate-remember-row">
+        <label class="gate-remember">
+          <input type="checkbox" id="gateKeepSignedIn"/>
+          <span>Keep me signed in</span>
+        </label>
+        <a href="#" class="gate-forgot" onclick="showGateView('forgot');return false;">Forgot Password?</a>
+      </div>
       <p class="gate-error" id="gateError">Incorrect email or password. Please try again.</p>
-      <button class="mbtn mbtn-primary" onclick="attemptLogin()">Unlock Console</button>
-      <a href="#" class="gate-forgot" onclick="showGateView('forgot');return false;">Forgot Password?</a>
+      <button class="mbtn mbtn-primary" id="gateUnlockBtn" onclick="attemptLogin()">Unlock Console</button>
       <p class="gate-foot">Access is logged. Unauthorized use is prohibited.</p>
     </div>
 
-    <!-- FORGOT PASSWORD VIEW -->
+    <!-- FORGOT PASSWORD VIEW — STEP 1: find account by email -->
     <div class="gate-view" id="gateForgotView">
       <div class="gate-icon">&#9993;</div>
       <h2>Reset Your Password</h2>
-      <p>Enter the institutional email linked to your admin account. If it matches an active account, we'll send a password reset link.</p>
+      <p>Enter the institutional email linked to your admin account. We'll send a 6-digit verification code so you can confirm it's you.</p>
       <div class="gate-field">
         <label for="gateForgotEmail">Institutional Email</label>
         <input type="email" id="gateForgotEmail" placeholder="name@ccc.edu.ph" autocomplete="off"/>
       </div>
-      <button class="mbtn mbtn-primary" onclick="submitForgotPassword()">Send Reset Link</button>
+      <button class="mbtn mbtn-primary" id="gateForgotBtn" onclick="forgotStep1()">Send Code</button>
       <a href="#" class="gate-back" onclick="showGateView('login');return false;">&larr; Back to Login</a>
     </div>
 
-    <!-- SET PASSWORD VIEW (reached via invite or reset link) -->
+    <!-- FORGOT PASSWORD VIEW — STEP 2: verify the emailed code -->
+    <div class="gate-view" id="gateForgotOtpView">
+      <div class="gate-icon">&#128274;</div>
+      <h2>Verify Your Email</h2>
+      <p class="modal-alert" id="gateForgotOtpMsg">A 6-digit verification code was sent to your email. Check your inbox and enter it below.</p>
+      <div class="otp-wrap" id="gateForgotOtpBoxes">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="gfotp0" aria-label="Digit 1"/>
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="gfotp1" aria-label="Digit 2"/>
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="gfotp2" aria-label="Digit 3"/>
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="gfotp3" aria-label="Digit 4"/>
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="gfotp4" aria-label="Digit 5"/>
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="gfotp5" aria-label="Digit 6"/>
+      </div>
+      <p class="field-err" id="gateForgotOtpError" style="text-align:center">Please enter all 6 digits.</p>
+      <div class="timer-text" id="gateForgotOtpTimer">Code expires in <strong id="gateForgotOtpCountdown">10:00</strong></div>
+      <div style="text-align:center;margin:.5rem 0 1.1rem">
+        <span class="resend-wrap">
+          <button class="resend-btn is-cooldown" id="gateForgotResendBtn" onclick="resendGateForgotCode()" aria-disabled="true">Resend code</button>
+          <span class="resend-tooltip" id="gateForgotResendTooltip" role="status"></span>
+        </span>
+      </div>
+      <button class="mbtn mbtn-primary" id="gateForgotOtpBtn" onclick="forgotStep2()">Verify Code</button>
+      <a href="#" class="gate-back" onclick="showGateView('forgot');return false;">&larr; Back</a>
+    </div>
+
+    <!-- SET PASSWORD VIEW (reached via invite link, or after verifying the forgot-password code) -->
     <div class="gate-view" id="gateSetPasswordView">
       <div class="gate-icon">&#128273;</div>
       <h2 id="gateSetPasswordTitle">Set Your Password</h2>
@@ -605,7 +878,7 @@ span.flag-btn{cursor:default}
         <input type="password" id="gateNewPasswordConfirm" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="off"/>
       </div>
       <p class="gate-error" id="gateSetPasswordError">Passwords must match and be at least 8 characters.</p>
-      <button class="mbtn mbtn-primary" onclick="submitSetPassword()">Set Password &amp; Continue</button>
+      <button class="mbtn mbtn-primary" id="gateSetPassBtn" onclick="submitSetPassword()">Set Password &amp; Continue</button>
     </div>
 
     <!-- INVALID / EXPIRED LINK VIEW -->
@@ -647,6 +920,20 @@ span.flag-btn{cursor:default}
     <div class="nav-portal-badge">Admin Console</div>
   </div>
 </nav>
+<script>
+/* Sidebar should stick right under the navbar (not under the topbar too),
+   so it visibly moves upward as the topbar scrolls out of view. */
+(function(){
+  function syncStickyTop(){
+    var nav = document.querySelector('.navbar');
+    if(!nav) return;
+    document.documentElement.style.setProperty('--sticky-top', nav.getBoundingClientRect().height + 'px');
+  }
+  syncStickyTop();
+  window.addEventListener('load', syncStickyTop);
+  window.addEventListener('resize', syncStickyTop);
+})();
+</script>
 
 <!-- ══ PORTAL SHELL ══ -->
 <div class="portal-shell">
@@ -671,7 +958,8 @@ span.flag-btn{cursor:default}
       <li><button class="menu-btn active" data-panel="dashboard" onclick="showPanel('dashboard',this)"><span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="3" y="12" width="4" height="8"/><rect x="10" y="7" width="4" height="13"/><rect x="17" y="3" width="4" height="17"/></svg></span> Dashboard <span class="menu-badge is-empty" id="dashNewBadge">0</span></button></li>
 
       <li class="sidebar-menu-label">Communications</li>
-      <li><button class="menu-btn" data-panel="announcements" onclick="showPanel('announcements',this)"><span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 11v2a2 2 0 0 0 2 2h1l4 4V5l-4 4H5a2 2 0 0 0-2 2z"/><path d="M16 8a4 4 0 0 1 0 8"/><path d="M19 5a8 8 0 0 1 0 14"/></svg></span> Communications</button></li>
+      <li class="comms-standard-only"><button class="menu-btn" data-panel="announcements" onclick="showPanel('announcements',this)"><span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 11v2a2 2 0 0 0 2 2h1l4 4V5l-4 4H5a2 2 0 0 0-2 2z"/><path d="M16 8a4 4 0 0 1 0 8"/><path d="M19 5a8 8 0 0 1 0 14"/></svg></span> Communications</button></li>
+      <li class="registrar-only"><button class="menu-btn" data-panel="allowance" onclick="showPanel('allowance',this)"><span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 11v2a2 2 0 0 0 2 2h1l4 4V5l-4 4H5a2 2 0 0 0-2 2z"/><path d="M16 8a4 4 0 0 1 0 8"/><path d="M19 5a8 8 0 0 1 0 14"/></svg></span> Allowance</button></li>
 
       <li class="sidebar-menu-label super-admin-only" id="superAdminLabel">Super Admin</li>
       <li class="super-admin-only"><button class="menu-btn" data-panel="admins" onclick="showPanel('admins',this)"><span class="menu-icon">&#128737;</span> Admin Accounts</button></li>
@@ -693,9 +981,9 @@ span.flag-btn{cursor:default}
           <h1>Dashboard</h1>
           <p>A summary of applicant statuses across the scholarship pipeline. Available to all types of Admins.</p>
         </div>
-        <button class="mbtn mbtn-secondary" onclick="exportQualifiedPDF()" title="Save all qualified applicants' personal information as a PDF, for submission to the LGU">
+        <button class="mbtn mbtn-secondary no-registrar-view" onclick="requestFreeHEBillingExport()" title="Export the Free Higher Education Billing Details form (landscape) listing all applicants">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export Qualified Applicants (PDF)
+          Export Free CHED Billing Details (PDF)
         </button>
       </div>
 
@@ -775,7 +1063,7 @@ span.flag-btn{cursor:default}
         </div>
       </div>
 
-      <div class="card">
+      <div class="card no-registrar-view">
         <div class="card-title">All Applicants <span class="count-badge is-empty" id="newApplicantsBadge" title="New applicants you haven’t opened yet">0</span></div>
 
         <div class="reviewer-note">
@@ -789,9 +1077,10 @@ span.flag-btn{cursor:default}
           <span class="filter-bar-label">Filters</span>
           <select id="programPreferenceFilter" onchange="renderApplicants()">
             <option value="all" selected>Select a program preference</option>
+            <option value="pending">Pending for Program Approval</option>
             <option value="first">First Preferred Program</option>
             <option value="second">Second Preferred Program</option>
-            <option value="pending">Pending for Program Approval</option>
+            <option value="other">Other Program Offer</option>
           </select>
           <select id="programFilter" class="program-filter-select" onchange="renderApplicants()">
             <option value="all" selected>Select a program</option>
@@ -812,7 +1101,7 @@ span.flag-btn{cursor:default}
           <input type="date" id="dateFromFilter" onchange="renderApplicants()"/>
           <span class="filter-bar-label">To</span>
           <input type="date" id="dateToFilter" onchange="renderApplicants()"/>
-          <button type="button" class="filter-clear" onclick="clearApplicantFilters()">&times; Clear filters</button>
+          <button type="button" class="filter-clear filter-clear-icon" onclick="clearApplicantFilters()" title="Clear all filters." aria-label="Clear all filters"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
         <table class="applicant-table">
           <thead>
@@ -937,7 +1226,46 @@ span.flag-btn{cursor:default}
       </div>
     </section>
 
-    <!-- ══ SUPER ADMIN: ACCOUNTS ══ -->
+    <!-- ══ OFFICE OF THE REGISTRAR: ALLOWANCE DISTRIBUTION ══ -->
+    <section class="portal-panel" id="panel-allowance">
+      <div class="portal-header">
+        <div>
+          <h1>Allowance Distribution</h1>
+          <p>Post allowance distribution schedules for applicants. This is only visible to the Office of the Registrar.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">New Post</div>
+        <div class="announce-form">
+          <div class="mfield">
+            <label for="allowanceStudentId">Student ID</label>
+            <input type="text" id="allowanceStudentId" placeholder="e.g. 2026-00001"/>
+          </div>
+
+          <div class="mfield">
+            <label for="allowanceDate">Date of Distribution</label>
+            <input type="date" id="allowanceDate"/>
+          </div>
+
+          <div class="mfield">
+            <label for="allowanceType">Type</label>
+            <select id="allowanceType" onchange="setAllowanceType(this.value)">
+              <option value="Wi-Fi" selected>Wi-Fi</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="mfield" id="allowanceOtherField" style="display:none">
+            <label for="allowanceOtherDesc">Description</label>
+            <input type="text" id="allowanceOtherDesc" placeholder="e.g.: Monetary."/>
+          </div>
+
+          <button class="mbtn mbtn-primary" id="allowanceSubmitBtn" onclick="disseminateAllowance()">Disseminate Allowance</button>
+          <p class="publish-note">&#128228; This will publish immediately to the Applicant Portal's Allowance Distribution page.</p>
+        </div>
+      </div>
+    </section>
     <section class="portal-panel" id="panel-admins">
       <div class="portal-header">
         <div>
@@ -962,9 +1290,10 @@ span.flag-btn{cursor:default}
             <select id="newAdminRole" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:.85rem">
               <option value="admin">Admin</option>
               <option value="super">Super Admin</option>
+              <option value="registrar">Office of the Registrar</option>
             </select>
           </div>
-          <button class="mbtn mbtn-primary" onclick="requestInviteAdmin()">Invite</button>
+          <button class="mbtn mbtn-primary" id="inviteAdminBtn" onclick="requestInviteAdmin()">Invite</button>
         </div>
       </div>
 
@@ -1030,7 +1359,6 @@ span.flag-btn{cursor:default}
         <div class="card-title">
           Recent Activity Log &amp; Notifications
           <span class="count-badge is-empty" id="unreadNotifBadge" title="Unread items">0</span>
-          <span class="tag" id="feedCount">0 total</span>
         </div>
         <div class="announce-form activity-filter-row">
           <div class="mfield">
@@ -1050,11 +1378,10 @@ span.flag-btn{cursor:default}
               <option value="read">Read</option>
             </select>
           </div>
-          <div class="mfield mfield-compact">
+          <div class="mfield mfield-compact mfield-actions">
             <label>&nbsp;</label>
             <div class="notif-bulk-actions">
-              <button type="button" class="filter-clear" onclick="markAllNotifs(true)">Read All</button>
-              <button type="button" class="filter-clear" onclick="markAllNotifs(false)">Unread All</button>
+              <button type="button" class="filter-clear" id="notifBulkToggleBtn">Mark all as read</button>
             </div>
           </div>
         </div>
@@ -1146,13 +1473,16 @@ span.flag-btn{cursor:default}
           <input type="text" id="editTermApplying" disabled/>
         </div>
       </div>
-      <div class="efield full">
-        <label for="editApprovedProgram"><span class="approved-status-dot" id="approvedStatusDot"></span>Approved Program for Applicant</label>
-        <select id="editApprovedProgram" onchange="handleApprovedProgramChange(this.value)"></select>
-      </div>
-      <div class="efield full" id="editApprovedProgramOtherWrap" style="display:none">
-        <label for="editApprovedProgramOther">Choose Another Program for Applicant</label>
-        <select id="editApprovedProgramOther" onchange="handleApprovedProgramOtherChange(this.value)"></select>
+      <div class="approved-program-wrap" id="approvedProgramWrap">
+        <div class="efield full">
+          <label for="editApprovedProgram"><span class="approved-status-dot" id="approvedStatusDot"></span>Approved Program for Applicant</label>
+          <select id="editApprovedProgram" onchange="handleApprovedProgramChange(this.value)"></select>
+        </div>
+        <div class="efield full" id="editApprovedProgramOtherWrap" style="display:none">
+          <label for="editApprovedProgramOther">Choose Another Program for Applicant</label>
+          <select id="editApprovedProgramOther" onchange="handleApprovedProgramOtherChange(this.value)"></select>
+        </div>
+        <div class="status-requirement-tooltip" id="approvedProgramReqTooltip">Applicant's requirements are still incomplete.</div>
       </div>
 
       <hr class="modal-divider"/>
@@ -1191,7 +1521,7 @@ span.flag-btn{cursor:default}
         <div class="email-fields" id="statusEmailFields"></div>
         <div class="confirm-inline-actions">
           <button class="mbtn mbtn-ghost mbtn-sm" onclick="cancelStatusChange()">Cancel</button>
-          <button class="mbtn mbtn-primary mbtn-sm" onclick="confirmStatusChange()">Send &amp; Update Status</button>
+          <button class="mbtn mbtn-primary mbtn-sm" id="statusSendBtn" onclick="confirmStatusChange()">Send &amp; Update Status</button>
         </div>
       </div>
 
@@ -1224,7 +1554,28 @@ span.flag-btn{cursor:default}
     <p class="confirm-password-error" id="cyclePasswordError">Incorrect password. Please try again.</p>
     <div class="confirm-actions">
       <button class="mbtn mbtn-ghost" onclick="closeCyclePasswordModal()">Cancel</button>
-      <button class="mbtn mbtn-primary" onclick="confirmCycleSettingsSave()">Confirm &amp; Save</button>
+      <button class="mbtn mbtn-primary" id="cyclePwConfirmBtn" onclick="confirmCycleSettingsSave()">Confirm &amp; Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FREE HE BILLING DETAILS: REFERENCE NUMBER MODAL ══ -->
+<div class="confirm-overlay" id="billingRefOverlay" onclick="handleBillingRefBackdrop(event)">
+  <div class="confirm-box has-password" role="dialog" aria-modal="true" aria-labelledby="billingRefTitle">
+    <div class="confirm-icon">&#128196;</div>
+    <h3 id="billingRefTitle">Free HE Billing Details Reference Number</h3>
+    <p>Enter the reference number issued for this billing form. It will be printed on the exported PDF.</p>
+    <div class="gate-field">
+      <input type="text" id="billingRefInput" placeholder="e.g. 06-CCC-2026-1-1" autocomplete="off"/>
+    </div>
+    <div class="gate-field">
+      <label for="billingDateInput">Date</label>
+      <input type="date" id="billingDateInput" autocomplete="off"/>
+    </div>
+    <p class="confirm-password-error" id="billingRefError">Please enter a reference number.</p>
+    <div class="confirm-actions">
+      <button class="mbtn mbtn-ghost" onclick="closeBillingRefModal()">Cancel</button>
+      <button class="mbtn mbtn-primary" id="billingRefConfirmBtn" onclick="confirmBillingRefExport()">Confirm &amp; Download</button>
     </div>
   </div>
 </div>
@@ -1246,9 +1597,6 @@ span.flag-btn{cursor:default}
   </div>
 </div>
 
-<!-- ══ TOASTS ══ -->
-<div class="toast-stack" id="toastStack"></div>
-
 </div><!-- /app-content -->
 
 <script>
@@ -1260,10 +1608,30 @@ span.flag-btn{cursor:default}
    matched admin account's own record, not to a single
    shared password.
    ══════════════════════════════════════════ */
-let currentRole = null; // 'super' | 'admin'
+let currentRole = null; // 'super' | 'admin' | 'registrar'
 let currentAdminName = null; // display name of the signed-in admin account
 let currentAdminEmail = null; // email of the signed-in admin account
 let currentStatusFilter = 'all'; // which status the applicant table is filtered to (set via the dashboard stat cards)
+const ADMIN_KEEP_SIGNED_IN_KEY = 'iskolusyonAdminKeepSignedIn'; // "Keep me signed in" — 30-day local session
+
+function checkKeepSignedIn(){
+  if(document.getElementById('gateLoginView') && !document.getElementById('gateLoginView').classList.contains('active')) return; // an invite/reset link is being handled instead
+  let saved;
+  try { saved = JSON.parse(localStorage.getItem(ADMIN_KEEP_SIGNED_IN_KEY) || 'null'); } catch(e){ saved = null; }
+  if(!saved || !saved.email || !saved.expiry || saved.expiry < Date.now()){
+    try { localStorage.removeItem(ADMIN_KEEP_SIGNED_IN_KEY); } catch(e){}
+    return;
+  }
+  const account = adminAccounts.find(ac=>ac.email.toLowerCase()===saved.email.toLowerCase() && ac.status==='active');
+  if(!account){ try { localStorage.removeItem(ADMIN_KEEP_SIGNED_IN_KEY); } catch(e){} return; }
+  currentRole = account.role;
+  currentAdminName = account.name;
+  currentAdminEmail = account.email;
+  document.getElementById('gateOverlay').classList.add('hidden');
+  document.getElementById('appContent').classList.add('unlocked');
+  applyRoleUI(account.role);
+  resetInactivityTimer();
+}
 
 function attemptLogin(){
   const emailInput = document.getElementById('gateEmail');
@@ -1282,6 +1650,12 @@ function attemptLogin(){
     err.classList.remove('show');
     emailInput.value='';
     passInput.value='';
+    const keepChk = document.getElementById('gateKeepSignedIn');
+    if(keepChk && keepChk.checked){
+      try { localStorage.setItem(ADMIN_KEEP_SIGNED_IN_KEY, JSON.stringify({email:account.email, expiry:Date.now()+30*24*60*60*1000})); } catch(e){}
+    } else {
+      try { localStorage.removeItem(ADMIN_KEEP_SIGNED_IN_KEY); } catch(e){}
+    }
     applyRoleUI(account.role);
     resetInactivityTimer();
   } else {
@@ -1297,28 +1671,122 @@ function attemptLogin(){
 }
 
 function showGateView(view){
-  const map = {login:'gateLoginView', forgot:'gateForgotView', setpw:'gateSetPasswordView', invalid:'gateInvalidLinkView'};
+  const map = {login:'gateLoginView', forgot:'gateForgotView', forgototp:'gateForgotOtpView', setpw:'gateSetPasswordView', invalid:'gateInvalidLinkView'};
   document.querySelectorAll('.gate-view').forEach(v=>v.classList.remove('active'));
   document.getElementById(map[view]).classList.add('active');
 }
 
-function submitForgotPassword(){
+let pendingForgotAccountId = null;
+function forgotStep1(){
   const emailInput = document.getElementById('gateForgotEmail');
   const email = emailInput.value.trim().toLowerCase();
   const account = adminAccounts.find(ac=>ac.email.toLowerCase()===email && ac.status==='active');
-  // Same confirmation is shown whether or not the email matches, so
+  // Same next step is shown whether or not the email matches, so
   // login emails can't be enumerated through this form.
-  if(account){
-    const token = generateSecureToken();
-    account.inviteToken = token;
-    account.inviteExpiry = Date.now() + 60*60*1000; // reset links valid 1 hour
-    account.inviteType = 'reset';
-    console.log('Password reset link (demo only):', window.location.pathname+'?invite='+token);
-  }
+  pendingForgotAccountId = account ? account.id : null;
+  document.getElementById('gateForgotOtpMsg').innerHTML = 'A 6-digit verification code was sent to <strong>'+(email||'your email')+'</strong>. Check your inbox and enter it below.';
   emailInput.value='';
-  showToast('&#10003; If that email matches an admin account, a reset link has been sent.', true);
-  showGateView('login');
+  showGateView('forgototp');
+  startGateForgotOtpTimer();
+  setTimeout(()=>document.getElementById('gfotp0').focus(),200);
 }
+function forgotStep2(){
+  const err = document.getElementById('gateForgotOtpError');
+  if(!abOtpFilled('gfotp')){
+    err.textContent='Please enter all 6 digits.';
+    err.style.display='block';
+    return;
+  }
+  // Demo only: like signup/applicant verification, the code itself isn't
+  // checked client-side — a real backend would validate it here.
+  err.style.display='none';
+  clearInterval(gfOtpInterval);
+  ['gfotp0','gfotp1','gfotp2','gfotp3','gfotp4','gfotp5'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; });
+  if(pendingForgotAccountId){
+    pendingSetPasswordAccountId = pendingForgotAccountId;
+    document.getElementById('gateSetPasswordTitle').textContent = 'Reset Your Password';
+    document.getElementById('gateSetPasswordSubtitle').textContent = 'Choose a new password for your admin account.';
+    showGateView('setpw');
+  } else {
+    // No active account matched the email — send them back to login rather
+    // than confirming/denying the account's existence.
+    showGateView('login');
+  }
+}
+let gfOtpInterval;
+let gfOtpCooldownSecs=0;
+function startGateForgotOtpTimer(){
+  let expirySecs=600; /* code stays valid for 10:00 */
+  gfOtpCooldownSecs=60; /* resend unlocks after 01:00 */
+  const rb=document.getElementById('gateForgotResendBtn');
+  if(rb) rb.classList.add('is-cooldown');
+  hideResendTooltip(document.getElementById('gateForgotResendTooltip'));
+  clearInterval(gfOtpInterval);
+  const cd=document.getElementById('gateForgotOtpCountdown');
+  if(cd) cd.textContent=formatMMSS(expirySecs);
+  gfOtpInterval=setInterval(()=>{
+    expirySecs--; gfOtpCooldownSecs--;
+    if(!document.getElementById('gateForgotOtpCountdown')){ clearInterval(gfOtpInterval); return; }
+    document.getElementById('gateForgotOtpCountdown').textContent=formatMMSS(expirySecs);
+    if(gfOtpCooldownSecs<=0 && rb) rb.classList.remove('is-cooldown');
+    if(expirySecs<=0){
+      clearInterval(gfOtpInterval);
+      document.getElementById('gateForgotOtpTimer').innerHTML='<span style="color:#C0392B;font-size:.75rem">Code expired. Please resend.</span>';
+      if(rb) rb.classList.remove('is-cooldown');
+    }
+  },1000);
+}
+function resendGateForgotCode(){
+  const rb=document.getElementById('gateForgotResendBtn');
+  const tip=document.getElementById('gateForgotResendTooltip');
+  if(rb && rb.classList.contains('is-cooldown')){
+    showResendTooltip(tip, Math.max(gfOtpCooldownSecs,1));
+    return;
+  }
+  hideResendTooltip(tip);
+  ['gfotp0','gfotp1','gfotp2','gfotp3','gfotp4','gfotp5'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; });
+  document.getElementById('gateForgotOtpError').style.display='none';
+  document.getElementById('gateForgotOtpTimer').innerHTML='Code expires in <strong id="gateForgotOtpCountdown">10:00</strong>';
+  startGateForgotOtpTimer();
+  document.getElementById('gfotp0').focus();
+}
+function formatMMSS(secs){
+  secs=Math.max(secs,0);
+  const m=Math.floor(secs/60).toString().padStart(2,'0');
+  const s=(secs%60).toString().padStart(2,'0');
+  return m+':'+s;
+}
+function showResendTooltip(tipEl,secsLeft){
+  if(!tipEl) return;
+  const label = secsLeft>=60 ? Math.ceil(secsLeft/60)+' minute'+(Math.ceil(secsLeft/60)!==1?'s':'') : Math.max(secsLeft,1)+' second'+(secsLeft!==1?'s':'');
+  tipEl.textContent='You may request another code in '+label+'.';
+  tipEl.classList.add('show');
+  clearTimeout(tipEl._hideTimer);
+  tipEl._hideTimer=setTimeout(()=>tipEl.classList.remove('show'),5000);
+}
+function hideResendTooltip(tipEl){
+  if(!tipEl) return;
+  tipEl.classList.remove('show');
+  clearTimeout(tipEl._hideTimer);
+}
+/* OTP box behavior — digit auto-advance, backspace, paste (matches signup.html/index.html) */
+document.querySelectorAll('#gateForgotOtpBoxes .otp-box').forEach((box,i,boxes)=>{
+  box.addEventListener('input',e=>{
+    const v=e.target.value.replace(/\D/g,'');
+    e.target.value=v?v[0]:'';
+    if(v&&i<boxes.length-1)boxes[i+1].focus();
+    document.getElementById('gateForgotOtpError').style.display='none';
+  });
+  box.addEventListener('keydown',e=>{
+    if(e.key==='Backspace'&&!box.value&&i>0)boxes[i-1].focus();
+  });
+  box.addEventListener('paste',e=>{
+    e.preventDefault();
+    const p=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+    p.split('').forEach((ch,idx)=>{ if(boxes[idx])boxes[idx].value=ch; });
+    if(p.length)boxes[Math.min(p.length,boxes.length-1)].focus();
+  });
+});
 
 let pendingSetPasswordAccountId = null;
 function checkInviteLink(){
@@ -1360,7 +1828,6 @@ function submitSetPassword(){
   document.getElementById('gateNewPassword').value='';
   document.getElementById('gateNewPasswordConfirm').value='';
   history.replaceState(null, '', window.location.pathname);
-  showToast('&#10003; Password set. You can now log in.', true);
   showGateView('login');
 }
 function generateSecureToken(){
@@ -1370,13 +1837,29 @@ function generateSecureToken(){
 
 function applyRoleUI(role){
   const isSuper = role === 'super';
+  const isRegistrar = role === 'registrar';
   document.querySelectorAll('.super-admin-only').forEach(el=>{
     el.style.display = isSuper ? '' : 'none';
   });
+  document.querySelectorAll('.comms-standard-only').forEach(el=>{
+    el.style.display = isRegistrar ? 'none' : '';
+  });
+  document.querySelectorAll('.registrar-only').forEach(el=>{
+    el.style.display = isRegistrar ? '' : 'none';
+  });
+  document.querySelectorAll('.no-registrar-view').forEach(el=>{
+    el.style.display = isRegistrar ? 'none' : '';
+  });
+  document.body.classList.toggle('role-is-registrar', isRegistrar);
+  if(isRegistrar){
+    setQualifiedSectionsExpanded(true);
+    const allowanceDateEl = document.getElementById('allowanceDate');
+    if(allowanceDateEl) allowanceDateEl.max = new Date().toISOString().slice(0,10);
+  }
   document.getElementById('sessionBadge').innerHTML = isSuper
     ? '&#128737; Super Admin Session'
-    : '&#128100; Admin Session';
-  document.getElementById('sidebarAdminRole').textContent = isSuper ? 'Super Admin' : 'Admin';
+    : (isRegistrar ? '&#127979; Registrar Session' : '&#128100; Admin Session');
+  document.getElementById('sidebarAdminRole').textContent = isSuper ? 'Super Admin' : (isRegistrar ? 'Office of the Registrar' : 'Admin');
   document.getElementById('sidebarAdminName').textContent = currentAdminName;
   // if a non-super admin was somehow left on a super-only panel, send them back to the Dashboard
   if(!isSuper){
@@ -1385,7 +1868,18 @@ function applyRoleUI(role){
       showPanel('dashboard');
     }
   }
-  updateCountBadges();
+  // Announcements and Allowance are mutually exclusive views based on role
+  const activePanel = document.querySelector('.portal-panel.active');
+  if(activePanel){
+    if(isRegistrar && activePanel.id==='panel-announcements'){
+      showPanel('dashboard');
+    } else if(!isRegistrar && activePanel.id==='panel-allowance'){
+      showPanel('dashboard');
+    }
+  }
+  /* Read state is per-admin, so a fresh sign-in must recompute the counts AND
+     relabel the bulk-action button for the account that just logged in. */
+  updateFeedCount();
 }
 
 document.getElementById('gateEmail').addEventListener('keydown', e=>{
@@ -1395,16 +1889,24 @@ document.getElementById('gatePassword').addEventListener('keydown', e=>{
   if(e.key==='Enter') attemptLogin();
 });
 document.getElementById('gateForgotEmail').addEventListener('keydown', e=>{
-  if(e.key==='Enter') submitForgotPassword();
+  if(e.key==='Enter') forgotStep1();
 });
 document.getElementById('gateNewPasswordConfirm').addEventListener('keydown', e=>{
   if(e.key==='Enter') submitSetPassword();
+});
+['gfotp0','gfotp1','gfotp2','gfotp3','gfotp4','gfotp5'].forEach(id=>{
+  document.getElementById(id).addEventListener('keydown', e=>{
+    if(e.key==='Enter') forgotStep2();
+  });
 });
 document.getElementById('cyclePassword').addEventListener('keydown', e=>{
   if(e.key==='Enter') confirmCycleSettingsSave();
 });
 document.getElementById('adminActionPassword').addEventListener('keydown', e=>{
   if(e.key==='Enter') confirmAdminActionPassword();
+});
+document.getElementById('billingRefInput').addEventListener('keydown', e=>{
+  if(e.key==='Enter') confirmBillingRefExport();
 });
 
 /* ══ SIDEBAR NAVIGATION ══ */
@@ -1482,6 +1984,7 @@ function setQualifiedSectionsExpanded(expand){
   });
 }
 function toggleDeptSection(){
+  if(currentRole === 'registrar') return;
   const body = document.getElementById('deptSectionBody');
   const expand = body.classList.contains('collapsed');
   setQualifiedSectionsExpanded(expand);
@@ -1518,48 +2021,195 @@ function renderYearLevelStats(){
   }
 }
 function toggleYearSection(){
+  if(currentRole === 'registrar') return;
   const body = document.getElementById('yearSectionBody');
   const expand = body.classList.contains('collapsed');
   setQualifiedSectionsExpanded(expand);
 }
 
-/* ══ DASHBOARD: EXPORT QUALIFIED APPLICANTS' PERSONAL INFO (PDF, FOR LGU) ══ */
-function exportQualifiedPDF(){
-  const qualified = applicants.filter(a=>a.status==='qualified');
-  if(!qualified.length){
-    showToast('There are no qualified applicants to export yet.', false);
+/* ══ DASHBOARD: EXPORT FREE HIGHER EDUCATION BILLING DETAILS (PDF) ══
+   Landscape billing form pulling every applicant's data straight from the
+   same applicant record set applicant.html feeds into (a.categories +
+   a.approvedProgram/a.email/a.phone/a.status). Mirrors the official
+   CCC "Free HE Billing Details" form (Form 3) layout, including the
+   Entrance/Admission Fees column (auto-filled at ₱200 per applicant, per
+   Section 7, Rule II of the IRR of RA 10931). */
+function requestFreeHEBillingExport(){
+  if(!applicants.length) return;
+  document.getElementById('billingRefInput').value = '';
+  document.getElementById('billingDateInput').value = new Date().toISOString().slice(0,10);
+  document.getElementById('billingRefError').classList.remove('show');
+  document.getElementById('billingRefOverlay').classList.add('open');
+  document.getElementById('billingRefInput').focus();
+}
+function closeBillingRefModal(){
+  document.getElementById('billingRefOverlay').classList.remove('open');
+}
+function handleBillingRefBackdrop(e){
+  if(e.target.id === 'billingRefOverlay') closeBillingRefModal();
+}
+function confirmBillingRefExport(){
+  const input = document.getElementById('billingRefInput');
+  const err = document.getElementById('billingRefError');
+  if(!input.value.trim()){
+    err.classList.add('show');
+    input.focus();
     return;
   }
+  err.classList.remove('show');
+  closeBillingRefModal();
+  exportFreeHEBillingPDF(input.value, document.getElementById('billingDateInput').value);
+}
+function exportFreeHEBillingPDF(refNumber, billingDate){
+  if(!applicants.length){
+    return;
+  }
+  refNumber = (refNumber || '').trim();
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const genDate = new Date().toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric'});
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const now = new Date();
+  const tableX = 8;
+  const tableWidth = pageWidth - (tableX*2);
+  const colScale = tableWidth / 272;
 
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(13);
-  doc.text('City College of Calamba — Iskolusyon Scholarship Program', 14, 16);
-  doc.setFontSize(11);
-  doc.text('List of Qualified Applicants — Personal Information for LGU Submission', 14, 23);
-  doc.setFont('helvetica', 'normal');
+  /* ── "Form 3" box, top-right corner ── */
+  doc.setDrawColor(0);
+  doc.setLineWidth(.5);
+  doc.rect(pageWidth-8-32, 4, 32, 7);
+  doc.setLineWidth(.2);
+  doc.setFont('times', 'normal');
+  doc.setFontSize(12);
+  doc.text('Form 3', pageWidth-8-16, 8.7, {align:'center'});
+
+  /* ── Header ── */
+  doc.setFont('times', 'normal');
   doc.setFontSize(9);
-  doc.text('Generated: ' + genDate + '   |   Total Qualified Applicants: ' + qualified.length, 14, 29);
+  doc.text('Republic of the Philippines', pageWidth/2, 11, {align:'center'});
+  doc.setFont('times', 'bolditalic');
+  doc.setFontSize(14);
+  doc.text('CITY COLLEGE OF CALAMBA', pageWidth/2, 18, {align:'center'});
+  doc.setFont('times', 'italic');
+  doc.setFontSize(9);
+  doc.text('Old Municipal Site Brgy VII Poblacion Calamba City', pageWidth/2, 23, {align:'center'});
+  doc.setFont('times', 'bold');
+  doc.setFontSize(14);
+  doc.text('FREE HIGHER EDUCATION BILLING DETAILS', pageWidth/2, 31, {align:'center'});
 
-  doc.autoTable({
-    startY: 34,
-    head: [['Applicant ID', 'Full Name', 'Email Address', 'Contact Number', 'Home Address']],
-    body: qualified.map(a => [appIdText(a), a.name, a.email, a.phone, a.address]),
-    styles: {fontSize: 8.5, cellPadding: 3},
-    headStyles: {fillColor: [13, 47, 110], textColor: 255, fontStyle: 'bold'},
-    alternateRowStyles: {fillColor: [245, 246, 248]},
-    margin: {left: 14, right: 14}
+  /* ── Reference Number & Date, values column-aligned & underlined ── */
+  const dateText = billingDate
+    ? new Date(billingDate+'T00:00:00').toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric'})
+    : now.toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric'});
+  const valueX = 205;
+  const lineStart = valueX+2;
+  const lineEnd = tableX + tableWidth;   /* same length for both, flush with the table's right edge */
+  doc.setFont('times', 'normal');
+  doc.setFontSize(10);
+  doc.text('Free HE Billing Details Reference Number:', valueX, 40, {align:'right'});
+  doc.text(refNumber, lineStart, 40);
+  doc.text('Date:', valueX, 45, {align:'right'});
+  doc.text(dateText, lineStart, 45);
+  doc.setLineWidth(.5);
+  doc.line(lineStart, 41, lineEnd, 41);
+  doc.line(lineStart, 46, lineEnd, 46);
+  doc.setLineWidth(.2);
+
+  /* ── Section banner, spans the table's own width, sits flush on top of it ── */
+  doc.setDrawColor(0);
+  doc.setLineWidth(.5);
+  doc.rect(tableX, 50, tableWidth, 7);
+  doc.setLineWidth(.2);
+  doc.setFont('times', 'bold');
+  doc.setFontSize(10);
+  doc.text('ADMISSION FEES (Based on Section 7, Rule II of the IRR of RA 10931)', tableX+2, 54.7);
+
+  /* ── Table rows, pulled dynamically per applicant ── */
+  const rows = applicants.map((a, i) => {
+    const personal = a.categories.personal;
+    const academic = a.categories.academic;
+    const lastname = findFieldInCat(personal, 'lastname');
+    const firstname = findFieldInCat(personal, 'firstname');
+    const middlename = findFieldInCat(personal, 'middlename');
+    const sex = findFieldInCat(personal, 'sex');
+    const dob = findFieldInCat(personal, 'dob');
+    const sexAtBirth = (sex && sex.value && sex.value !== 'Not yet submitted') ? sex.value.charAt(0).toUpperCase() : '';
+    const remarks = a.status === 'qualified' ? 'Passed' : 'Failed';
+    const phoneDigits = (a.phone || '').replace(/\D/g, '');
+    const phoneFormatted = phoneDigits.length === 11
+      ? `${phoneDigits.slice(0,4)}-${phoneDigits.slice(4,7)}-${phoneDigits.slice(7,11)}`
+      : a.phone;
+    return [
+      i+1,
+      (lastname && lastname.value !== 'Not yet submitted') ? lastname.value : '',
+      (firstname && firstname.value !== 'Not yet submitted') ? firstname.value : '',
+      (middlename && middlename.value !== 'Not yet submitted') ? middlename.value : '',
+      sexAtBirth,
+      (dob && dob.value !== 'Not yet submitted') ? dob.value : '',
+      a.approvedProgram || '\u2014',
+      'New',
+      a.email,
+      phoneFormatted,
+      '200',
+      remarks
+    ];
   });
 
-  const fileDate = new Date().toISOString().slice(0,10);
-  doc.save(`Qualified_Applicants_LGU_${fileDate}.pdf`);
-  addActivity('Applicant Data Exported', `Exported personal information of ${qualified.length} qualified applicant(s) to PDF for LGU submission.`, 'done');
-  showToast('&#10003; PDF exported for ' + qualified.length + ' qualified applicant(s).', true);
+  let headerBottomY = null;
+  doc.autoTable({
+    startY: 57,
+    head: [['Sequence\nNumber','Last Name','Given Name','Middle Name','Sex at Birth (M/F)','Birthdate (mm/dd/yyyy)','Degree Program','Year Level','Email Address','Phone Number','Entrance/\nAdmission\nFees*','Remarks\n(Passed or Failed)']],
+    body: rows,
+    theme: 'grid',
+    styles: {font: 'times', fontSize: 6.8, cellPadding: 1.6, valign: 'middle', overflow: 'linebreak', lineColor: [0,0,0], lineWidth: .1, textColor: [0,0,0]},
+    headStyles: {fillColor: [255,255,255], textColor: [0,0,0], fontStyle: 'bold', halign: 'center', fontSize: 6.8, lineWidth: .5, lineColor: [0,0,0]},
+    alternateRowStyles: {fillColor: [255,255,255]},
+    didDrawCell: function(data){
+      if(data.section === 'head'){
+        headerBottomY = data.cell.y + data.cell.height;
+      }
+    },
+    columnStyles: {
+      0: {cellWidth: 13*colScale, halign: 'center'},
+      1: {cellWidth: 22*colScale},
+      2: {cellWidth: 22*colScale},
+      3: {cellWidth: 20*colScale},
+      4: {cellWidth: 12*colScale, halign: 'center'},
+      5: {cellWidth: 18*colScale, halign: 'center'},
+      6: {cellWidth: 52*colScale, halign: 'center'},
+      7: {cellWidth: 13*colScale, halign: 'center'},
+      8: {cellWidth: 46*colScale, halign: 'center'},
+      9: {cellWidth: 20*colScale, halign: 'center'},
+      10: {cellWidth: 14*colScale, halign: 'center'},
+      11: {cellWidth: 20*colScale, halign: 'center'}
+    },
+    margin: {left: tableX, right: tableX, bottom: 12}
+  });
+
+  /* ── Reinforce the line below the header row as solid black (not gray) ── */
+  if(headerBottomY !== null){
+    doc.setPage(1);
+    doc.setDrawColor(0);
+    doc.setLineWidth(.5);
+    doc.line(tableX, headerBottomY, tableX + tableWidth, headerBottomY);
+  }
+
+  /* ── Page numbering footer, e.g. "1 of X" ── */
+  const pageCount = doc.internal.getNumberOfPages();
+  for(let p=1; p<=pageCount; p++){
+    doc.setPage(p);
+    doc.setFont('times', 'normal');
+    doc.setFontSize(9);
+    doc.text(`${p} of ${pageCount}`, pageWidth/2, pageHeight-6, {align: 'center'});
+  }
+
+  const fileDate = now.toISOString().slice(0,10);
+  doc.save(`FreeHE_Billing_Details_${fileDate}.pdf`);
+  addActivity('Free HE Billing Details Exported', `Exported the Free Higher Education Billing Details form (${applicants.length} applicant(s)) to PDF.`, 'done');
 }
 
 function goToApplicantsFiltered(status){
+  if(currentRole === 'registrar') return;
   showPanel('dashboard');
   currentStatusFilter = status;
   document.getElementById('applicantSearch').value = '';
@@ -1633,10 +2283,24 @@ function saveMessagesToStorage() {
   try { localStorage.setItem(MSG_STORAGE_KEY, JSON.stringify(messages)); } catch (e) { /* storage unavailable */ }
 }
 
+/* Allowance Distributions: posted by the Office of the Registrar account only.
+   Persisted the same way as Announcements/Messages so applicant.html's own
+   Allowance Distribution view can read the same key and reflect new posts. */
+const ALLOWANCE_STORAGE_KEY = 'iskolusyon_allowance_distributions';
+let allowanceDistributions = [];
+try {
+  const storedAllowance = localStorage.getItem(ALLOWANCE_STORAGE_KEY);
+  if (storedAllowance) allowanceDistributions = JSON.parse(storedAllowance);
+} catch (e) { /* ignore malformed/blocked storage, keep defaults above */ }
+function saveAllowanceDistributionsToStorage() {
+  try { localStorage.setItem(ALLOWANCE_STORAGE_KEY, JSON.stringify(allowanceDistributions)); } catch (e) { /* storage unavailable */ }
+}
+
 let adminAccounts = [
-  {id:'d1', name:'Guidance & Testing Office', email:'gctcdo@ccc.edu.ph', role:'super', password:'CCC-SuperAdmin-2026', status:'active', inviteToken:null, inviteExpiry:null, inviteType:null},
+  {id:'d1', name:'Guidance & Testing Office', email:'gctcdo@ccc.edu.ph', role:'super', password:'CCC-SuperAdmin-2026', status:'active', inviteToken:null, inviteExpiry:null, inviteType:null, protected:true},
   {id:'d2', name:'Grace Villanueva', email:'g.villanueva@ccc.edu.ph', role:'admin', password:'CCC-Admin-2026', status:'active', inviteToken:null, inviteExpiry:null, inviteType:null},
-  {id:'d3', name:'Mark Osorio', email:'m.osorio@ccc.edu.ph', role:'admin', password:'CCC-Admin-2026', status:'active', inviteToken:null, inviteExpiry:null, inviteType:null}
+  {id:'d3', name:'Mark Osorio', email:'m.osorio@ccc.edu.ph', role:'admin', password:'CCC-Admin-2026', status:'active', inviteToken:null, inviteExpiry:null, inviteType:null},
+  {id:'d4', name:'Office of the Registrar', email:'registrar@ccc.edu.ph', role:'registrar', password:'CCC-Registrar-2026', status:'active', inviteToken:null, inviteExpiry:null, inviteType:null, protected:true}
 ];
 
 /* ── Recent Activity / Notifications: SVG icon set (same stroke style as the
@@ -1675,6 +2339,26 @@ function markNotifRead(type, id){
   if(!notifReadState[currentAdminName]) notifReadState[currentAdminName] = {};
   notifReadState[currentAdminName][notifKey(type, id)] = true;
   saveNotifReadState();
+}
+/* Re-flags an item as unread for EVERY admin — used when an existing item
+   gains new content (e.g. a same-day message thread that gets appended to),
+   so the badge counts it again instead of staying silently read. */
+function markNotifUnread(type, id){
+  const key = notifKey(type, id);
+  let changed = false;
+  Object.keys(notifReadState).forEach(adminName=>{
+    if(notifReadState[adminName] && notifReadState[adminName][key]){
+      delete notifReadState[adminName][key];
+      changed = true;
+    }
+  });
+  if(changed) saveNotifReadState();
+}
+/* Date.now() alone collides when two items are created inside the same
+   millisecond, which makes them share one read-state key and undercount the
+   badge. Suffixing with randomness keeps every notif id unique. */
+function newNotifId(prefix){
+  return prefix + '-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
 }
 /* ══ NEW-APPLICANT (UNOPENED) STATE — per signed-in admin ══
    An applicant counts as "new" for this admin until they open that
@@ -1737,17 +2421,8 @@ function handleNotifClick(type, id){
   updateCountBadges();
 }
 function updateFeedCount(){
-  const tag = document.getElementById('feedCount');
-  if(!tag) return;
-  const nA = activityLog.filter(i=>passesReadFilter('activity', i.id)).length;
-  const nN = announcements.filter(n=>passesReadFilter('announcement', n.id)).length;
-  const nM = messages.filter(m=>passesReadFilter('message', m.id)).length;
-  let count = nA + nN + nM;
-  if(activityFeedView==='activity') count = nA;
-  else if(activityFeedView==='announcements') count = nN;
-  else if(activityFeedView==='messages') count = nM;
-  tag.textContent = count+' total';
   updateCountBadges();
+  updateBulkNotifToggle();
 }
 
 const STATUS_META = {
@@ -1757,13 +2432,21 @@ const STATUS_META = {
   'not-qualified':{label:'Not Qualified', cls:'badge-deficient'},
   appealed:{label:'Appealed', cls:'badge-orange'}
 };
-/* Default applicant-table order: status (priority below: Pending Review >
-   Appealed > Waitlisted > Qualified > Not Qualified) > date submitted >
-   profile completion. */
+/* Default applicant-table order, highest priority first:
+     1. Profile — Ready for review before Not ready for review
+     2. Date    — newest submission before oldest
+     3. Status  — Pending Review > Appealed > Waitlisted > Qualified > Not Qualified
+   Clicking a column's sort arrow overrides this whole chain (see renderApplicants). */
 const STATUS_SORT_ORDER = ['pending','appealed','waitlisted','qualified','not-qualified'];
 function statusRank(status){
   const i = STATUS_SORT_ORDER.indexOf(status);
   return i === -1 ? STATUS_SORT_ORDER.length : i;
+}
+/* The Profile column shows "Ready for review" only when an applicant has no
+   pending and no deficient documents — same test the row itself renders with. */
+function profileReadyRank(a){
+  const c = parseDocCounts(a.docs);
+  return (c.pending === 0 && c.deficient === 0) ? 0 : 1;
 }
 
 /* ══ SUBMITTED DOCUMENTS & PROFILE DATA, BY CATEGORY & STACK ══
@@ -1794,7 +2477,10 @@ const CATEGORY_DEFS = {
           {key:'sex', label:'Sex'},
           {key:'citizenship', label:'Citizenship'},
           {key:'religion', label:'Religion'},
-          {key:'civilstatus', label:'Civil Status'}
+          {key:'civilstatus', label:'Civil Status'},
+          {key:'spousename', label:'Spouse\u2019s Name'},
+          {key:'spouseoccupation', label:'Spouse\u2019s Occupation'},
+          {key:'spousecontact', label:'Spouse\u2019s Contact Number'}
         ],
         docs:[{key:'birthcert', name:'Birth Certificate / PSA / NSO'}] },
       { label:'Stack 3 \u2014 Contact & Residency', tag:'Editable', docNote:'1 required',
@@ -1805,14 +2491,14 @@ const CATEGORY_DEFS = {
           {key:'precinct', label:'Voter\u2019s Precinct No.'}
         ],
         docs:[{key:'voterid', name:'Voter\u2019s ID / Certification of Applicant'}] },
-      { label:'Stack 4 \u2014 Additional Information', tag:'Editable',
+      { label:'Stack 4 \u2014 Additional Information', tag:'Editable', adminLocked:true,
         fields:[
           {key:'lgbtqi', label:'LGBTQI+ Community Member'},
           {key:'disability', label:'Physical/Behavioral Condition or Disability'},
           {key:'hobbies', label:'Hobbies and Interests'}
         ],
         docs:[] },
-      { label:'Stack 5 \u2014 Organizational Involvement', tag:'Optional',
+      { label:'Stack 5 \u2014 Organizational Involvement', tag:'Optional', adminLocked:true,
         fields:[{key:'orginvolvement', label:'Organizational Involvement'}],
         docs:[] },
       { label:'Stack 6 \u2014 Motivation and Aspirations Questions', tag:'Editable', adminLocked:true,
@@ -1842,12 +2528,24 @@ const CATEGORY_DEFS = {
       { label:'Stack 3 \u2014 Educational Background', tag:'Editable', docNote:'Optional',
         fields:[
           {key:'primschool', label:'Primary/Elementary School Name'},
+          {key:'primaddress', label:'Primary/Elementary Address'},
+          {key:'primsection', label:'Primary/Elementary Section/Strands/Program'},
           {key:'primyear', label:'Primary/Elementary Completion Year'},
+          {key:'primhonors', label:'Primary/Elementary Honors/Awards Received'},
           {key:'secschool', label:'Secondary/Senior High School Name'},
+          {key:'secaddress', label:'Secondary/Senior High Address'},
+          {key:'secsection', label:'Secondary/Senior High Section/Strands/Program'},
           {key:'secyear', label:'Secondary/Senior High Completion Year'},
+          {key:'sechonors', label:'Secondary/Senior High Honors/Awards Received'},
           {key:'tertschool', label:'Tertiary/College School Name'},
+          {key:'tertaddress', label:'Tertiary/College Address'},
+          {key:'tertsection', label:'Tertiary/College Section/Strands/Program'},
           {key:'tertyear', label:'Tertiary/College Completion Year'},
-          {key:'techvoc', label:'Technical/Vocational Course Taken'}
+          {key:'terthonors', label:'Tertiary/College Honors/Awards Received'},
+          {key:'techvoc', label:'Technical/Vocational Course Taken'},
+          {key:'techvocschool', label:'Technical/Vocational School Name'},
+          {key:'techvoccourse', label:'Technical/Vocational Course Name'},
+          {key:'techvocaddress', label:'Technical/Vocational School Address'}
         ],
         docs:[{key:'form138', name:'Grades (Proof of Grades / Form 138 / Report Card)'}] }
     ]
@@ -1858,8 +2556,23 @@ const CATEGORY_DEFS = {
       { label:'Family Information', docNote:'1 required',
         fields:[
           {key:'mothername', label:'Mother\u2019s Name'},
+          {key:'mothercitizenship', label:'Mother\u2019s Citizenship'},
+          {key:'motherdob', label:'Mother\u2019s Date of Birth'},
+          {key:'mothercontact', label:'Mother\u2019s Contact Number'},
+          {key:'mothereducation', label:'Mother\u2019s Highest Educational Attainment'},
+          {key:'motheremployment', label:'Mother\u2019s Employment Status'},
           {key:'fathername', label:'Father\u2019s Name'},
+          {key:'fathercitizenship', label:'Father\u2019s Citizenship'},
+          {key:'fatherdob', label:'Father\u2019s Date of Birth'},
+          {key:'fathercontact', label:'Father\u2019s Contact Number'},
+          {key:'fathereducation', label:'Father\u2019s Highest Educational Attainment'},
+          {key:'fatheremployment', label:'Father\u2019s Employment Status'},
           {key:'guardianname', label:'Guardian\u2019s Name'},
+          {key:'guardiancitizenship', label:'Guardian\u2019s Citizenship'},
+          {key:'guardiandob', label:'Guardian\u2019s Date of Birth'},
+          {key:'guardiancontact', label:'Guardian\u2019s Contact Number'},
+          {key:'guardianeducation', label:'Guardian\u2019s Highest Educational Attainment'},
+          {key:'guardianemployment', label:'Guardian\u2019s Employment Status'},
           {key:'onlychild', label:'Only Child'},
           {key:'numsiblings', label:'Number of Siblings'},
           {key:'siblingcurrentstudent', label:'Sibling Currently Enrolled at CCC'},
@@ -1915,15 +2628,42 @@ const FIELD_SAMPLE_VALUES = {
   choice1:['Bachelor of Science in Information Technology','Bachelor of Science in Computer Science','Bachelor of Science in Accountancy'],
   choice2:['Bachelor of Science in Psychology','Bachelor of Elementary Education','None of the above'],
   primschool:['Calamba Elementary School','Real Elementary School','Canlubang Elementary School'],
+  primaddress:['Bunggo, Calamba City','Real, Calamba City','Canlubang, Calamba City'],
+  primsection:['Osme\u00f1a','Rizal','Bonifacio'],
   primyear:['2018','2019','2020'],
+  primhonors:['With Honors','N/A','With High Honors'],
   secschool:['Calamba National High School','Real National High School','Canlubang National High School'],
+  secaddress:['Bunggo, Calamba City','Real, Calamba City','Canlubang, Calamba City'],
+  secsection:['HUMSS - Hope','STEM - Faith','ABM - Charity'],
   secyear:['2024','2025','2026'],
+  sechonors:['Honors','N/A','With Honors'],
   tertschool:['City College of Calamba','\u2014','\u2014'],
+  tertaddress:['Calamba City, Laguna','\u2014','\u2014'],
+  tertsection:['BS Information Technology','\u2014','\u2014'],
   tertyear:['2028','\u2014','\u2014'],
+  terthonors:['N/A','\u2014','\u2014'],
   techvoc:['No','Yes'],
+  techvocschool:['\u2014','Calamba Technical Vocational School'],
+  techvoccourse:['\u2014','Computer Systems Servicing NC II'],
+  techvocaddress:['\u2014','Brgy. Real, Calamba City, Laguna'],
   mothername:['Juana Dela Cruz','Elena Santos','Rosa Reyes'],
+  mothercitizenship:['Filipino'],
+  motherdob:['MM/DD/YYYY'],
+  mothercontact:['0917 123 4567','0918 234 5678','0919 345 6789'],
+  mothereducation:['College Graduate','High School Graduate','College Graduate'],
+  motheremployment:['Employed','Unemployed','Employed'],
   fathername:['Juan Dela Cruz','Pedro Santos','Mario Reyes'],
+  fathercitizenship:['Filipino'],
+  fatherdob:['MM/DD/YYYY'],
+  fathercontact:['0917 123 4567','0918 234 5678','0919 345 6789'],
+  fathereducation:['College Graduate','High School Graduate','College Graduate'],
+  fatheremployment:['Employed','Unemployed','Employed'],
   guardianname:['N/A','N/A','Lola Nena'],
+  guardiancitizenship:['N/A','N/A','Filipino'],
+  guardiandob:['N/A','N/A','MM/DD/YYYY'],
+  guardiancontact:['N/A','N/A','0920 456 7890'],
+  guardianeducation:['N/A','N/A','High School Graduate'],
+  guardianemployment:['N/A','N/A','Retired'],
   onlychild:['No','Yes'],
   numsiblings:['2','0','3'],
   siblingcurrentstudent:['No','Yes'],
@@ -2080,10 +2820,33 @@ function matchesProgramFilter(a, program){
   const choice2 = findFieldInCat(cat, 'choice2');
   return (choice1 && choice1.value===program) || (choice2 && choice2.value===program);
 }
+/* "Select a program preference" filter, keyed off Approved Program for
+   Applicant rather than the applicant's own stated choices:
+     - Pending for Program Approval: no approved program chosen yet
+     - First/Second Preferred Program: approved program matches that choice
+     - Other Program Offer: approved program was set to something other than
+       either of the applicant's own preferred programs */
+function matchesProgramPreferenceFilter(a, pref){
+  if(pref==='all') return true;
+  const cat = a.categories.academic;
+  const choice1 = findFieldInCat(cat, 'choice1');
+  const choice2 = findFieldInCat(cat, 'choice2');
+  const approved = a.approvedProgram;
+  if(pref==='pending') return !approved;
+  if(!approved) return false;
+  const isFirst = choice1 && approved === choice1.value;
+  const isSecond = choice2 && approved === choice2.value;
+  if(pref==='first') return isFirst;
+  if(pref==='second') return isSecond;
+  if(pref==='other') return !isFirst && !isSecond;
+  return true;
+}
 function clearApplicantFilters(){
+  const programPrefEl = document.getElementById('programPreferenceFilter');
   const programFilterEl = document.getElementById('programFilter');
   const dateFromEl = document.getElementById('dateFromFilter');
   const dateToEl = document.getElementById('dateToFilter');
+  if(programPrefEl) programPrefEl.value = 'all';
   if(programFilterEl) programFilterEl.value = 'all';
   if(dateFromEl) dateFromEl.value = '';
   if(dateToEl) dateToEl.value = '';
@@ -2092,6 +2855,7 @@ function clearApplicantFilters(){
 function renderApplicants(){
   const q = document.getElementById('applicantSearch').value.trim().toLowerCase();
   const filter = currentStatusFilter;
+  const programPrefVal = document.getElementById('programPreferenceFilter') ? document.getElementById('programPreferenceFilter').value : 'all';
   const programFilterVal = document.getElementById('programFilter') ? document.getElementById('programFilter').value : 'all';
   const dateFrom = document.getElementById('dateFromFilter') ? document.getElementById('dateFromFilter').value : '';
   const dateTo = document.getElementById('dateToFilter') ? document.getElementById('dateToFilter').value : '';
@@ -2112,6 +2876,7 @@ function renderApplicants(){
   applicants
     .filter(a => filter==='all' || a.status===filter)
     .filter(a => !q || a.name.toLowerCase().includes(q) || appIdText(a).toLowerCase().includes(q))
+    .filter(a => matchesProgramPreferenceFilter(a, programPrefVal))
     .filter(a => matchesProgramFilter(a, programFilterVal))
     .filter(a => !dateFrom || a.submittedDate >= dateFrom)
     .filter(a => !dateTo || a.submittedDate <= dateTo)
@@ -2124,11 +2889,11 @@ function renderApplicants(){
         const diff = new Date(a.submittedDate) - new Date(b.submittedDate);
         return profileSortDir === 'asc' ? diff : -diff;
       }
-      const statusDiff = statusRank(a.status) - statusRank(b.status);
-      if(statusDiff !== 0) return statusDiff;
-      const dateDiff = new Date(a.submittedDate) - new Date(b.submittedDate);
+      const readyDiff = profileReadyRank(a) - profileReadyRank(b);
+      if(readyDiff !== 0) return readyDiff;
+      const dateDiff = new Date(b.submittedDate) - new Date(a.submittedDate); /* newest first */
       if(dateDiff !== 0) return dateDiff;
-      return profileCompletionPercent(a) - profileCompletionPercent(b);
+      return statusRank(a.status) - statusRank(b.status);
     })
     .forEach(a=>{
       const meta = STATUS_META[a.status];
@@ -2186,13 +2951,18 @@ function refreshProgramSummaryFields(a){
   const choice1Value = (choice1 && isValidChoice(choice1.value)) ? choice1.value : null;
   const choice2Value = (choice2 && isValidChoice(choice2.value)) ? choice2.value : null;
 
+  /* Locked (disabled, unclickable) until the applicant has submitted &
+     the system has verified everything required — same gating that
+     controls the Update Application Status buttons. */
+  const ready = getMissingRequiredItems(a).length === 0;
+
   const select = document.getElementById('editApprovedProgram');
   if(!choice1Value && !choice2Value){
     select.innerHTML = '<option value="">No submitted program choices yet</option>';
     select.disabled = true;
     a.approvedProgram = null;
   } else {
-    select.disabled = false;
+    select.disabled = !ready;
     const validValues = [choice1Value, choice2Value].filter(Boolean);
     const isOtherSelected = !!(a.approvedProgram && !validValues.includes(a.approvedProgram));
     let options = '<option value="">&mdash; Select approved program &mdash;</option>';
@@ -2222,13 +2992,23 @@ function toggleApprovedProgramOtherWrap(show, a){
 }
 function renderApprovedProgramOtherOptions(a){
   const sel = document.getElementById('editApprovedProgramOther');
+  sel.disabled = getMissingRequiredItems(a).length > 0;
   const allPrograms = DEPARTMENTS.reduce((acc,d)=>acc.concat(d.programs), []);
   sel.innerHTML = '<option value="">&mdash; Select a program &mdash;</option>'
     + allPrograms.map(p=>`<option value="${escapeAttr(p)}"${p===a.approvedProgram?' selected':''}>${p}</option>`).join('');
 }
 function updateApprovedProgramDot(a){
-  document.getElementById('approvedStatusDot').classList.toggle('complete', !!a.approvedProgram);
+  const ready = getMissingRequiredItems(a).length === 0;
+  document.getElementById('approvedStatusDot').classList.toggle('complete', ready && !!a.approvedProgram);
+  /* Grayed out AND actually disabled/unclickable when not ready — the
+     admin cannot open or interact with the dropdown at all until the
+     applicant's info is fully submitted & verified. */
+  document.getElementById('approvedProgramWrap').classList.toggle('locked', !ready);
 }
+/* Picking an approved program is the last step before a status can be
+   changed — and it's fully locked (disabled, unclickable, grayed out)
+   until the applicant's own info is fully submitted & verified. Clearing
+   an already-approved program is always allowed. */
 function handleApprovedProgramChange(value){
   const a = applicants.find(x=>x.id===activeApplicantId);
   if(!a) return;
@@ -2237,6 +3017,10 @@ function handleApprovedProgramChange(value){
     return;
   }
   toggleApprovedProgramOtherWrap(false, a);
+  if(value && getMissingRequiredItems(a).length > 0){
+    refreshProgramSummaryFields(a); // not saved — snap the select back
+    return;
+  }
   a.approvedProgram = value || null;
   updateApprovedProgramDot(a);
   addActivity('Approved Program Updated', a.approvedProgram
@@ -2246,6 +3030,10 @@ function handleApprovedProgramChange(value){
 function handleApprovedProgramOtherChange(value){
   const a = applicants.find(x=>x.id===activeApplicantId);
   if(!a) return;
+  if(value && getMissingRequiredItems(a).length > 0){
+    refreshProgramSummaryFields(a); // not saved — snap the select back
+    return;
+  }
   a.approvedProgram = value || null;
   updateApprovedProgramDot(a);
   addActivity('Approved Program Updated', a.approvedProgram
@@ -2258,7 +3046,6 @@ function openApplicantModal(id){
 
   /* Single-reviewer access: block if another admin already has this profile open */
   if(a.lockedBy && a.lockedBy !== currentAdminName){
-    showToast(`<b>${a.name}</b> is currently being reviewed by <b>${a.lockedBy}</b>. Only one admin can access an applicant's profile at a time &mdash; please try again once they're finished.`, false);
     return;
   }
   a.lockedBy = currentAdminName;
@@ -2344,6 +3131,7 @@ function renderDocCatTabs(){
     return `<button class="doc-cat-tab${catKey===activeDocCat?' active':''}" data-cat="${catKey}" onclick="showDocCategory('${catKey}')"><span class="cat-dot ${dotCls}"></span>${def.label}${count}${reqAsterisk}</button>`;
   }).join('');
   updateStatusReadiness(a);
+  updateApprovedProgramDot(a);
 }
 function showDocCategory(catKey){
   syncActiveDocCatFromDOM(); // keep any in-progress edits on the tab we're leaving
@@ -2374,8 +3162,9 @@ function updateDocCatEditControls(){
   const wrap = document.getElementById('docCatEditControls');
   if(!wrap) return;
   wrap.innerHTML = docCatEditing
-    ? '<button type="button" class="section-edit-btn is-editing" onclick="cancelDocCatEdit()">Cancel</button> <button type="button" class="mbtn mbtn-secondary mbtn-sm" onclick="saveDocCategory()">Save Changes</button>'
+    ? '<button type="button" class="section-edit-btn is-editing" onclick="cancelDocCatEdit()">Cancel</button> <button type="button" class="mbtn mbtn-primary mbtn-sm" id="docCatSaveBtn" onclick="saveDocCategory()">Save Changes</button>'
     : '<button type="button" class="section-edit-btn" id="docCatEditBtn" onclick="toggleDocCatEdit()">Edit</button>';
+  if(typeof registerDocCatSaveBtn === 'function') registerDocCatSaveBtn();
 }
 /* Builds the <option> list for a dropdown-backed field. Any stored value that
    isn't one of applicant.html's own choices (e.g. "Not yet submitted" or an
@@ -2482,9 +3271,11 @@ function getRequiredChecklist(a){
    'motivation','selfdescription','tenyears'].forEach(k=>addField('personal', k));
   ['profilepic','birthcert','voterid'].forEach(k=>addDoc('personal', k));
 
-  ['applyingas','termapplying','choice1','choice2','primschool','primyear'].forEach(k=>addField('academic', k));
+  ['applyingas','termapplying','choice1','choice2','primschool','primaddress','primsection','primyear'].forEach(k=>addField('academic', k));
 
-  ['mothername','fathername','onlychild','emergencycontact','workingstudent'].forEach(k=>addField('financial', k));
+  ['mothername','mothercitizenship','motherdob','mothercontact','mothereducation','motheremployment',
+   'fathername','fathercitizenship','fatherdob','fathercontact','fathereducation','fatheremployment',
+   'onlychild','emergencycontact','workingstudent'].forEach(k=>addField('financial', k));
   addDoc('financial', 'voteridguardian');
 
   const onlychild = findFieldInCat(a.categories.financial, 'onlychild');
@@ -2558,12 +3349,41 @@ function toggleItemFlag(kind, key){
   if(!item.flagged) item.flagNote = '';
   renderDocCatPanel();
 }
+/* Pulls the admin's edited (non-locked) name/email/contact/applying-as/
+   term-applying values back out of the categories and refreshes every place
+   General Information displays them — the modal header, avatar initials,
+   and the four disabled summary fields — so they never go stale after a
+   save. */
+function syncGeneralInfoFromCategories(a){
+  const personal = a.categories.personal;
+  const isSet = f => f && f.value && f.value !== 'Not yet submitted';
+  const firstname = findFieldInCat(personal, 'firstname');
+  const lastname = findFieldInCat(personal, 'lastname');
+  if(isSet(firstname) && isSet(lastname)){
+    a.name = `${firstname.value} ${lastname.value}`.trim();
+  }
+  const email = findFieldInCat(personal, 'email');
+  if(isSet(email)) a.email = email.value;
+  const contact = findFieldInCat(personal, 'contact');
+  if(isSet(contact)) a.phone = contact.value;
+
+  document.getElementById('modalAvatar').textContent = initials(a.name);
+  document.getElementById('modalName').textContent = a.name;
+  document.getElementById('modalReqPhoto').textContent = initials(a.name);
+  const anOpen = splitName(a.name);
+  document.getElementById('editLastName').value = anOpen.last;
+  document.getElementById('editFirstName').value = anOpen.first;
+  document.getElementById('editEmail').value = a.email;
+  document.getElementById('editPhone').value = a.phone;
+  refreshProgramSummaryFields(a); // covers Applying As / Term Applying In
+}
 function saveDocCategory(){
   const a = applicants.find(x=>x.id===activeApplicantId);
   if(!a) return;
   syncActiveDocCatFromDOM();
   const changeEntries = docCatEditSnapshot ? getCategoryChangeEntries(docCatEditSnapshot, a.categories) : [];
   recomputeDocsSummary(a);
+  syncGeneralInfoFromCategories(a);
   docCatEditing = false;
   docCatEditSnapshot = null;
   updateDocCatEditControls();
@@ -2632,9 +3452,12 @@ function logApplicantChangeMessage(a, changeEntries){
     thread.entries = thread.entries.concat(changeEntries);
     thread.body = thread.entries.map(e=>'&bull; '+e).join('<br>');
     thread.date = dateDisplay;
+    /* New content on an already-read thread makes it unread again, otherwise
+       the appended entries would never register on the count badge. */
+    markNotifUnread('message', thread.id);
   } else {
     thread = {
-      id:'msg-'+Date.now(),
+      id:newNotifId('msg'),
       applicantId: a.id,
       threadDateKey: dateKey,
       title: 'Updates to Your Application',
@@ -2725,7 +3548,6 @@ function handleAdminDocReplace(input, key){
   d.fileUrl = URL.createObjectURL(file);
   input.value = '';
   renderDocCatPanel();
-  showToast(`<b>${d.name}</b> replaced with <b>${file.name}</b>. Save this category to keep the change.`, true);
 }
 
 
@@ -2734,7 +3556,6 @@ function requestStatusChange(status){
   const a = applicants.find(x=>x.id===activeApplicantId);
   if(!a) return;
   if(getMissingRequiredItems(a).length > 0){
-    showToast("Applicant's requirements are still incomplete.", false);
     return;
   }
   pendingStatus = status;
@@ -2770,6 +3591,7 @@ function requestStatusChange(status){
       </div>
     </div>`;
   box.classList.add('show');
+  abRefresh();
 }
 function toggleEmailFieldEdit(fieldId, btn){
   const field = document.getElementById(fieldId);
@@ -2812,7 +3634,7 @@ function confirmStatusChange(){
   renderDashboard();
 
   announcements.unshift({
-    id:'auto-'+Date.now(),
+    id:newNotifId('auto'),
     type:'text',
     title:`Application Status Update — ${a.name}`,
     category:'Result',
@@ -2831,7 +3653,6 @@ function confirmStatusChange(){
     'done',
     'check'
   );
-  showToast(`&#9993; Status email sent to ${emailTo} — marked "${meta.label}".`, true);
   resetEmailFieldEditStates();
   cancelStatusChange();
 }
@@ -2895,6 +3716,7 @@ initRichTextEditor('msgBodyEditor', 'msgBody');
 let commType = '';
 function setCommType(type){
   commType = type;
+  setTimeout(abRefresh, 0);
   const body = document.getElementById('commTypeBody');
   const placeholder = document.getElementById('commTypePlaceholder');
   if(!type){
@@ -2930,6 +3752,38 @@ function populateMsgApplicantSelect(){
 function submitCommunication(){
   if(commType==='announcement') postAnnouncement();
   else postMessage();
+}
+
+/* ══ ALLOWANCE DISTRIBUTION (Office of the Registrar only) ══ */
+function setAllowanceType(type){
+  const otherField = document.getElementById('allowanceOtherField');
+  otherField.style.display = type==='Other' ? '' : 'none';
+  if(type!=='Other') document.getElementById('allowanceOtherDesc').value = '';
+}
+function disseminateAllowance(){
+  const studentIdInput = document.getElementById('allowanceStudentId');
+  const dateInput = document.getElementById('allowanceDate');
+  const type = document.getElementById('allowanceType').value;
+  const otherDesc = document.getElementById('allowanceOtherDesc').value.trim();
+  const studentId = studentIdInput.value.trim();
+  if(!studentId) return;
+  if(!dateInput.value) return;
+  if(type==='Other' && !otherDesc) return;
+  allowanceDistributions.unshift({
+    id:'al-'+Date.now(),
+    studentId,
+    date: dateInput.value,
+    type,
+    description: type==='Other' ? otherDesc : null,
+    postedBy: currentAdminName
+  });
+  saveAllowanceDistributionsToStorage();
+  addActivity('Allowance Distribution Posted', `${currentAdminName} disseminated a ${type==='Other' ? otherDesc : type} allowance distribution to Student ID ${studentId}, scheduled on ${dateInput.value}.`, 'done', 'megaphone');
+  studentIdInput.value = '';
+  dateInput.value = '';
+  document.getElementById('allowanceType').value = 'Wi-Fi';
+  document.getElementById('allowanceOtherDesc').value = '';
+  document.getElementById('allowanceOtherField').style.display = 'none';
 }
 
 /* ══ ANNOUNCEMENTS (public — guest page + Applicant Portal) ══ */
@@ -2971,18 +3825,17 @@ function postAnnouncement(){
 
   const body = document.getElementById('annBody').value.trim();
   if(!title || !body){
-    showToast('Please fill out both a title and a message.', false);
     return;
   }
-  announcements.unshift({id:'m-'+Date.now(), type:'text', title, category, body, date:'Posted just now', auto:false});
+  announcements.unshift({id:newNotifId('m'), type:'text', title, category, body, date:'Posted just now', auto:false});
   document.getElementById('annBody').value='';
   clearRichTextEditor('annBody');
 
   document.getElementById('commTitle').value='';
+  abDone(document.getElementById('commSubmitBtn'));
   renderAnnouncements();
   saveAnnouncementsToStorage();
   addActivity('Announcement Released', `Admin, ${currentAdminName}, has released an announcement to All Applicants about "${title}".`, 'done', 'megaphone');
-  showToast('&#10003; Announcement published to Applicant Portal and website.', true);
 }
 function deleteAnnouncement(id){
   const n = announcements.find(x=>x.id===id);
@@ -3025,7 +3878,6 @@ function postMessage(){
   const title = document.getElementById('commTitle').value.trim();
   const body = document.getElementById('msgBody').value.trim();
   if(!title || !body){
-    showToast('Please fill out both a title and a message.', false);
     return;
   }
   const category = document.getElementById('msgCategory').value;
@@ -3040,14 +3892,14 @@ function postMessage(){
     const meta = STATUS_META[document.getElementById('msgTargetCategory').value];
     target = meta ? meta.label : 'Category';
   }
-  messages.unshift({id:'msg-'+Date.now(), title, category, body, date:'Posted just now', target, applicantId});
+  messages.unshift({id:newNotifId('msg'), title, category, body, date:'Posted just now', target, applicantId});
   document.getElementById('commTitle').value='';
   document.getElementById('msgBody').value='';
   clearRichTextEditor('msgBody');
+  abDone(document.getElementById('commSubmitBtn'));
   renderMessages();
   saveMessagesToStorage();
   addActivity('Message Released', `Admin, ${currentAdminName}, has released a message to ${target} about "${title}".`, 'done', 'mail');
-  showToast(`&#10003; Message sent to ${target}.`, true);
 }
 function deleteMessage(id){
   const m = messages.find(x=>x.id===id);
@@ -3069,8 +3921,8 @@ function renderAdmins(){
       <div class="aa-avatar">${initials(ac.name)}</div>
       <div class="aa-info"><div class="aa-name">${ac.name}</div><div class="aa-email">${ac.email}</div></div>
       ${pendingPill}
-      <span class="role-tag ${ac.role}">${ac.role==='super'?'Super Admin':'Admin'}</span>
-      <button class="admin-row-del" title="Remove account" onclick="requestTrashAdmin('${ac.id}')">&#128465;</button>
+      <span class="role-tag ${ac.role}">${ac.role==='super'?'Super Admin':(ac.role==='registrar'?'Office of the Registrar':'Admin')}</span>
+      <button class="admin-row-del${ac.protected?' is-disabled':''}" title="${ac.protected?'This account is protected and cannot be removed':'Remove account'}" onclick="requestTrashAdmin('${ac.id}')">&#128465;</button>
     `;
     list.appendChild(row);
   });
@@ -3086,11 +3938,9 @@ function requestInviteAdmin(){
   const email = document.getElementById('newAdminEmail').value.trim();
   const role = document.getElementById('newAdminRole').value;
   if(!name || !email){
-    showToast('Please enter both a name and email.', false);
     return;
   }
   if(adminAccounts.some(ac=>ac.email.toLowerCase()===email.toLowerCase())){
-    showToast('An account with that email already exists.', false);
     return;
   }
   pendingAdminAction = {type:'invite', name, email, role};
@@ -3099,8 +3949,8 @@ function requestInviteAdmin(){
 function requestTrashAdmin(id){
   const ac = adminAccounts.find(x=>x.id===id);
   if(!ac) return;
+  if(ac.protected) return;
   if(ac.role==='super' && adminAccounts.filter(x=>x.role==='super').length<=1){
-    showToast('At least one Super Admin account must remain.', false);
     return;
   }
   pendingAdminAction = {type:'trash', id};
@@ -3117,13 +3967,16 @@ function openAdminActionPasswordModal(type, ac){
     desc.textContent = 'Re-enter your password to send this invite.';
     confirmBtn.textContent = 'Confirm & Send Invite';
     confirmBtn.className = 'mbtn mbtn-primary';
+    abSetBase(confirmBtn, 'mbtn-primary');
   } else {
     title.textContent = 'Confirm Account Removal';
     desc.textContent = `Re-enter your password to remove ${ac ? ac.name : 'this account'} from the console.`;
     confirmBtn.textContent = 'Confirm & Remove';
     confirmBtn.className = 'mbtn mbtn-danger';
+    abSetBase(confirmBtn, 'mbtn-danger');
   }
   document.getElementById('adminActionPasswordOverlay').classList.add('open');
+  abRefresh();
   document.getElementById('adminActionPassword').focus();
 }
 function closeAdminActionPasswordModal(){
@@ -3155,16 +4008,15 @@ function confirmAdminActionPassword(){
     });
     document.getElementById('newAdminName').value='';
     document.getElementById('newAdminEmail').value='';
+    abDone(document.getElementById('inviteAdminBtn'));
     renderAdmins();
     addActivity('Admin Account Invited', `Invited new ${role==='super'?'super admin':'admin'} account for ${name} (${email}).`, 'done');
-    showToast('&#10003; Invite sent to '+email+'.', true);
     console.log('Admin invite link (demo only):', window.location.pathname+'?invite='+token);
   } else if(pendingAdminAction.type==='trash'){
     const ac = adminAccounts.find(x=>x.id===pendingAdminAction.id);
     adminAccounts = adminAccounts.filter(x=>x.id!==pendingAdminAction.id);
     renderAdmins();
     if(ac) addActivity('Admin Account Removed', `Removed admin account for ${ac.name}.`, 'warn');
-    showToast('&#10003; Account removed.', true);
   }
 
   closeAdminActionPasswordModal();
@@ -3230,7 +4082,7 @@ function cycleSettingsIsDirty(){
 function markCycleSettingsDirty(){
   const dirty = cycleSettingsIsDirty();
   document.getElementById('cycleCancelBtn').disabled = !dirty;
-  document.getElementById('cycleSaveBtn').disabled = !dirty;
+  abRefresh(); /* cycleSaveBtn is driven by the shared action-button engine */
 }
 function cancelCycleSettings(){
   if(!cycleSettingsSnapshot) return;
@@ -3242,13 +4094,14 @@ function cancelCycleSettings(){
   document.getElementById('toggleUploads').checked = cycleSettingsSnapshot.uploads;
   document.getElementById('toggleResults').checked = cycleSettingsSnapshot.results;
   document.getElementById('cycleCancelBtn').disabled = true;
-  document.getElementById('cycleSaveBtn').disabled = true;
+  abRefresh();
 }
 function requestCycleSettingsSave(){
   if(!cycleSettingsIsDirty()) return;
   document.getElementById('cyclePassword').value = '';
   document.getElementById('cyclePasswordError').classList.remove('show');
   document.getElementById('cyclePasswordOverlay').classList.add('open');
+  abRefresh();
   document.getElementById('cyclePassword').focus();
 }
 function closeCyclePasswordModal(){
@@ -3283,9 +4136,8 @@ function confirmCycleSettingsSave(){
   if(cur.results !== prev.results) logToggle('Exam Results Visibility', cur.results);
   captureCycleSettingsSnapshot();
   document.getElementById('cycleCancelBtn').disabled = true;
-  document.getElementById('cycleSaveBtn').disabled = true;
+  abRefresh();
   closeCyclePasswordModal();
-  showToast('&#10003; Application cycle settings saved.', true);
 }
 /* Full "Month Day, Year · HH:MM AM/PM" stamp — matches the demo notifications'
    date style (announce-date / message-date) but adds the time, per spec. */
@@ -3361,20 +4213,30 @@ function markAllNotifs(read){
   renderAnnouncements();
   renderMessages();
 }
-
-/* ══ TOAST ══ */
-function showToast(html, success){
-  const stack = document.getElementById('toastStack');
-  const t = document.createElement('div');
-  t.className = 'toast'+(success?' success':'');
-  t.innerHTML = html;
-  stack.appendChild(t);
-  setTimeout(()=>{
-    t.classList.add('fadeout');
-    setTimeout(()=>t.remove(), 320);
-  }, 3400);
+/* Whether every item currently in scope (per the Show filter) is read,
+   which decides what the single bulk-action button offers next. */
+function areAllNotifsInScopeRead(){
+  const checkActivity = activityFeedView==='all' || activityFeedView==='activity';
+  const checkAnn = activityFeedView==='all' || activityFeedView==='announcements';
+  const checkMsg = activityFeedView==='all' || activityFeedView==='messages';
+  const items = []
+    .concat(checkActivity ? activityLog.map(i=>['activity', i.id]) : [])
+    .concat(checkAnn ? announcements.map(n=>['announcement', n.id]) : [])
+    .concat(checkMsg ? messages.map(m=>['message', m.id]) : []);
+  if(!items.length) return true;
+  return items.every(([type, id]) => isNotifRead(type, id));
+}
+/* One button doing double duty: it reads all-read/all-unread and flips to
+   the opposite action, relabeling itself each time the feed re-renders. */
+function updateBulkNotifToggle(){
+  const btn = document.getElementById('notifBulkToggleBtn');
+  if(!btn) return;
+  const allRead = areAllNotifsInScopeRead();
+  btn.textContent = allRead ? 'Mark all as unread' : 'Mark all as read';
+  btn.onclick = () => markAllNotifs(!allRead);
 }
 
+/* ══ TOAST ══ */
 /* ══ LOGOUT ══ */
 function openLogoutConfirm(){ document.getElementById('logoutOverlay').classList.add('open'); }
 function closeLogoutConfirm(){ document.getElementById('logoutOverlay').classList.remove('open'); }
@@ -3403,7 +4265,6 @@ function handleInactivityTimeout(){
   currentAdminEmail = null;
   showPanel('dashboard');
   clearInactivityTimer();
-  showToast('&#9203; Session expired after 30 minutes of inactivity.', false);
 }
 ['mousemove','mousedown','keydown','scroll','touchstart'].forEach(evt=>{
   document.addEventListener(evt, resetInactivityTimer, {passive:true});
@@ -3430,6 +4291,7 @@ function confirmLogout(){
   currentRole = null;
   currentAdminName = null;
   currentAdminEmail = null;
+  try { localStorage.removeItem(ADMIN_KEEP_SIGNED_IN_KEY); } catch(e){}
   clearInactivityTimer();
   showPanel('dashboard');
 }
@@ -3445,6 +4307,58 @@ renderDashboard();
 renderActivity();
 captureCycleSettingsSnapshot();
 checkInviteLink();
+checkKeepSignedIn();
+</script>
+
+<script>
+/* ── admin.html registrations ── */
+function abCommReady(){
+  var type = (document.getElementById('commTypeSelect')||{}).value;
+  if(!type || !abFilled('commTitle')) return false;
+  return abFilled(type === 'announcement' ? 'annBody' : 'msgBody');
+}
+function abAllowanceReady(){
+  if(!abFilled('allowanceStudentId') || !abFilled('allowanceDate')) return false;
+  var type = (document.getElementById('allowanceType')||{}).value;
+  return type !== 'Other' || abFilled('allowanceOtherDesc');
+}
+abRegister(document.getElementById('gateUnlockBtn'),  document.getElementById('gateLoginView'),
+  function(){ return abAllFilled(['gateEmail','gatePassword']); });
+abRegister(document.getElementById('gateForgotBtn'),  document.getElementById('gateForgotView'),
+  function(){ return abFilled('gateForgotEmail'); });
+abRegister(document.getElementById('gateForgotOtpBtn'), document.getElementById('gateForgotOtpView'),
+  function(){ return abOtpFilled('gfotp'); });
+abRegister(document.getElementById('gateSetPassBtn'), document.getElementById('gateSetPasswordView'),
+  function(){ return abAllFilled(['gateNewPassword','gateNewPasswordConfirm']); });
+abRegister(document.getElementById('commSubmitBtn'), document.getElementById('panel-announcements'), abCommReady);
+abRegister(document.getElementById('allowanceSubmitBtn'), document.getElementById('panel-allowance'), abAllowanceReady);
+abRegister(document.getElementById('inviteAdminBtn'), document.getElementById('panel-admins'),
+  function(){ return abAllFilled(['newAdminName','newAdminEmail']); });
+/* Application Cycle Settings: nothing changed = nothing to save = gray. */
+abRegister(document.getElementById('cycleSaveBtn'), null,
+  function(){ return typeof cycleSettingsIsDirty === 'function' && cycleSettingsIsDirty(); }, {live:true});
+abRegister(document.getElementById('cyclePwConfirmBtn'), document.getElementById('cyclePasswordOverlay'),
+  function(){ return abFilled('cyclePassword'); });
+abRegister(document.getElementById('billingRefConfirmBtn'), document.getElementById('billingRefOverlay'),
+  function(){ return abAllFilled(['billingRefInput','billingDateInput']); });
+abRegister(document.getElementById('adminActionConfirmBtn'), document.getElementById('adminActionPasswordOverlay'),
+  function(){ return abFilled('adminActionPassword'); });
+abRegister(document.getElementById('statusSendBtn'), document.getElementById('statusConfirmBox'),
+  function(){ return !!pendingStatus && abAllFilled(['statusEmailTo','statusEmailSubject','statusEmailMessage']); });
+/* Reviewing an applicant — "Save Changes" stays gray until something in the
+   edit session actually differs from the snapshot taken when Edit was pressed. */
+function registerDocCatSaveBtn(){
+  var btn = document.getElementById('docCatSaveBtn');
+  if(!btn) return;
+  abRegister(btn, document.getElementById('docCatPanel'), function(){
+    if(!docCatEditing || !docCatEditSnapshot) return false;
+    var a = applicants.find(function(x){ return x.id === activeApplicantId; });
+    if(!a) return false;
+    syncActiveDocCatFromDOM();
+    return getCategoryChangeEntries(docCatEditSnapshot, a.categories).length > 0;
+  }, {live:true});
+}
+registerDocCatSaveBtn();
 </script>
 </body>
 </html>
