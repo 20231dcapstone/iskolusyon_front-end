@@ -550,12 +550,12 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
   <aside class="sidebar">
     <div class="sidebar-profile">
       <div class="avatar-wrap" title="Profile picture">
-        <span class="avatar-initials" id="avatarInitials">JD</span>
+        <span class="avatar-initials" id="avatarInitials">&mdash;</span>
         <img id="avatarImg" alt="Profile picture"/>
       </div>
 
       <div class="profile-name-row" id="profileNameRow">
-        <span class="profile-name" id="profileNameDisplay">Juan Dela Cruz</span>
+        <span class="profile-name" id="profileNameDisplay">Your Name</span>
       </div>
       <div class="profile-role">Applicant No.:</div>
       <div class="profile-id">(Application Number will be provided once your documents are submitted and verified)</div>
@@ -604,18 +604,18 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
     <!-- ══ DASHBOARD ══ -->
     <section class="portal-panel active" id="panel-dashboard">
       <div class="portal-header">
-        <h1 id="dashGreeting">Welcome back, Juan!</h1>
+        <h1 id="dashGreeting">Welcome back!</h1>
         <p>Here's a quick look at your scholarship application progress with the City College of Calamba.</p>
       </div>
 
       <div class="card status-hero">
         <p class="status-hero-eyebrow">Application Status</p>
-        <div class="status-hero-value"><span class="badge badge-progress">Step 2 of 6 &middot; Filling Out Profile</span></div>
-        <p class="status-hero-desc">You've created and verified your account. You're now completing your applicant profile &mdash; once your Academic, Financial, and Health sections are filled out and your documents are verified, you'll be scheduled for the scholarship qualifying exam.</p>
+        <div class="status-hero-value"><span class="badge badge-progress" id="statusHeroBadge">Not yet started</span></div>
+        <p class="status-hero-desc" id="statusHeroDesc">Your application progress will appear here once your record is loaded.</p>
         <div class="status-hero-next">
           <div>
             <div class="next-label">Next Step</div>
-            <div class="next-action">Complete your Educational Background</div>
+            <div class="next-action" id="statusHeroNext">&mdash;</div>
           </div>
           <a href="#" class="next-action-btn" onclick="showPanel('academic');return false;">Continue &rarr;</a>
         </div>
@@ -629,8 +629,8 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       <div class="stat-grid" id="statGrid">
         <div class="stat-card unlocked-clickable tab-active" data-stage="profile" data-required-step="2" onclick="selectStage('profile', this)" role="button" tabindex="0" aria-label="View Profile Completion progress">
           <div class="stat-label">Profile Completion</div>
-          <div class="stat-value">2 of 5 sections done</div>
-          <div class="stat-progress"><div class="stat-progress-bar" style="width:40%"></div></div>
+          <div class="stat-value" id="profileCompletionValue">0 of 5 sections done</div>
+          <div class="stat-progress"><div class="stat-progress-bar" id="profileCompletionBar" style="width:0%"></div></div>
           <div class="stat-note">Includes filling out each section and uploading &amp; submitting its documents.</div>
           <div class="stat-card-hint">&#9660; Viewing details below</div>
         </div>
@@ -672,12 +672,12 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
           <p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Fill out the sections below so Iskolusyon can automatically match you to scholarship programs you qualify for.</p>
           <div class="timeline">
             <div class="timeline-item">
-              <div class="timeline-dot step-done">1</div>
-              <div class="timeline-body"><h4>Account Setup &amp; Personal Information</h4><p>Completed during sign up.</p></div>
+              <div class="timeline-dot step-notstarted">1</div>
+              <div class="timeline-body"><h4>Account Setup &amp; Personal Information</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('personal');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
             </div>
             <div class="timeline-item">
-              <div class="timeline-dot step-ongoing">2</div>
-              <div class="timeline-body"><h4>Educational Background</h4><p>Currently ongoing &mdash; <a href="#" onclick="showPanel('academic');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">continue &rarr;</a></p></div>
+              <div class="timeline-dot step-notstarted">2</div>
+              <div class="timeline-body"><h4>Educational Background</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('academic');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot step-notstarted">3</div>
@@ -1316,26 +1316,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
           <thead>
             <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Profile Picture</td>
-              <td><span class="badge badge-verified">Verified</span></td>
-              <td>Verified July 9, 2026</td>
-              <td>&mdash;</td>
-            </tr>
-            <tr>
-              <td>Birth Certificate / PSA / NSO</td>
-              <td><span class="badge badge-verified">Verified</span></td>
-              <td>Verified July 9, 2026</td>
-              <td>&mdash;</td>
-            </tr>
-            <tr>
-              <td>Voter's ID / Certification of Applicant</td>
-              <td><span class="badge badge-pending">Pending Review</span></td>
-              <td>Submitted July 8, 2026</td>
-              <td>&mdash;</td>
-            </tr>
-          </tbody>
+          <tbody id="docStatusPersonalBody"></tbody>
         </table>
 
         <!-- Category: Educational Background -->
@@ -1344,14 +1325,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
           <thead>
             <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Grades (Proof of Grades / Form 138 / Report Card)</td>
-              <td><span class="badge badge-pending">Pending Review</span></td>
-              <td>Submitted July 8, 2026</td>
-              <td>&mdash;</td>
-            </tr>
-          </tbody>
+          <tbody id="docStatusAcademicBody"></tbody>
         </table>
 
         <!-- Category: Financial & Employment -->
@@ -1360,44 +1334,13 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
           <thead>
             <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Voter's ID / Certification of Parent/Guardian</td>
-              <td><span class="badge badge-pending">Pending Review</span></td>
-              <td>Submitted July 8, 2026</td>
-              <td>&mdash;</td>
-            </tr>
-            <tr>
-              <td>Proof of Employment</td>
-              <td><span class="badge badge-deficient">Deficient</span></td>
-              <td>Image unreadable &mdash; please re-upload</td>
-              <td><button class="reupload-link" onclick="showPanel('financial');return false;">Re-upload</button></td>
-            </tr>
-            <tr>
-              <td>Proof of Income (Family / Guardian)</td>
-              <td><span class="badge badge-pending">Pending Review</span></td>
-              <td>Submitted July 8, 2026</td>
-              <td>&mdash;</td>
-            </tr>
-          </tbody>
+          <tbody id="docStatusFinancialBody"></tbody>
         </table>
       </div>
 
       <div class="card">
         <div class="card-title">Application History &amp; Activity Log</div>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-dot done"></div>
-            <div class="timeline-body"><h4>Account created and verified</h4><p>July 9, 2026 &middot; 10:12 AM</p></div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot warn"></div>
-            <div class="timeline-body"><h4>Deficiency flagged on Proof of Employment</h4><p>July 9, 2026 &middot; 2:47 PM</p></div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot">&#8230;</div>
-            <div class="timeline-body"><h4>Awaiting remaining profile sections</h4><p>Complete your Educational Background and Family &amp; Financial Information sections to proceed.</p></div>
-          </div>
+        <div class="timeline" id="appHistoryTimeline">
         </div>
       </div>
     </section>
@@ -1481,13 +1424,15 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
 /* ── MESSAGES PANEL: Announcements (public) &amp; Messages (private) with filter ──
    kind: 'announcement' (received by all applicants + guest page) or 'message'
    (sent to you specifically, or to your applicant category). */
-const communications = [
-  {id:'c1', kind:'announcement', icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg>', iconStyle:'', title:'Scholarship Examination Schedule Released', body:'The written examination for AY 2026&ndash;2027 applicants is set on August 15, 2026, 8:00 AM at the CCC Main Campus.', date:'Posted July 3, 2026'},
-  {id:'c2', kind:'message', icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>', iconStyle:'background:#FBE7E7;color:#902020;', title:'Deficiency Notice: Barangay Certificate', body:'Your uploaded Barangay Certificate of Residency needs to be re-uploaded &mdash; the copy submitted is unreadable.', date:'Posted July 5, 2026'},
-  {id:'c3', kind:'message', icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>', iconStyle:'background:#E6F4EC;color:#1B6B3A;', title:'Registration Confirmed', body:'Your Iskolusyon applicant account was successfully created and verified.', date:'Posted July 9, 2026'}
-];
-/* This demo portal represents applicant record "a1" (Juan Dela Cruz) on the
-   Admin console. Compiled messages the admin sends when they edit or flag
+const communications = [];
+/* Empty by design. Announcements and messages arrive from the database
+   integration (and, for admin-written updates, from syncAdminMessages below).
+   Expected shape: {id, kind:'announcement'|'message', icon, iconStyle,
+   title, body, date}. */
+
+/* This portal represents one applicant record on the Admin console; the id
+   below is a placeholder until the database integration supplies the
+   signed-in applicant's real record id. Compiled messages the admin sends when they edit or flag
    something in that applicant's reviewed record (see admin.html >
    logApplicantChangeMessage) are written to the same-origin localStorage
    key below, one compiled message per calendar day the admin made changes
@@ -1645,8 +1590,17 @@ function setMessagesFilter(filter){
 function renderComms(){
   const list = document.getElementById('commsList');
   list.innerHTML = '';
-  communications
-    .filter(c => commsFilter==='all' || c.kind===commsFilter)
+  const visible = communications.filter(c => commsFilter==='all' || c.kind===commsFilter);
+  if(!visible.length){
+    list.innerHTML = '<p style="font-size:.85rem;color:var(--muted);padding:.5rem 0">'
+      + (commsFilter==='announcement' ? 'No announcements yet.'
+       : commsFilter==='message' ? 'No messages yet.'
+       : 'No announcements or messages yet.')
+      + '</p>';
+    updateMessagesBadge();
+    return;
+  }
+  visible
     .forEach(c => {
       const div = document.createElement('div');
       const unread = isCommUnread(c);
@@ -1694,8 +1648,8 @@ const STAGE_CONTENT = {
     body: `<p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Fill out the sections below so Iskolusyon can automatically match you to scholarship programs you qualify for.</p>
       <div class="timeline">
         <div class="timeline-item">
-          <div class="timeline-dot done"></div>
-          <div class="timeline-body"><h4>Account Setup &amp; Personal Information</h4><p>Completed during sign up.</p></div>
+          <div class="timeline-dot">1</div>
+          <div class="timeline-body"><h4>Account Setup &amp; Personal Information</h4><p>Not yet started &mdash; <a href="#" onclick="showPanel('personal');return false;" style="color:var(--ccc-blue);font-weight:600;text-decoration:none">complete now &rarr;</a></p></div>
         </div>
         <div class="timeline-item">
           <div class="timeline-dot">2</div>
@@ -1715,11 +1669,7 @@ const STAGE_CONTENT = {
     title: 'Document Verification',
     tag: 'Step 3 &middot; Upload Docs',
     body: `<p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Once your profile sections are submitted, uploaded documents move through review here.</p>
-      <div class="timeline">
-        <div class="timeline-item"><div class="timeline-dot done">&#10003;</div><div class="timeline-body"><h4>Birth Certificate / PSA</h4><p>Verified.</p></div></div>
-        <div class="timeline-item"><div class="timeline-dot warn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="timeline-body"><h4>Barangay Certificate of Residency</h4><p>Deficient &mdash; needs re-upload.</p></div></div>
-        <div class="timeline-item"><div class="timeline-dot">3</div><div class="timeline-body"><h4>Income Documents</h4><p>Pending review.</p></div></div>
-      </div>`
+      <p style="font-size:.85rem;color:var(--muted)">No documents submitted yet.</p>`
   },
   exam: {
     title: 'Exam Schedule',
@@ -1839,15 +1789,66 @@ function syncProfileNameFromPersonalInfo(){
   updateAvatarInitials(full);
 }
 
-/* ── DOCUMENT UPLOAD ── */
-/* Mock data simulating what document text-extraction/hashing would pull from each
-   file. In production this comes from the OCR pass performed during submission;
-   it only fills EMPTY fields below so it never overwrites something the applicant
-   already typed, since extraction isn't always perfect. */
-const DOC_EXTRACTED_DATA = {
-  'up-birthcert': {'pi-firstname':'Juan','pi-middlename':'Santos','pi-lastname':'Dela Cruz','pi-dob':'2006-04-12','pi-pob':'Calamba City, Laguna','pi-sex':'Male'},
-  'up-voterid': {'pi-address':'123 Rizal St., Brgy. Real, Calamba City, Laguna','pi-precinct':'0142A'}
+/* ── DOCUMENTS & VERIFICATION STATUS ──
+   Empty by design. The database integration supplies one array per category
+   below; each row is {name, status:'verified'|'pending'|'deficient',
+   note, reuploadPanel}. Until then every table paints its empty state. */
+const DOC_STATUS_ROWS = { personal: [], academic: [], financial: [] };
+const DOC_STATUS_BADGES = {
+  verified:   {cls:'badge-verified',  label:'Verified'},
+  pending:    {cls:'badge-pending',   label:'Pending Review'},
+  deficient:  {cls:'badge-deficient', label:'Deficient'}
 };
+function renderDocStatusTables(){
+  [['personal','docStatusPersonalBody'],
+   ['academic','docStatusAcademicBody'],
+   ['financial','docStatusFinancialBody']].forEach(([key, bodyId])=>{
+    const body = document.getElementById(bodyId);
+    if(!body) return;
+    const rows = DOC_STATUS_ROWS[key] || [];
+    if(!rows.length){
+      body.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:1.35rem 1rem">No documents submitted yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = rows.map(r=>{
+      const meta = DOC_STATUS_BADGES[r.status] || DOC_STATUS_BADGES.pending;
+      const action = r.reuploadPanel
+        ? `<button class="reupload-link" onclick="showPanel('${r.reuploadPanel}');return false;">Re-upload</button>`
+        : '&mdash;';
+      return `<tr><td>${r.name}</td>`
+        + `<td><span class="badge ${meta.cls}">${meta.label}</span></td>`
+        + `<td>${r.note || '&mdash;'}</td><td>${action}</td></tr>`;
+    }).join('');
+  });
+}
+renderDocStatusTables();
+
+/* ── APPLICATION HISTORY & ACTIVITY LOG ──
+   Empty by design. Populated by the database integration with
+   {title, detail, state:'done'|'warn'|''} entries. */
+const APP_HISTORY_ENTRIES = [];
+function renderAppHistory(){
+  const wrap = document.getElementById('appHistoryTimeline');
+  if(!wrap) return;
+  if(!APP_HISTORY_ENTRIES.length){
+    wrap.innerHTML = '<p style="font-size:.85rem;color:var(--muted)">No activity recorded yet.</p>';
+    return;
+  }
+  wrap.innerHTML = APP_HISTORY_ENTRIES.map(e=>
+    `<div class="timeline-item"><div class="timeline-dot ${e.state||''}"></div>`
+    + `<div class="timeline-body"><h4>${e.title}</h4><p>${e.detail||''}</p></div></div>`
+  ).join('');
+}
+renderAppHistory();
+
+/* ── DOCUMENT UPLOAD ── */
+/* Field values pulled from each uploaded file by the OCR/text-extraction pass.
+   Empty by design — the upcoming backend integration fills this keyed by
+   upload-row id, e.g. {'up-birthcert': {'pi-firstname': '...'}}. It only ever
+   fills EMPTY fields below, so it never overwrites something the applicant
+   already typed, since extraction isn't always perfect. */
+const DOC_EXTRACTED_DATA = {};
+
 function handleDocUpload(input, rowId){
   const file = input.files[0];
   if(!file) return;
