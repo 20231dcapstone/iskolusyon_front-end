@@ -329,6 +329,10 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--white
 .mbtn-secondary:hover{background:var(--green-dark)}
 .mbtn-ghost{background:none;border:1.5px solid var(--border);color:var(--muted)}
 .mbtn-ghost:hover{background:var(--off);color:var(--text)}
+/* Shared state for every send/publish/submit/save button — gray + unclickable
+   while a required field is still empty or there is simply nothing to send. */
+.mbtn-idle,.mbtn:disabled{background:#D5D9DF !important;color:#8A9199 !important;cursor:not-allowed !important;box-shadow:none;opacity:1}
+.mbtn-idle:hover,.mbtn:disabled:hover{background:#D5D9DF !important;color:#8A9199 !important}
 .modal-footer-note{text-align:center;font-size:.75rem;color:var(--muted);padding-top:.25rem}
 .modal-footer-note a{color:var(--ccc-blue);font-weight:700;text-decoration:none}
 .modal-footer-note a:hover{text-decoration:underline}
@@ -458,7 +462,192 @@ input[type="password"]::-ms-clear{display:none}
   .form-grid{grid-template-columns:1fr}
   .form-actions{flex-direction:column}
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE LAYER — fluid layout hardening
+   Appended last so it only ever refines the rules above it. Everything here
+   is either a no-op at desktop widths or lives inside a media query, so all
+   existing colours, component styling and behaviour are untouched.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Nothing may spill out of its container horizontally. Note: overflow-x:hidden
+   is deliberately NOT used on html/body — it silently breaks the sticky
+   navbar. Overflow is fixed at its source instead. */
+img,svg,video,canvas{max-width:100%}
+/* Flex/grid children default to min-width:auto, which refuses to shrink below
+   their content and is the usual cause of a blown-out row. */
+.nav-inner>*,.hero-content>*,.footer-content-row>*,.programs-grid>*,
+.auth-shell>*,.footer-main>*,.contact-inner>*{min-width:0}
+/* Long unbroken strings (emails, URLs, reference codes) wrap instead of
+   forcing the page wider. */
+.contact-table td,.faq-card,.req-panel-wrap,.bya-l1-body,.auth-main,
+.footer-content-col,.modal-alert{overflow-wrap:break-word;word-break:break-word}
+/* Any horizontally-scrolling strip should scroll smoothly on touch. */
+.req-tabs,.carousel-track-wrap{-webkit-overflow-scrolling:touch}
+
+/* ── ≤1080px: the centred nav links are absolutely positioned, so they ride
+   over the brand and the auth buttons as soon as the bar narrows. Put them
+   back in normal flow before that can happen. ── */
+@media(max-width:1080px){
+  .nav-inner{padding:0 1.5rem;gap:.85rem}
+  .nav-links{position:static;transform:none;left:auto;top:auto;flex-shrink:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .brand-text .main{font-size:.92rem}
+  .brand-logos img{height:44px}
+}
+
+/* ── ≤860px: stack the bar onto two rows rather than letting three groups
+   fight over one line. ── */
+@media(max-width:860px){
+  .nav-inner{flex-wrap:wrap;height:auto;padding:.7rem 1.25rem;row-gap:.55rem}
+  .brand{flex:1 1 auto}
+  .nav-actions{flex:0 0 auto;margin-left:auto}
+  .nav-links{order:3;flex:1 0 100%;justify-content:flex-start;gap:4px;padding-bottom:2px}
+  .topbar .inner{flex-wrap:wrap;gap:.5rem;padding:0 1.25rem}
+  .content-wrap,.how-inner,.faq-inner,.contact-inner{padding-left:1.5rem;padding-right:1.5rem}
+  .hero{padding:3.25rem 1.5rem}
+}
+
+/* ── ≤640px ── */
+@media(max-width:640px){
+  .nav-inner{padding:.6rem 1rem}
+  .brand-logos{gap:4px}
+  .brand-logos img{height:36px}
+  .brand-text{padding-left:8px}
+  .brand-text .main{font-size:.82rem;letter-spacing:.3px}
+  .brand-text .sub{font-size:.52rem;letter-spacing:.8px}
+  .nav-actions{gap:6px}
+  .btn-nav-login,.btn-nav-signup{padding:7px 12px;font-size:.68rem}
+  .hero{padding:2.5rem 1.15rem}
+  .hero-btns{flex-direction:column;align-items:stretch}
+  .hero-btns>*{width:100%;text-align:center;justify-content:center}
+  .content-wrap,.how-inner,.faq-inner{padding-left:1.15rem;padding-right:1.15rem}
+  .contact-inner{padding:1.75rem 1.15rem 2rem}
+  .section-heading,.programs-heading,.bya-heading{overflow-wrap:break-word}
+  /* Contact/details tables scroll inside their own box instead of widening
+     the page (same treatment the applicant table already uses). */
+  .contact-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Six fixed 46px boxes plus gaps overflow a 360px screen. */
+  .otp-wrap{gap:6px}
+  .otp-box{width:clamp(34px,13vw,46px);height:50px;font-size:1.1rem}
+  .auth-shell{border-radius:10px}
+  .steps-map{gap:1rem}
+  .step-item{width:100%;max-width:220px}
+  .modal-backdrop{padding:1rem .85rem}
+  .modal-alert{width:100%}
+}
+
+/* ── ≤480px ── */
+@media(max-width:480px){
+  .nav-inner{padding:.55rem .85rem;gap:.5rem}
+  .brand-text{display:none}
+  .btn-nav-login,.btn-nav-signup{padding:6px 10px;font-size:.64rem}
+  .topbar .inner{padding:0 .85rem;font-size:.68rem}
+  .content-wrap,.how-inner,.faq-inner{padding-left:.9rem;padding-right:.9rem}
+  .contact-inner{padding:1.5rem .95rem 1.75rem}
+  .hero{padding:2.15rem .95rem}
+  .req-panel-wrap{padding:1.1rem .9rem 1.25rem}
+  .otp-box{height:46px;font-size:1rem}
+  .footer-inner{padding-left:.9rem;padding-right:.9rem}
+}
+
+/* ── PASS 2: remaining fixed-width / nowrap overflow ── */
+/* Three stacked brand logos at a fixed 120px tall could not fit a phone
+   row, pushing the whole footer past the viewport edge. */
+@media(max-width:640px){
+  .footer-logo-col{flex-wrap:wrap;gap:16px;justify-content:center}
+  .footer-logo-col img{height:88px}
+  /* Tooltip text is nowrap and centred on its trigger, so near a screen edge
+     it ran off-screen. Let it wrap and cap it to the viewport. */
+  .resend-tooltip{white-space:normal;width:max-content;max-width:min(260px,calc(100vw - 32px));text-align:center}
+  /* Map caption: inline-styled nowrap label centred over the map. */
+  .map-overlay-label{white-space:normal !important;width:max-content;max-width:calc(100% - 24px);padding:7px 12px !important;text-align:center}
+}
+@media(max-width:480px){
+  .footer-logo-col img{height:68px}
+  .map-overlay-label{max-width:calc(100% - 16px);font-size:.92em}
+}
 </style>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   ACTION-BUTTON STATE ENGINE
+   One shared rule for every send / publish / submit / save button:
+     • GRAY + unclickable      — required fields aren't filled in yet, or
+                                 there's simply nothing to send
+     • BLUE  (mbtn-primary)    — ready to go, but nothing has been touched
+     • GREEN (mbtn-secondary)  — information changed, waiting to be sent
+     • back to BLUE            — the moment the action goes through
+   Register a button with abRegister(btn, scope, isReadyFn) and call
+   abDone(btn) after the action succeeds.
+   ══════════════════════════════════════════════════════════════════════════ */
+var AB_RECS = [];
+function abRegister(btn, scope, isReady, opts){
+  if(!btn) return null;
+  opts = opts || {};
+  var existing = abFind(btn);
+  if(existing){
+    existing.scope = scope || null;
+    if(isReady) existing.isReady = isReady;
+    abPaint(existing);
+    return existing;
+  }
+  var base = opts.base || (btn.classList.contains('mbtn-danger') ? 'mbtn-danger' : 'mbtn-primary');
+  var rec = {
+    btn: btn,
+    scope: scope || null,
+    isReady: isReady || function(){ return true; },
+    dirty: !!opts.startDirty,
+    live: !!opts.live,          /* live buttons are green whenever actionable */
+    base: base
+  };
+  btn.classList.remove('mbtn-secondary');
+  AB_RECS.push(rec);
+  abPaint(rec);
+  return rec;
+}
+function abFind(btn){
+  for(var i=0;i<AB_RECS.length;i++){ if(AB_RECS[i].btn === btn) return AB_RECS[i]; }
+  return null;
+}
+function abSetBase(btn, cls){ var r = abFind(btn); if(r){ r.base = cls; abPaint(r); } }
+function abPaint(rec){
+  var b = rec.btn;
+  if(!b || !b.isConnected) return;
+  var ready = false;
+  try { ready = !!rec.isReady(); } catch(e){ ready = false; }
+  if(b.dataset.abLocked === '1') ready = false;
+  var dirty = ready && (rec.live || rec.dirty);
+  b.disabled = !ready;
+  b.classList.toggle('mbtn-idle', !ready);
+  b.classList.toggle('mbtn-secondary', dirty);
+  b.classList.toggle(rec.base, ready && !dirty);
+}
+function abRefresh(){
+  for(var i=AB_RECS.length-1;i>=0;i--){
+    if(!AB_RECS[i].btn || !AB_RECS[i].btn.isConnected) AB_RECS.splice(i,1);
+    else abPaint(AB_RECS[i]);
+  }
+}
+function abTouch(target){
+  AB_RECS.forEach(function(rec){
+    if(rec.scope && target && rec.scope.contains && rec.scope.contains(target)) rec.dirty = true;
+  });
+  abRefresh();
+}
+function abDone(btn){ var r = abFind(btn); if(r) r.dirty = false; abRefresh(); }
+function abResetAll(){ AB_RECS.forEach(function(r){ r.dirty = false; }); abRefresh(); }
+function abLock(btn, locked){ if(btn){ btn.dataset.abLocked = locked ? '1' : '0'; abRefresh(); } }
+/* ── small readiness helpers ── */
+function abFilled(id){ var el = document.getElementById(id); return !!(el && String(el.value||'').trim()); }
+function abAllFilled(ids){ return ids.every(abFilled); }
+function abChecked(id){ var el = document.getElementById(id); return !!(el && el.checked); }
+function abOtpFilled(prefix){ for(var i=0;i<6;i++){ if(!abFilled(prefix+i)) return false; } return true; }
+/* Any edit anywhere marks the owning button green; any click re-evaluates. */
+['input','change','paste','keyup'].forEach(function(ev){
+  document.addEventListener(ev, function(e){ var t = e.target; setTimeout(function(){ abTouch(t); }, 0); }, true);
+});
+document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true);
+</script>
 </head>
 <body>
 
@@ -560,7 +749,7 @@ input[type="password"]::-ms-clear{display:none}
         </div>
 
         <div class="form-actions">
-          <button class="mbtn mbtn-primary" onclick="nextStep(1)" type="button">Continue &rarr;</button>
+          <button class="mbtn mbtn-primary" id="signupStep1Btn" onclick="nextStep(1)" type="button">Continue &rarr;</button>
         </div>
         <div class="modal-footer-note">
           Already have an account? <a href="index.html#login">Log in here</a>
@@ -572,7 +761,7 @@ input[type="password"]::-ms-clear{display:none}
         <p class="step-eyebrow">Program Application</p>
 
         <div class="mfield">
-          <label for="pa-applying-as">Applying as</label>
+          <label for="pa-applying-as">Applying As</label>
           <select id="pa-applying-as" required>
             <option value="">Select&hellip;</option>
             <option>First Year</option>
@@ -595,7 +784,7 @@ input[type="password"]::-ms-clear{display:none}
 
         <p class="step-eyebrow">Preferred Program</p>
         <div class="mfield">
-          <label for="pa-choice1">First Choice</label>
+          <label for="pa-choice1">First Priority Program</label>
           <select id="pa-choice1" required>
             <option value="">Select&hellip;</option>
             <option>Bachelor of Science in Accounting Information System</option>
@@ -611,10 +800,10 @@ input[type="password"]::-ms-clear{display:none}
             <option>Bachelor of Science in Information Technology</option>
             <option>Bachelor of Science in Psychology</option>
           </select>
-          <div class="field-err" id="pa-choice1-err">Please select your first choice program.</div>
+          <div class="field-err" id="pa-choice1-err">Please select your first priority program.</div>
         </div>
         <div class="mfield">
-          <label for="pa-choice2">Second Choice</label>
+          <label for="pa-choice2">Second Priority Program</label>
           <select id="pa-choice2" required>
             <option value="">Select&hellip;</option>
             <option>Bachelor of Science in Accounting Information System</option>
@@ -631,14 +820,14 @@ input[type="password"]::-ms-clear{display:none}
             <option>Bachelor of Science in Psychology</option>
             <option>None of the above</option>
           </select>
-          <div class="field-err" id="pa-choice2-err">Please select your second choice program.</div>
+          <div class="field-err" id="pa-choice2-err">Please select your second priority program.</div>
         </div>
 
         <hr class="guide-divider"/>
 
         <div class="form-actions">
           <button class="mbtn mbtn-ghost" onclick="prevStep(2)" type="button">&#8592; Back</button>
-          <button class="mbtn mbtn-primary" onclick="nextStep(2)" type="button">Continue &rarr;</button>
+          <button class="mbtn mbtn-primary" id="signupStep2Btn" onclick="nextStep(2)" type="button">Continue &rarr;</button>
         </div>
       </div>
 
@@ -788,7 +977,7 @@ input[type="password"]::-ms-clear{display:none}
 
         <div class="form-actions">
           <button class="mbtn mbtn-ghost" onclick="prevStep(3)" type="button">&#8592; Back</button>
-          <button class="mbtn mbtn-primary" onclick="goToReview()" type="button">Review &amp; Continue &rarr;</button>
+          <button class="mbtn mbtn-primary" id="signupStep3Btn" onclick="goToReview()" type="button">Review &amp; Continue &rarr;</button>
         </div>
       </div>
 
@@ -804,10 +993,10 @@ input[type="password"]::-ms-clear{display:none}
 
           <div class="review-group">
             <h4>Program Application</h4>
-            <div class="review-row"><span>Applying as</span><span id="rv-pa-applying-as"></span></div>
+            <div class="review-row"><span>Applying As</span><span id="rv-pa-applying-as"></span></div>
             <div class="review-row"><span>Term Applying In</span><span id="rv-pa-term"></span></div>
-            <div class="review-row"><span>First Choice</span><span id="rv-pa-choice1"></span></div>
-            <div class="review-row"><span>Second Choice</span><span id="rv-pa-choice2"></span></div>
+            <div class="review-row"><span>First Priority Program</span><span id="rv-pa-choice1"></span></div>
+            <div class="review-row"><span>Second Priority Program</span><span id="rv-pa-choice2"></span></div>
           </div>
 
           <div class="review-group">
@@ -833,7 +1022,7 @@ input[type="password"]::-ms-clear{display:none}
 
           <div class="form-actions">
             <button class="mbtn mbtn-ghost" onclick="prevStep(4)" type="button">&#8592; Back</button>
-            <button class="mbtn mbtn-primary" onclick="submitSignup()" type="button">Create Account</button>
+            <button class="mbtn mbtn-primary" id="signupCreateBtn" onclick="submitSignup()" type="button">Create Account</button>
           </div>
         </div>
 
@@ -862,7 +1051,7 @@ input[type="password"]::-ms-clear{display:none}
             </span>
           </div>
 
-          <button class="mbtn mbtn-secondary" onclick="verifySignup()" type="button">Sign up</button>
+          <button class="mbtn mbtn-primary" id="signupVerifyBtn" onclick="verifySignup()" type="button">Sign up</button>
           <button class="mbtn mbtn-ghost" onclick="backToReview()" type="button">&#8592; Back</button>
         <div class="modal-footer-note" style="margin-top:.5rem">
           Please check your spam folder if you haven&rsquo;t received an email within a minute.
@@ -1046,6 +1235,7 @@ function renderStep(n){
   const mob=document.getElementById('mobileStepIndicator');
   if(mob) mob.textContent = 'Step '+n+' of '+totalSteps+' — '+stepLabels[n];
   window.scrollTo({top:0,behavior:'smooth'});
+  abRefresh();
 }
 
 function validateStep(n){
@@ -1082,6 +1272,7 @@ function nextStep(n){
   if(!validateStep(n)) return;
   currentStep = n+1;
   renderStep(currentStep);
+  abDone(document.getElementById('signupStep'+n+'Btn'));
 }
 function prevStep(n){
   currentStep = n-1;
@@ -1093,6 +1284,7 @@ function goToReview(){
   populateReview();
   currentStep = 4;
   renderStep(4);
+  abDone(document.getElementById('signupStep3Btn'));
 }
 
 let residencyInfoTimer = null;
@@ -1170,6 +1362,7 @@ function submitSignup(){
   document.getElementById('reviewWrap').style.display='none';
   document.getElementById('verifyWrap').style.display='block';
   startSignupOTPTimer();
+  abDone(document.getElementById('signupCreateBtn'));
   setTimeout(()=>document.getElementById('sotp0').focus(),200);
 }
 
@@ -1180,6 +1373,7 @@ function backToReview(){
      in the background so the user doesn't lose progress. */
   document.getElementById('verifyWrap').style.display='none';
   document.getElementById('reviewWrap').style.display='block';
+  abRefresh();
 }
 
 function verifySignup(){
@@ -1196,6 +1390,7 @@ function verifySignup(){
   */
   hideFErr('sotp-err');
   clearInterval(sOtpInterval);
+  abDone(document.getElementById('signupVerifyBtn'));
   document.getElementById('verifyWrap').style.display='none';
   document.getElementById('successWrap').style.display='block';
   const titleEl=document.getElementById('signupTitle'); if(titleEl) titleEl.style.display='none';
@@ -1285,6 +1480,20 @@ if(toTopBtn){
     toTopBtn.classList.toggle('show', window.scrollY > 300);
   });
 }
+</script>
+
+<script>
+/* ── signup.html registrations (required-field lists mirror validateStep) ── */
+abRegister(document.getElementById('signupStep1Btn'), document.querySelector('.auth-panel[data-step="1"]'),
+  function(){ return abAllFilled(['s-email','s-pass','s-pass2']); });
+abRegister(document.getElementById('signupStep2Btn'), document.querySelector('.auth-panel[data-step="2"]'),
+  function(){ return abAllFilled(['pa-applying-as','pa-term','pa-choice1','pa-choice2']); });
+abRegister(document.getElementById('signupStep3Btn'), document.querySelector('.auth-panel[data-step="3"]'),
+  function(){ return abAllFilled(['p-last','p-first','p-sex','p-dob','p-civil','p-contact','p-address','p-barangay','p-residency']); });
+abRegister(document.getElementById('signupCreateBtn'), document.getElementById('reviewWrap'),
+  function(){ return abChecked('s-terms') && abChecked('s-privacy'); });
+abRegister(document.getElementById('signupVerifyBtn'), document.getElementById('verifyWrap'),
+  function(){ return abOtpFilled('sotp'); });
 </script>
 </body>
 </html>

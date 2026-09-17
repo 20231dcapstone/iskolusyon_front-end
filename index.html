@@ -361,6 +361,10 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--white
 .mbtn-secondary:hover{background:var(--green-dark)}
 .mbtn-ghost{background:none;border:1.5px solid var(--border);color:var(--muted)}
 .mbtn-ghost:hover{background:var(--off);color:var(--text)}
+/* Shared state for every send/publish/submit/save button — gray + unclickable
+   while a required field is still empty or there is simply nothing to send. */
+.mbtn-idle,.mbtn:disabled{background:#D5D9DF !important;color:#8A9199 !important;cursor:not-allowed !important;box-shadow:none;opacity:1}
+.mbtn-idle:hover,.mbtn:disabled:hover{background:#D5D9DF !important;color:#8A9199 !important}
 .modal-footer-note{text-align:center;font-size:.75rem;color:var(--muted);padding-top:.25rem}
 .modal-footer-note a{color:var(--ccc-blue);font-weight:700;text-decoration:none}
 .modal-footer-note a:hover{text-decoration:underline}
@@ -397,7 +401,192 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--white
   .mobile-step-indicator{display:block}
   .auth-main{padding:2.25rem 1.5rem 2rem}
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE LAYER — fluid layout hardening
+   Appended last so it only ever refines the rules above it. Everything here
+   is either a no-op at desktop widths or lives inside a media query, so all
+   existing colours, component styling and behaviour are untouched.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Nothing may spill out of its container horizontally. Note: overflow-x:hidden
+   is deliberately NOT used on html/body — it silently breaks the sticky
+   navbar. Overflow is fixed at its source instead. */
+img,svg,video,canvas{max-width:100%}
+/* Flex/grid children default to min-width:auto, which refuses to shrink below
+   their content and is the usual cause of a blown-out row. */
+.nav-inner>*,.hero-content>*,.footer-content-row>*,.programs-grid>*,
+.auth-shell>*,.footer-main>*,.contact-inner>*{min-width:0}
+/* Long unbroken strings (emails, URLs, reference codes) wrap instead of
+   forcing the page wider. */
+.contact-table td,.faq-card,.req-panel-wrap,.bya-l1-body,.auth-main,
+.footer-content-col,.modal-alert{overflow-wrap:break-word;word-break:break-word}
+/* Any horizontally-scrolling strip should scroll smoothly on touch. */
+.req-tabs,.carousel-track-wrap{-webkit-overflow-scrolling:touch}
+
+/* ── ≤1080px: the centred nav links are absolutely positioned, so they ride
+   over the brand and the auth buttons as soon as the bar narrows. Put them
+   back in normal flow before that can happen. ── */
+@media(max-width:1080px){
+  .nav-inner{padding:0 1.5rem;gap:.85rem}
+  .nav-links{position:static;transform:none;left:auto;top:auto;flex-shrink:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .brand-text .main{font-size:.92rem}
+  .brand-logos img{height:44px}
+}
+
+/* ── ≤860px: stack the bar onto two rows rather than letting three groups
+   fight over one line. ── */
+@media(max-width:860px){
+  .nav-inner{flex-wrap:wrap;height:auto;padding:.7rem 1.25rem;row-gap:.55rem}
+  .brand{flex:1 1 auto}
+  .nav-actions{flex:0 0 auto;margin-left:auto}
+  .nav-links{order:3;flex:1 0 100%;justify-content:flex-start;gap:4px;padding-bottom:2px}
+  .topbar .inner{flex-wrap:wrap;gap:.5rem;padding:0 1.25rem}
+  .content-wrap,.how-inner,.faq-inner,.contact-inner{padding-left:1.5rem;padding-right:1.5rem}
+  .hero{padding:3.25rem 1.5rem}
+}
+
+/* ── ≤640px ── */
+@media(max-width:640px){
+  .nav-inner{padding:.6rem 1rem}
+  .brand-logos{gap:4px}
+  .brand-logos img{height:36px}
+  .brand-text{padding-left:8px}
+  .brand-text .main{font-size:.82rem;letter-spacing:.3px}
+  .brand-text .sub{font-size:.52rem;letter-spacing:.8px}
+  .nav-actions{gap:6px}
+  .btn-nav-login,.btn-nav-signup{padding:7px 12px;font-size:.68rem}
+  .hero{padding:2.5rem 1.15rem}
+  .hero-btns{flex-direction:column;align-items:stretch}
+  .hero-btns>*{width:100%;text-align:center;justify-content:center}
+  .content-wrap,.how-inner,.faq-inner{padding-left:1.15rem;padding-right:1.15rem}
+  .contact-inner{padding:1.75rem 1.15rem 2rem}
+  .section-heading,.programs-heading,.bya-heading{overflow-wrap:break-word}
+  /* Contact/details tables scroll inside their own box instead of widening
+     the page (same treatment the applicant table already uses). */
+  .contact-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Six fixed 46px boxes plus gaps overflow a 360px screen. */
+  .otp-wrap{gap:6px}
+  .otp-box{width:clamp(34px,13vw,46px);height:50px;font-size:1.1rem}
+  .auth-shell{border-radius:10px}
+  .steps-map{gap:1rem}
+  .step-item{width:100%;max-width:220px}
+  .modal-backdrop{padding:1rem .85rem}
+  .modal-alert{width:100%}
+}
+
+/* ── ≤480px ── */
+@media(max-width:480px){
+  .nav-inner{padding:.55rem .85rem;gap:.5rem}
+  .brand-text{display:none}
+  .btn-nav-login,.btn-nav-signup{padding:6px 10px;font-size:.64rem}
+  .topbar .inner{padding:0 .85rem;font-size:.68rem}
+  .content-wrap,.how-inner,.faq-inner{padding-left:.9rem;padding-right:.9rem}
+  .contact-inner{padding:1.5rem .95rem 1.75rem}
+  .hero{padding:2.15rem .95rem}
+  .req-panel-wrap{padding:1.1rem .9rem 1.25rem}
+  .otp-box{height:46px;font-size:1rem}
+  .footer-inner{padding-left:.9rem;padding-right:.9rem}
+}
+
+/* ── PASS 2: remaining fixed-width / nowrap overflow ── */
+/* Three stacked brand logos at a fixed 120px tall could not fit a phone
+   row, pushing the whole footer past the viewport edge. */
+@media(max-width:640px){
+  .footer-logo-col{flex-wrap:wrap;gap:16px;justify-content:center}
+  .footer-logo-col img{height:88px}
+  /* Tooltip text is nowrap and centred on its trigger, so near a screen edge
+     it ran off-screen. Let it wrap and cap it to the viewport. */
+  .resend-tooltip{white-space:normal;width:max-content;max-width:min(260px,calc(100vw - 32px));text-align:center}
+  /* Map caption: inline-styled nowrap label centred over the map. */
+  .map-overlay-label{white-space:normal !important;width:max-content;max-width:calc(100% - 24px);padding:7px 12px !important;text-align:center}
+}
+@media(max-width:480px){
+  .footer-logo-col img{height:68px}
+  .map-overlay-label{max-width:calc(100% - 16px);font-size:.92em}
+}
 </style>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   ACTION-BUTTON STATE ENGINE
+   One shared rule for every send / publish / submit / save button:
+     • GRAY + unclickable      — required fields aren't filled in yet, or
+                                 there's simply nothing to send
+     • BLUE  (mbtn-primary)    — ready to go, but nothing has been touched
+     • GREEN (mbtn-secondary)  — information changed, waiting to be sent
+     • back to BLUE            — the moment the action goes through
+   Register a button with abRegister(btn, scope, isReadyFn) and call
+   abDone(btn) after the action succeeds.
+   ══════════════════════════════════════════════════════════════════════════ */
+var AB_RECS = [];
+function abRegister(btn, scope, isReady, opts){
+  if(!btn) return null;
+  opts = opts || {};
+  var existing = abFind(btn);
+  if(existing){
+    existing.scope = scope || null;
+    if(isReady) existing.isReady = isReady;
+    abPaint(existing);
+    return existing;
+  }
+  var base = opts.base || (btn.classList.contains('mbtn-danger') ? 'mbtn-danger' : 'mbtn-primary');
+  var rec = {
+    btn: btn,
+    scope: scope || null,
+    isReady: isReady || function(){ return true; },
+    dirty: !!opts.startDirty,
+    live: !!opts.live,          /* live buttons are green whenever actionable */
+    base: base
+  };
+  btn.classList.remove('mbtn-secondary');
+  AB_RECS.push(rec);
+  abPaint(rec);
+  return rec;
+}
+function abFind(btn){
+  for(var i=0;i<AB_RECS.length;i++){ if(AB_RECS[i].btn === btn) return AB_RECS[i]; }
+  return null;
+}
+function abSetBase(btn, cls){ var r = abFind(btn); if(r){ r.base = cls; abPaint(r); } }
+function abPaint(rec){
+  var b = rec.btn;
+  if(!b || !b.isConnected) return;
+  var ready = false;
+  try { ready = !!rec.isReady(); } catch(e){ ready = false; }
+  if(b.dataset.abLocked === '1') ready = false;
+  var dirty = ready && (rec.live || rec.dirty);
+  b.disabled = !ready;
+  b.classList.toggle('mbtn-idle', !ready);
+  b.classList.toggle('mbtn-secondary', dirty);
+  b.classList.toggle(rec.base, ready && !dirty);
+}
+function abRefresh(){
+  for(var i=AB_RECS.length-1;i>=0;i--){
+    if(!AB_RECS[i].btn || !AB_RECS[i].btn.isConnected) AB_RECS.splice(i,1);
+    else abPaint(AB_RECS[i]);
+  }
+}
+function abTouch(target){
+  AB_RECS.forEach(function(rec){
+    if(rec.scope && target && rec.scope.contains && rec.scope.contains(target)) rec.dirty = true;
+  });
+  abRefresh();
+}
+function abDone(btn){ var r = abFind(btn); if(r) r.dirty = false; abRefresh(); }
+function abResetAll(){ AB_RECS.forEach(function(r){ r.dirty = false; }); abRefresh(); }
+function abLock(btn, locked){ if(btn){ btn.dataset.abLocked = locked ? '1' : '0'; abRefresh(); } }
+/* ── small readiness helpers ── */
+function abFilled(id){ var el = document.getElementById(id); return !!(el && String(el.value||'').trim()); }
+function abAllFilled(ids){ return ids.every(abFilled); }
+function abChecked(id){ var el = document.getElementById(id); return !!(el && el.checked); }
+function abOtpFilled(prefix){ for(var i=0;i<6;i++){ if(!abFilled(prefix+i)) return false; } return true; }
+/* Any edit anywhere marks the owning button green; any click re-evaluates. */
+['input','change','paste','keyup'].forEach(function(ev){
+  document.addEventListener(ev, function(e){ var t = e.target; setTimeout(function(){ abTouch(t); }, 0); }, true);
+});
+document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true);
+</script>
 </head>
 <body>
 
@@ -1016,7 +1205,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--white
     title="City College of Calamba — Calamba City, Laguna">
   </iframe>
   <!-- Overlay label centered on the map -->
-  <div style="position:absolute;top:16px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.93);border-radius:6px;padding:8px 18px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.18);pointer-events:none;white-space:nowrap;line-height:1.4;">
+  <div class="map-overlay-label" style="position:absolute;top:16px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.93);border-radius:6px;padding:8px 18px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.18);pointer-events:none;white-space:nowrap;line-height:1.4;">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ccc-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
     <span style="font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:700;color:var(--navy);letter-spacing:.4px;">City College of Calamba &nbsp;&mdash;&nbsp; Brgy. Real, Calamba City, Laguna 4027</span>
   </div>
@@ -1364,11 +1553,15 @@ window.addEventListener('scroll', () => {
           <div class="field-err" id="l-pass-err">Please enter your password.</div>
         </div>
 
-        <div style="text-align:right;margin-bottom:1rem">
-          <a href="#" onclick="showForgotFlow();return false;" style="font-size:.75rem;color:var(--ccc-blue);font-weight:600;text-decoration:none">Forgot password?</a>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem">
+          <label style="display:flex;align-items:center;gap:7px;font-size:.75rem;color:var(--muted);font-family:'Montserrat',sans-serif;font-weight:600;cursor:pointer">
+            <input type="checkbox" id="l-keep-signed-in" style="width:15px;height:15px;margin:0;accent-color:var(--ccc-blue);cursor:pointer;flex-shrink:0"/>
+            <span>Keep me signed in</span>
+          </label>
+          <a href="#" onclick="showForgotFlow();return false;" style="font-size:.75rem;color:var(--ccc-blue);font-weight:600;text-decoration:none;white-space:nowrap">Forgot password?</a>
         </div>
 
-        <button class="mbtn mbtn-primary" onclick="loginStep1()">Continue &rarr;</button>
+        <button class="mbtn mbtn-primary" id="loginContinueBtn" onclick="loginStep1()">Continue &rarr;</button>
 
         <div class="modal-footer-note">
           Don&rsquo;t have an account? <a href="signup.html">Sign up here</a>
@@ -1399,7 +1592,7 @@ window.addEventListener('scroll', () => {
           </span>
         </div>
 
-        <button class="mbtn mbtn-secondary" onclick="loginStep2()">Verify &amp; Log In</button>
+        <button class="mbtn mbtn-primary" id="loginVerifyBtn" onclick="loginStep2()">Verify &amp; Log In</button>
         <button class="mbtn mbtn-ghost" onclick="backToStep1()">&#8592; Back</button>
 
         <div class="modal-footer-note" style="margin-top:.5rem">
@@ -1427,7 +1620,7 @@ window.addEventListener('scroll', () => {
             <div class="field-err" id="fp-email-err">Please enter a valid email address.</div>
           </div>
 
-          <button class="mbtn mbtn-primary" onclick="forgotStep1()">Send Code &rarr;</button>
+          <button class="mbtn mbtn-primary" id="fpSendCodeBtn" onclick="forgotStep1()">Send Code &rarr;</button>
           <button class="mbtn mbtn-ghost" onclick="backToLogin()">&#8592; Back to Log In</button>
         </div>
 
@@ -1457,7 +1650,7 @@ window.addEventListener('scroll', () => {
             </span>
           </div>
 
-          <button class="mbtn mbtn-secondary" onclick="forgotStep2()">Verify Code</button>
+          <button class="mbtn mbtn-primary" id="fpVerifyBtn" onclick="forgotStep2()">Verify Code</button>
           <button class="mbtn mbtn-ghost" onclick="forgotBackTo(1)">&#8592; Back</button>
         </div>
 
@@ -1484,7 +1677,7 @@ window.addEventListener('scroll', () => {
             <div class="field-err" id="fp-pass2-err">Passwords do not match.</div>
           </div>
 
-          <button class="mbtn mbtn-primary" onclick="forgotStep3()">Reset Password</button>
+          <button class="mbtn mbtn-primary" id="fpResetBtn" onclick="forgotStep3()">Reset Password</button>
           <button class="mbtn mbtn-ghost" onclick="forgotBackTo(2)">&#8592; Back</button>
         </div>
 
@@ -1526,6 +1719,8 @@ function resetLoginModal(){
   showLStep(1);
   document.getElementById('l-email').value='';
   document.getElementById('l-pass').value='';
+  const keepChk = document.getElementById('l-keep-signed-in');
+  if(keepChk) keepChk.checked=false;
   clearOTP();
   document.getElementById('fp-email').value='';
   document.getElementById('fp-pass').value='';
@@ -1538,6 +1733,7 @@ function resetLoginModal(){
   resetResendUI('fresend-btn','fresend-tooltip');
   const ot=document.getElementById('otp-timer'); if(ot) ot.innerHTML='Code expires in <strong id="otp-countdown">10:00</strong>';
   const ft=document.getElementById('fotp-timer'); if(ft) ft.innerHTML='Code expires in <strong id="fotp-countdown">10:00</strong>';
+  abResetAll();
 }
 /* ── STEP DISPLAY ── */
 function setAsSteps(ids,n){
@@ -1556,6 +1752,7 @@ function showLStep(n){
   setAsSteps(['asl-step1','asl-step2'], n);
   const mob=document.getElementById('mobileStepIndicator');
   if(mob) mob.textContent = n===1 ? 'Step 1 of 2 — Sign In' : 'Step 2 of 2 — Verify (MFA)';
+  abRefresh();
 }
 function showFErr(id){ document.getElementById(id).style.display='block'; }
 function hideFErr(id){ document.getElementById(id).style.display='none'; }
@@ -1604,6 +1801,7 @@ function showForgotStep(n){
   if(ind) ind.textContent = labels[n] || 'Reset Password';
   const sub=document.getElementById('forgotSubtitle');
   if(sub) sub.style.display = n===4?'none':'block';
+  abRefresh();
 }
 function forgotBackTo(n){
   showForgotStep(n);
@@ -1617,6 +1815,7 @@ function forgotStep1(){
   if(msgEl) msgEl.innerHTML='A 6-digit verification code was sent to <strong id="fp-email-display">'+email+'</strong>. Enter it below.';
   showForgotStep(2);
   startForgotOTPTimer();
+  abDone(document.getElementById('fpSendCodeBtn'));
   setTimeout(()=>document.getElementById('fotp0').focus(),200);
 }
 function forgotStep2(){
@@ -1631,6 +1830,7 @@ function forgotStep2(){
   hideFErr('fotp-err');
   clearInterval(fOtpInterval);
   showForgotStep(3);
+  abDone(document.getElementById('fpVerifyBtn'));
 }
 function forgotStep3(){
   let ok=true;
@@ -1641,6 +1841,7 @@ function forgotStep3(){
   if(!ok) return;
   /* In production: POST /api/auth/reset-password { email, newPassword } */
   showForgotStep(4);
+  abDone(document.getElementById('fpResetBtn'));
 }
 let fOtpInterval;
 let fOtpCooldownSecs=0;
@@ -1721,6 +1922,7 @@ function loginStep1(){
   if(msgEl) msgEl.innerHTML='A 6-digit verification code was sent to <strong id="l-email-display">'+email+'</strong>. Check your inbox and enter it below.';
   showLStep(2);
   startOTPTimer();
+  abDone(document.getElementById('loginContinueBtn'));
   setTimeout(()=>document.getElementById('otp0').focus(),200);
 }
 function loginStep2(){
@@ -1739,6 +1941,14 @@ function loginStep2(){
   */
   hideFErr('otp-err');
   clearInterval(otpInterval);
+  abDone(document.getElementById('loginVerifyBtn'));
+  const keepChk = document.getElementById('l-keep-signed-in');
+  const email = document.getElementById('l-email').value.trim();
+  if(keepChk && keepChk.checked){
+    try { localStorage.setItem('iskolusyonApplicantKeepSignedIn', JSON.stringify({email:email, expiry:Date.now()+30*24*60*60*1000})); } catch(e){}
+  } else {
+    try { localStorage.removeItem('iskolusyonApplicantKeepSignedIn'); } catch(e){}
+  }
   window.location.href='home.html'; // redirect to applicant dashboard
 }
 function backToStep1(){
@@ -1847,6 +2057,15 @@ function resendCode(){
   document.getElementById('otp0').focus();
   /* In production: POST /api/auth/resend-otp { email } */
 }
+</script>
+
+<script>
+/* ── index.html registrations ── */
+abRegister(document.getElementById('loginContinueBtn'), document.getElementById('login-step1'),  function(){ return abAllFilled(['l-email','l-pass']); });
+abRegister(document.getElementById('loginVerifyBtn'),   document.getElementById('login-step2'),  function(){ return abOtpFilled('otp'); });
+abRegister(document.getElementById('fpSendCodeBtn'),    document.getElementById('forgot-step1'), function(){ return abFilled('fp-email'); });
+abRegister(document.getElementById('fpVerifyBtn'),      document.getElementById('forgot-step2'), function(){ return abOtpFilled('fotp'); });
+abRegister(document.getElementById('fpResetBtn'),       document.getElementById('forgot-step3'), function(){ return abAllFilled(['fp-pass','fp-pass2']); });
 </script>
 </body>
 </html>

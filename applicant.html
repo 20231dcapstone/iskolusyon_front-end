@@ -51,7 +51,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .portal-shell{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 108px);align-items:stretch}
 
 /* ── SIDEBAR ── */
-.sidebar{background:linear-gradient(180deg,var(--navy) 0%,var(--ccc-blue) 100%);color:#fff;padding:2rem 1.35rem 1.5rem;display:flex;flex-direction:column;position:sticky;top:108px;height:calc(100vh - 108px);overflow-y:auto}
+.sidebar{background:linear-gradient(180deg,var(--navy) 0%,var(--ccc-blue) 100%);color:#fff;padding:2rem 1.35rem 1.5rem;display:flex;flex-direction:column;position:sticky;top:var(--sticky-top,75px);height:calc(100vh - var(--sticky-top,75px));overflow-y:auto}
 .sidebar-profile{text-align:center;margin-bottom:1.75rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,.15)}
 .avatar-wrap{width:84px;height:84px;border-radius:50%;margin:0 auto .85rem;position:relative;border:3px solid rgba(255,255,255,.35);overflow:hidden;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:1.9rem;font-family:'Montserrat',sans-serif;font-weight:800}
 .avatar-wrap img{width:100%;height:100%;object-fit:cover;display:none;position:absolute;inset:0}
@@ -166,6 +166,9 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .message-body h4{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.85rem;color:var(--text);margin-bottom:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .message-body p{font-size:.8rem;color:var(--muted)}
 .message-body .message-date{font-size:.68rem;color:var(--muted);margin-top:4px;display:block}
+/* ── Read/unread indicators for Announcements & Messages ── */
+.notif-unread-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ccc-blue);flex-shrink:0}
+.message-item.unread .message-body h4{font-weight:900;color:var(--navy)}
 
 /* ── comms filter: Announcements / Messages toggle ── */
 .post-type-toggle{display:flex;gap:.6rem;margin-bottom:1.1rem}
@@ -260,6 +263,10 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .mbtn-ghost:hover{background:var(--off);color:var(--text)}
 .mbtn-danger{background:#C0392B;color:#fff}
 .mbtn-danger:hover{background:#992d22}
+/* Shared state for every send/publish/submit/save button — gray + unclickable
+   while a required field is still empty or there is simply nothing to send. */
+.mbtn-idle,.mbtn:disabled{background:#D5D9DF !important;color:#8A9199 !important;cursor:not-allowed !important;box-shadow:none;opacity:1}
+.mbtn-idle:hover,.mbtn:disabled:hover{background:#D5D9DF !important;color:#8A9199 !important}
 .form-actions{display:flex;gap:.75rem;margin-top:1.5rem;flex-wrap:wrap}
 .save-note{font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:6px;margin-top:.5rem}
 
@@ -312,7 +319,188 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
   .form-grid{grid-template-columns:1fr}
   .nav-portal-badge{display:none}
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE LAYER — fluid layout hardening
+   Appended last so it only ever refines the rules above it. Everything here
+   is either a no-op at desktop widths or lives inside a media query, so all
+   existing colours, component styling and behaviour are untouched.
+   Note: overflow-x:hidden is deliberately NOT used on html/body — it breaks
+   the sticky navbar and sticky sidebar. Overflow is fixed at its source.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+img,svg,video,canvas{max-width:100%}
+/* Flex/grid children default to min-width:auto and so refuse to shrink below
+   their content — the usual cause of a row blowing past its container. */
+.portal-shell>*,.nav-inner>*,.stat-grid>*,.dual-grid>*,.form-grid>*,
+.upload-row>*,.status-hero>*,.card>*,.portal-header>*,.form-actions>*{min-width:0}
+/* Long unbroken strings (emails, filenames, reference codes) wrap instead of
+   forcing a horizontal scrollbar. */
+.card,.portal-header,.status-hero,.stat-card,.message-body,.doc-table td,
+.upload-row,.tab-content-card{overflow-wrap:break-word;word-break:break-word}
+/* Tables already sit in scrolling wrappers where one exists; give the rest
+   the same escape hatch. */
+.edu-table-wrap{-webkit-overflow-scrolling:touch}
+
+/* ── ≤1080px: nav bar breathing room before anything collides ── */
+@media(max-width:1080px){
+  .nav-inner{padding:0 1.5rem;gap:.85rem}
+  .brand-logos img{height:44px}
+  .brand-text .main{font-size:.92rem}
+}
+
+/* ── ≤960px: the existing breakpoint turns the sidebar into a horizontal
+   strip. Let that strip scroll rather than pile up when it runs out of
+   room, and keep the portal shell from being forced wide by it. ── */
+@media(max-width:960px){
+  .portal-shell{min-height:0}
+  .sidebar{gap:.5rem;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch}
+  .sidebar-menu{gap:4px;margin-left:.75rem;min-width:0}
+  .menu-btn{white-space:nowrap}
+  .portal-header{align-items:flex-start}
+}
+
+/* ── ≤860px: nav bar stacks onto two rows ── */
+@media(max-width:860px){
+  .nav-inner{flex-wrap:wrap;height:auto;padding:.7rem 1.25rem;row-gap:.5rem}
+  .topbar .inner{flex-wrap:wrap;gap:.5rem;padding:0 1.25rem}
+  .portal-main{padding:1.5rem 1.1rem 2.5rem}
+  .card{padding:1.4rem 1.2rem}
+  .status-hero{padding:1.5rem 1.35rem}
+  .stat-grid{grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:.85rem}
+}
+
+/* ── ≤640px ── */
+@media(max-width:640px){
+  .nav-inner{padding:.6rem 1rem}
+  .brand-logos{gap:4px}
+  .brand-logos img{height:36px}
+  .brand-text{padding-left:8px}
+  .brand-text .main{font-size:.82rem;letter-spacing:.3px}
+  .brand-text .sub{font-size:.52rem;letter-spacing:.8px}
+  .sidebar{flex-direction:column;align-items:stretch;padding:1rem}
+  .sidebar-profile{margin-bottom:.85rem;align-self:center}
+  .sidebar-menu{margin-left:0;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .sidebar-menu::-webkit-scrollbar{display:none}
+  .sidebar-logout{margin-left:0;margin-top:.75rem;align-self:stretch}
+  .portal-main{padding:1.25rem .9rem 2.25rem}
+  .card{padding:1.2rem 1rem}
+  .status-hero{padding:1.25rem 1.1rem}
+  /* Document table scrolls in its own box instead of widening the page. */
+  .doc-table{display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+  .form-actions{flex-direction:column;align-items:stretch}
+  .form-actions>*{width:100%;justify-content:center}
+  .confirm-actions{flex-direction:column}
+  .confirm-actions>*{width:100%;justify-content:center}
+  .upload-row{flex-wrap:wrap;gap:10px}
+  .profile-name-row{flex-wrap:wrap;justify-content:center}
+  .org-row-action,.sib-col{flex-wrap:wrap}
+  .check-grid{gap:11px}
+}
+
+/* ── ≤480px ── */
+@media(max-width:480px){
+  .nav-inner{padding:.55rem .85rem;gap:.5rem}
+  .brand-text{display:none}
+  .topbar .inner{padding:0 .85rem;font-size:.68rem}
+  .portal-main{padding:1.1rem .75rem 2rem}
+  .card{padding:1.05rem .85rem}
+  .stat-grid{grid-template-columns:1fr}
+  .status-hero{padding:1.1rem .95rem}
+  .confirm-box{padding:1.5rem 1.15rem}
+}
+
+/* ── PASS 2: remaining nowrap overflow ── */
+@media(max-width:860px){
+  /* Explanatory sub-heading carried an inline white-space:nowrap, so the
+     sentence rendered ~605px wide regardless of viewport and spilled out of
+     the panel (it only "fit" because .portal-main scrolls sideways). */
+  .header-note-nowrap{white-space:normal !important}
+}
+@media(max-width:640px){
+  .section-divider-chip{white-space:normal;text-align:center}
+}
 </style>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   ACTION-BUTTON STATE ENGINE
+   One shared rule for every send / publish / submit / save button:
+     • GRAY + unclickable      — required fields aren't filled in yet, or
+                                 there's simply nothing to send
+     • BLUE  (mbtn-primary)    — ready to go, but nothing has been touched
+     • GREEN (mbtn-secondary)  — information changed, waiting to be sent
+     • back to BLUE            — the moment the action goes through
+   Register a button with abRegister(btn, scope, isReadyFn) and call
+   abDone(btn) after the action succeeds.
+   ══════════════════════════════════════════════════════════════════════════ */
+var AB_RECS = [];
+function abRegister(btn, scope, isReady, opts){
+  if(!btn) return null;
+  opts = opts || {};
+  var existing = abFind(btn);
+  if(existing){
+    existing.scope = scope || null;
+    if(isReady) existing.isReady = isReady;
+    abPaint(existing);
+    return existing;
+  }
+  var base = opts.base || (btn.classList.contains('mbtn-danger') ? 'mbtn-danger' : 'mbtn-primary');
+  var rec = {
+    btn: btn,
+    scope: scope || null,
+    isReady: isReady || function(){ return true; },
+    dirty: !!opts.startDirty,
+    live: !!opts.live,          /* live buttons are green whenever actionable */
+    base: base
+  };
+  btn.classList.remove('mbtn-secondary');
+  AB_RECS.push(rec);
+  abPaint(rec);
+  return rec;
+}
+function abFind(btn){
+  for(var i=0;i<AB_RECS.length;i++){ if(AB_RECS[i].btn === btn) return AB_RECS[i]; }
+  return null;
+}
+function abSetBase(btn, cls){ var r = abFind(btn); if(r){ r.base = cls; abPaint(r); } }
+function abPaint(rec){
+  var b = rec.btn;
+  if(!b || !b.isConnected) return;
+  var ready = false;
+  try { ready = !!rec.isReady(); } catch(e){ ready = false; }
+  if(b.dataset.abLocked === '1') ready = false;
+  var dirty = ready && (rec.live || rec.dirty);
+  b.disabled = !ready;
+  b.classList.toggle('mbtn-idle', !ready);
+  b.classList.toggle('mbtn-secondary', dirty);
+  b.classList.toggle(rec.base, ready && !dirty);
+}
+function abRefresh(){
+  for(var i=AB_RECS.length-1;i>=0;i--){
+    if(!AB_RECS[i].btn || !AB_RECS[i].btn.isConnected) AB_RECS.splice(i,1);
+    else abPaint(AB_RECS[i]);
+  }
+}
+function abTouch(target){
+  AB_RECS.forEach(function(rec){
+    if(rec.scope && target && rec.scope.contains && rec.scope.contains(target)) rec.dirty = true;
+  });
+  abRefresh();
+}
+function abDone(btn){ var r = abFind(btn); if(r) r.dirty = false; abRefresh(); }
+function abResetAll(){ AB_RECS.forEach(function(r){ r.dirty = false; }); abRefresh(); }
+function abLock(btn, locked){ if(btn){ btn.dataset.abLocked = locked ? '1' : '0'; abRefresh(); } }
+/* ── small readiness helpers ── */
+function abFilled(id){ var el = document.getElementById(id); return !!(el && String(el.value||'').trim()); }
+function abAllFilled(ids){ return ids.every(abFilled); }
+function abChecked(id){ var el = document.getElementById(id); return !!(el && el.checked); }
+function abOtpFilled(prefix){ for(var i=0;i<6;i++){ if(!abFilled(prefix+i)) return false; } return true; }
+/* Any edit anywhere marks the owning button green; any click re-evaluates. */
+['input','change','paste','keyup'].forEach(function(ev){
+  document.addEventListener(ev, function(e){ var t = e.target; setTimeout(function(){ abTouch(t); }, 0); }, true);
+});
+document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true);
+</script>
 </head>
 <body>
 
@@ -340,6 +528,20 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
     </div>
   </div>
 </nav>
+<script>
+/* Sidebar should stick right under the navbar (not under the topbar too),
+   so it visibly moves upward as the topbar scrolls out of view. */
+(function(){
+  function syncStickyTop(){
+    var nav = document.querySelector('.navbar');
+    if(!nav) return;
+    document.documentElement.style.setProperty('--sticky-top', nav.getBoundingClientRect().height + 'px');
+  }
+  syncStickyTop();
+  window.addEventListener('load', syncStickyTop);
+  window.addEventListener('resize', syncStickyTop);
+})();
+</script>
 
 <!-- ══ PORTAL SHELL ══ -->
 <div class="portal-shell">
@@ -420,7 +622,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       </div>
 
       <div class="section-divider">
-        <div class="section-divider-chip"><span class="divider-icon">&#128275;</span> Progress Milestones</div>
+        <div class="section-divider-chip"><span class="divider-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="4" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.2-2.4"/></svg></span> Progress Milestones</div>
       </div>
       <p class="section-divider-sub">Each milestone below unlocks as you clear the corresponding step in the application process.</p>
 
@@ -434,28 +636,28 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
         </div>
 
         <div class="stat-card locked" data-stage="documents" data-required-step="3">
-          <div class="stat-lock-badge">&#128274;</div>
+          <div class="stat-lock-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
           <div class="stat-label">Document Verification</div>
           <div class="stat-value stat-locked">Locked</div>
           <div class="stat-note">Unlocks once your profile is complete &mdash; Step 3: Upload Docs.</div>
         </div>
 
         <div class="stat-card locked" data-stage="exam" data-required-step="5">
-          <div class="stat-lock-badge">&#128274;</div>
+          <div class="stat-lock-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
           <div class="stat-label">Exam Schedule</div>
           <div class="stat-value stat-locked">Locked</div>
           <div class="stat-note">Unlocks once your documents are verified &mdash; Step 5: Take Exam.</div>
         </div>
 
         <div class="stat-card locked" data-stage="medical" data-required-step="5.5">
-          <div class="stat-lock-badge">&#128274;</div>
+          <div class="stat-lock-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
           <div class="stat-label">Medical Status</div>
           <div class="stat-value stat-locked">Locked</div>
           <div class="stat-note">Unlocks once you've passed the applicant examination.</div>
         </div>
 
         <div class="stat-card locked" data-stage="admission" data-required-step="6">
-          <div class="stat-lock-badge">&#128274;</div>
+          <div class="stat-lock-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
           <div class="stat-label">Admission</div>
           <div class="stat-value stat-locked">Locked</div>
           <div class="stat-note">Unlocks once your exam results are released &mdash; Step 6: Track Result.</div>
@@ -675,8 +877,8 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       </div>
 
       <div class="form-actions">
-        <button class="mbtn mbtn-primary save-draft-btn" onclick="saveDraft(this)">Save as Draft</button>
-        <button class="mbtn mbtn-primary" onclick="submitSection(this,'Personal Information')">Submit Section</button>
+        <button class="mbtn mbtn-primary save-draft-btn" id="saveDraftPersonal" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary" id="submitPersonalBtn" onclick="submitSection(this,'Personal Information')">Submit Section</button>
       </div>
     </section>
 
@@ -685,7 +887,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       <div class="portal-header">
         <p class="portal-eyebrow">Admission &middot; My Profile (Softcopy)</p>
         <h1>Educational Background</h1>
-        <p style="white-space:nowrap;max-width:none">This information is used for qualification matching and cross-referenced against your submitted documents.</p>
+        <p class="header-note-nowrap" style="white-space:nowrap;max-width:none">This information is used for qualification matching and cross-referenced against your submitted documents.</p>
       </div>
 
       <div class="card">
@@ -832,8 +1034,8 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       </div>
 
       <div class="form-actions">
-        <button class="mbtn mbtn-primary save-draft-btn" onclick="saveDraft(this)">Save as Draft</button>
-        <button class="mbtn mbtn-primary" onclick="submitSection(this,'Educational Background')">Submit Section</button>
+        <button class="mbtn mbtn-primary save-draft-btn" id="saveDraftAcademic" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary" id="submitAcademicBtn" onclick="submitSection(this,'Educational Background')">Submit Section</button>
       </div>
     </section>
 
@@ -1055,8 +1257,8 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       </div>
 
       <div class="form-actions">
-        <button class="mbtn mbtn-primary save-draft-btn" onclick="saveDraft(this)">Save as Draft</button>
-        <button class="mbtn mbtn-primary" onclick="submitSection(this,'Financial &amp; Employment')">Submit Section</button>
+        <button class="mbtn mbtn-primary save-draft-btn" id="saveDraftFinancial" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary" id="submitFinancialBtn" onclick="submitSection(this,'Financial &amp; Employment')">Submit Section</button>
       </div>
     </section>
 
@@ -1092,8 +1294,8 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       </div>
 
       <div class="form-actions">
-        <button class="mbtn mbtn-primary save-draft-btn" onclick="saveDraft(this)">Save as Draft</button>
-        <button class="mbtn mbtn-primary" onclick="submitSection(this,'Health &amp; Wellness')">Submit Section</button>
+        <button class="mbtn mbtn-primary save-draft-btn" id="saveDraftHealth" onclick="saveDraft(this)">Save as Draft</button>
+        <button class="mbtn mbtn-primary" id="submitHealthBtn" onclick="submitSection(this,'Health &amp; Wellness')">Submit Section</button>
       </div>
     </section>
 
@@ -1212,8 +1414,8 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
         <div class="card-title">Submit a Request</div>
         <div class="form-grid">
           <div class="mfield full">
-            <label for="ap-type">Request Type</label>
-            <select id="ap-type">
+            <label for="ap-type">Request Type <span class="req-mark">*</span></label>
+            <select id="ap-type" required>
               <option value="">Select&hellip;</option>
               <option>Appeal for Retake / Re-application</option>
               <option>Reschedule Examination (Absence)</option>
@@ -1221,8 +1423,8 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
             </select>
           </div>
           <div class="mfield full">
-            <label for="ap-details">Details</label>
-            <textarea id="ap-details" placeholder="e.g. I was unable to attend the scheduled exam due to a medical emergency."></textarea>
+            <label for="ap-details">Details <span class="req-mark">*</span></label>
+            <textarea id="ap-details" required placeholder="e.g. I was unable to attend the scheduled exam due to a medical emergency."></textarea>
           </div>
         </div>
         <div class="upload-row required" id="up-appeal">
@@ -1235,7 +1437,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
           <label class="upload-btn-label">Upload<input type="file" required onchange="handleDocUpload(this,'up-appeal')"/></label>
         </div>
         <div class="form-actions">
-          <button class="mbtn mbtn-primary" onclick="submitSection(this,'Appeal / Reschedule Request')">Submit Request</button>
+          <button class="mbtn mbtn-primary" id="submitAppealBtn" onclick="submitSection(this,'Appeal / Reschedule Request')">Submit Request</button>
         </div>
       </div>
     </section>
@@ -1249,7 +1451,13 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
       </div>
       <div class="card">
         <div class="card-title">Distribution Status</div>
-        <p style="font-size:.85rem;color:var(--muted)">You don't have an active allowance disbursement yet. This becomes available once your application is approved and endorsed.</p>
+        <p id="allowanceEmptyNote" style="font-size:.85rem;color:var(--muted)">You don't have an active allowance disbursement yet. This becomes available once your application is approved and endorsed.</p>
+        <table class="doc-table" id="allowanceTableWrap" style="display:none">
+          <thead>
+            <tr><th>Date of Distribution</th><th>Type</th><th>Description</th></tr>
+          </thead>
+          <tbody id="allowanceTableBody"></tbody>
+        </table>
       </div>
     </section>
 
@@ -1274,9 +1482,9 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
    kind: 'announcement' (received by all applicants + guest page) or 'message'
    (sent to you specifically, or to your applicant category). */
 const communications = [
-  {id:'c1', kind:'announcement', icon:'&#128197;', iconStyle:'', title:'Scholarship Examination Schedule Released', body:'The written examination for AY 2026&ndash;2027 applicants is set on August 15, 2026, 8:00 AM at the CCC Main Campus.', date:'Posted July 3, 2026'},
-  {id:'c2', kind:'message', icon:'&#9888;', iconStyle:'background:#FBE7E7;color:#902020;', title:'Deficiency Notice: Barangay Certificate', body:'Your uploaded Barangay Certificate of Residency needs to be re-uploaded &mdash; the copy submitted is unreadable.', date:'Posted July 5, 2026'},
-  {id:'c3', kind:'message', icon:'&#9989;', iconStyle:'background:#E6F4EC;color:#1B6B3A;', title:'Registration Confirmed', body:'Your Iskolusyon applicant account was successfully created and verified.', date:'Posted July 9, 2026'}
+  {id:'c1', kind:'announcement', icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg>', iconStyle:'', title:'Scholarship Examination Schedule Released', body:'The written examination for AY 2026&ndash;2027 applicants is set on August 15, 2026, 8:00 AM at the CCC Main Campus.', date:'Posted July 3, 2026'},
+  {id:'c2', kind:'message', icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>', iconStyle:'background:#FBE7E7;color:#902020;', title:'Deficiency Notice: Barangay Certificate', body:'Your uploaded Barangay Certificate of Residency needs to be re-uploaded &mdash; the copy submitted is unreadable.', date:'Posted July 5, 2026'},
+  {id:'c3', kind:'message', icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>', iconStyle:'background:#E6F4EC;color:#1B6B3A;', title:'Registration Confirmed', body:'Your Iskolusyon applicant account was successfully created and verified.', date:'Posted July 9, 2026'}
 ];
 /* This demo portal represents applicant record "a1" (Juan Dela Cruz) on the
    Admin console. Compiled messages the admin sends when they edit or flag
@@ -1286,23 +1494,84 @@ const communications = [
    (a new thread starts the first time changes/flags happen on a new day). */
 const CURRENT_APPLICANT_ID = 'a1';
 const MSG_STORAGE_KEY = 'iskolusyon_messages';
-try {
-  const storedMsgs = localStorage.getItem(MSG_STORAGE_KEY);
-  if (storedMsgs) {
-    const adminMessages = JSON.parse(storedMsgs)
+const ADMIN_MSG_ICON = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>';
+/* Re-reads the admin-written messages and merges them in. Called again
+   whenever the Messages panel is opened, when another tab writes to the key,
+   and when this tab regains focus — so a message the admin sends while this
+   portal is already open still arrives and still bumps the unread badge,
+   instead of only ever being picked up at first page load.
+   Returns true when anything was added or an existing thread changed. */
+function syncAdminMessages(){
+  let changed = false;
+  try {
+    const storedMsgs = localStorage.getItem(MSG_STORAGE_KEY);
+    if (!storedMsgs) return false;
+    JSON.parse(storedMsgs)
       .filter(m => m.applicantId === CURRENT_APPLICANT_ID)
-      .map(m => ({
-        id: m.id,
-        kind: 'message',
-        icon: '&#9993;',
-        iconStyle: '',
-        title: m.title,
-        body: m.body,
-        date: m.date
-      }));
-    communications.push(...adminMessages);
+      .forEach(m => {
+        const mapped = {
+          id: m.id,
+          kind: 'message',
+          icon: ADMIN_MSG_ICON,
+          iconStyle: '',
+          title: m.title,
+          body: m.body,
+          date: m.date
+        };
+        const existing = communications.find(c => c.id === m.id);
+        if(!existing){
+          communications.push(mapped);
+          changed = true;
+        } else if(existing.body !== m.body || existing.title !== m.title){
+          /* An existing same-day thread the admin appended to: refresh it and
+             flag it unread again so the badge counts the new content. */
+          Object.assign(existing, mapped);
+          if(commsReadState[m.id]){
+            delete commsReadState[m.id];
+            saveCommsReadState();
+          }
+          changed = true;
+        }
+      });
+  } catch (e) { /* ignore malformed/blocked storage, keep the defaults above */ }
+  return changed;
+}
+
+/* ══ ALLOWANCE DISTRIBUTION (view-only) ══
+   Published by the Office of the Registrar in admin.html (see
+   disseminateAllowance) and written to the same-origin localStorage key
+   below. Rendered here strictly read-only, filtered to this applicant's
+   own account. Student ID format is not yet finalized admin-side, so this
+   demo matches it against CURRENT_APPLICANT_ID above; update the match
+   once a real Student ID format is set. */
+const ALLOWANCE_STORAGE_KEY = 'iskolusyon_allowance_distributions';
+let allowanceDistributions = [];
+try {
+  const storedAllowance = localStorage.getItem(ALLOWANCE_STORAGE_KEY);
+  if (storedAllowance) allowanceDistributions = JSON.parse(storedAllowance);
+} catch (e) { /* ignore malformed/blocked storage */ }
+function renderAllowanceDistributions(){
+  const table = document.getElementById('allowanceTableWrap');
+  const emptyNote = document.getElementById('allowanceEmptyNote');
+  const tbody = document.getElementById('allowanceTableBody');
+  if(!table || !emptyNote || !tbody) return;
+  const myRecords = allowanceDistributions.filter(d => d.studentId === CURRENT_APPLICANT_ID);
+  if(!myRecords.length){
+    table.style.display = 'none';
+    emptyNote.style.display = '';
+    return;
   }
-} catch (e) { /* ignore malformed/blocked storage, keep the defaults above */ }
+  table.style.display = '';
+  emptyNote.style.display = 'none';
+  tbody.innerHTML = myRecords.map(d => `
+    <tr>
+      <td>${d.date}</td>
+      <td>${d.type}</td>
+      <td>${d.type==='Other' ? (d.description || '&mdash;') : '&mdash;'}</td>
+    </tr>
+  `).join('');
+}
+renderAllowanceDistributions();
 /* ══ UNREAD STATE FOR ANNOUNCEMENTS & MESSAGES ══
    Tracks which communications this applicant has already seen, so the sidebar
    shows a count badge of new/unread items at a glance. Opening the Messages
@@ -1326,14 +1595,36 @@ function updateMessagesBadge(){
   const n = countUnreadComms();
   badge.textContent = n > 99 ? '99+' : n;
   badge.classList.toggle('is-empty', n <= 0);
+  badge.title = n === 0
+    ? 'No unread messages'
+    : (n === 1 ? '1 unread message' : n + ' unread messages');
 }
+/* Items that were unread when this visit to the Messages panel started.
+   They are persisted as read straight away (so the badge clears), but stay
+   visually flagged until the applicant navigates away — otherwise everything
+   would de-highlight the instant the panel opened and they'd never see which
+   items were actually new. */
+let commsJustOpenedUnread = new Set();
 function markAllCommsRead(){
   let changed = false;
   communications.forEach(c => {
-    if(!commsReadState[c.id]){ commsReadState[c.id] = true; changed = true; }
+    if(!commsReadState[c.id]){
+      commsJustOpenedUnread.add(c.id);
+      commsReadState[c.id] = true;
+      changed = true;
+    }
   });
   if(changed) saveCommsReadState();
   updateMessagesBadge();
+}
+/* Leaving the panel retires the highlight, so the next visit shows only
+   what is genuinely new since this one. */
+function clearCommsHighlight(){
+  if(!commsJustOpenedUnread.size) return;
+  commsJustOpenedUnread = new Set();
+}
+function isCommUnread(c){
+  return !commsReadState[c.id] || commsJustOpenedUnread.has(c.id);
 }
 let commsFilter = 'all';
 function setMessagesFilter(filter){
@@ -1358,12 +1649,13 @@ function renderComms(){
     .filter(c => commsFilter==='all' || c.kind===commsFilter)
     .forEach(c => {
       const div = document.createElement('div');
-      div.className = 'message-item';
+      const unread = isCommUnread(c);
+      div.className = 'message-item' + (unread ? ' unread' : '');
       const tag = c.kind==='announcement' ? 'Announcement' : 'Message';
       div.innerHTML = `
         <div class="message-dot" style="${c.iconStyle}">${c.icon}</div>
         <div class="message-body">
-          <h4>${c.title} <span class="msg-kind-tag">${tag}</span></h4>
+          <h4>${unread?'<span class="notif-unread-dot"></span> ':''}${c.title} <span class="msg-kind-tag">${tag}</span></h4>
           <p>${c.body}</p>
           <span class="message-date">${c.date}</span>
         </div>
@@ -1372,8 +1664,27 @@ function renderComms(){
     });
   updateMessagesBadge();
 }
+/* Initial load: pull in any admin-written messages, then paint + count. */
+syncAdminMessages();
 renderComms();
 updateMessagesBadge();
+
+/* Keep the badge live while the portal sits open: another tab writing new
+   admin messages fires 'storage', and returning to this tab re-checks. */
+window.addEventListener('storage', e => {
+  if(e.key !== MSG_STORAGE_KEY) return;
+  if(syncAdminMessages()){
+    const onMessagesPanel = document.getElementById('panel-messages').classList.contains('active');
+    if(onMessagesPanel) markAllCommsRead();
+    renderComms();
+  }
+  updateMessagesBadge();
+});
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden) return;
+  if(syncAdminMessages()) renderComms();
+  updateMessagesBadge();
+});
 
 /* ── DASHBOARD: PROGRESS MILESTONE TABS ── */
 const STAGE_CONTENT = {
@@ -1406,7 +1717,7 @@ const STAGE_CONTENT = {
     body: `<p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Once your profile sections are submitted, uploaded documents move through review here.</p>
       <div class="timeline">
         <div class="timeline-item"><div class="timeline-dot done">&#10003;</div><div class="timeline-body"><h4>Birth Certificate / PSA</h4><p>Verified.</p></div></div>
-        <div class="timeline-item"><div class="timeline-dot warn">&#9888;</div><div class="timeline-body"><h4>Barangay Certificate of Residency</h4><p>Deficient &mdash; needs re-upload.</p></div></div>
+        <div class="timeline-item"><div class="timeline-dot warn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="timeline-body"><h4>Barangay Certificate of Residency</h4><p>Deficient &mdash; needs re-upload.</p></div></div>
         <div class="timeline-item"><div class="timeline-dot">3</div><div class="timeline-body"><h4>Income Documents</h4><p>Pending review.</p></div></div>
       </div>`
   },
@@ -1480,11 +1791,32 @@ window.addEventListener('DOMContentLoaded', ()=>{
 /* ── SIDEBAR NAVIGATION ── */
 function showPanel(name, btn){
   document.querySelectorAll('.portal-panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+name));
+  setTimeout(abRefresh, 0);
   document.querySelectorAll('.menu-btn').forEach(b=>b.classList.remove('active'));
   const target = btn || document.querySelector('.menu-btn[data-panel="'+name+'"]');
   if(target) target.classList.add('active');
   document.querySelector('.portal-main').scrollTo({top:0,behavior:'smooth'});
-  if(name==='messages') markAllCommsRead();
+  if(name==='messages'){
+    /* Pick up anything the admin sent since this page loaded, mark the list
+       read (clearing the badge), then repaint so the newly-read items still
+       show their unread flag for this visit. */
+    syncAdminMessages();
+    markAllCommsRead();
+    renderComms();
+  } else {
+    /* Navigating away retires this visit's unread highlight. */
+    if(commsJustOpenedUnread.size){
+      clearCommsHighlight();
+      renderComms();
+    }
+  }
+  if(name==='allowance'){
+    try {
+      const storedAllowance = localStorage.getItem(ALLOWANCE_STORAGE_KEY);
+      if(storedAllowance) allowanceDistributions = JSON.parse(storedAllowance);
+    } catch (e) { /* ignore malformed/blocked storage */ }
+    renderAllowanceDistributions();
+  }
   if(name==='dashboard'){
     const active = document.querySelector('.stat-card.tab-active');
     if(active) setTimeout(()=>positionTabConnector(active), 50);
@@ -1630,30 +1962,15 @@ function toggleIfTechVoc(sel){
 }
 
 /* ── SAVE / SUBMIT ── */
-/* Save-as-Draft buttons are blue by default, turn green the moment any
-   field in that section is touched, then revert to blue once saved. */
-function setSaveDraftDirty(btn, dirty){
-  if(!btn) return;
-  btn.classList.toggle('mbtn-primary', !dirty);
-  btn.classList.toggle('mbtn-secondary', dirty);
-}
-function initSaveDraftDirtyTracking(){
-  document.querySelectorAll('.portal-panel').forEach(panel=>{
-    const saveBtn = panel.querySelector('.save-draft-btn');
-    if(!saveBtn) return;
-    const markDirty = ()=> setSaveDraftDirty(saveBtn, true);
-    panel.querySelectorAll('input, select, textarea').forEach(el=>{
-      el.addEventListener('input', markDirty);
-      el.addEventListener('change', markDirty);
-    });
-  });
-}
-initSaveDraftDirtyTracking();
+/* Every Save-as-Draft and Submit button is driven by the shared action-button
+   state engine at the bottom of this file: gray while the section is empty or
+   its required items are incomplete, blue when ready but untouched, green while
+   there are pending changes, and blue again once saved/submitted. */
 function saveDraft(btn){
   const original = btn.textContent;
   btn.textContent = 'Saved ✓';
-  setSaveDraftDirty(btn, false);
-  setTimeout(()=>{ btn.textContent = original; }, 1600);
+  abDone(btn);
+  setTimeout(()=>{ btn.textContent = original; abRefresh(); }, 1600);
   /* In production: POST /api/applicant/save-draft { section, data } */
 }
 /* Returns the missing required-document labels for a panel, skipping any
@@ -1690,10 +2007,10 @@ function submitSection(btn, sectionName){
   }
   const original = btn.textContent;
   btn.textContent = 'Submitted ✓';
-  btn.disabled = true;
-  setTimeout(()=>{ btn.textContent = original; btn.disabled=false; }, 1800);
+  abLock(btn, true);
+  setTimeout(()=>{ btn.textContent = original; abLock(btn, false); abDone(btn); }, 1800);
   const ownerPanel = btn.closest('.portal-panel');
-  if(ownerPanel) setSaveDraftDirty(ownerPanel.querySelector('.save-draft-btn'), false);
+  if(ownerPanel) abDone(ownerPanel.querySelector('.save-draft-btn'));
 
   /* Educational Background: editable while in progress, but locked for good
      once submitted — matches the rest of the profile's "editable" fields,
@@ -1711,13 +2028,11 @@ function lockPanelFields(panelId, submitBtn){
   if(!panel) return;
   panel.querySelectorAll('input, select, textarea').forEach(el=>{ el.disabled = true; });
   panel.querySelectorAll('.upload-btn-label').forEach(el=>{ el.classList.add('disabled'); el.style.pointerEvents='none'; el.style.opacity='.5'; });
-  panel.querySelectorAll('.save-draft-btn').forEach(el=>{ el.disabled = true; el.style.opacity='.5'; el.style.cursor='not-allowed'; });
+  panel.querySelectorAll('.save-draft-btn').forEach(el=>{ abLock(el, true); });
   if(submitBtn){
     setTimeout(()=>{
       submitBtn.textContent = 'Submitted — Locked';
-      submitBtn.disabled = true;
-      submitBtn.style.opacity = '.7';
-      submitBtn.style.cursor = 'not-allowed';
+      abLock(submitBtn, true);
     }, 1800);
   }
   const header = panel.querySelector('.portal-header p');
@@ -1743,6 +2058,55 @@ function confirmLogout(){
   /* In production: POST /api/auth/logout → clear session/JWT */
   window.location.href='login.html';
 }
+</script>
+
+<script>
+/* ── applicant.html registrations ──
+   A section can be SAVED as a draft as soon as it holds any content, and can
+   only be SUBMITTED once every visible required field and required document
+   in that section is complete. */
+function abVisible(el){ return !!(el && el.offsetParent !== null); }
+function abMissingRequired(panelId){
+  const panel = document.getElementById(panelId);
+  const missing = [];
+  if(!panel) return ['panel'];
+  panel.querySelectorAll('[required]').forEach(el=>{
+    if(el.type === 'file') return;               /* covered by the upload rows */
+    if(el.disabled || !abVisible(el)) return;    /* not applicable yet */
+    const filled = (el.type === 'checkbox' || el.type === 'radio')
+      ? el.checked : String(el.value||'').trim() !== '';
+    if(!filled) missing.push(el.id || 'field');
+  });
+  panel.querySelectorAll('.upload-row.required').forEach(row=>{
+    if(row.offsetParent === null) return;
+    if(!row.classList.contains('has-file')) missing.push(row.id);
+  });
+  return missing;
+}
+function abPanelHasContent(panelId){
+  const panel = document.getElementById(panelId);
+  if(!panel) return false;
+  let any = false;
+  panel.querySelectorAll('input, select, textarea').forEach(el=>{
+    if(el.type === 'file' || el.disabled) return;
+    /* checkboxes/radios default to value "on" — judge them by .checked instead */
+    if(el.type === 'checkbox' || el.type === 'radio'){ if(el.checked) any = true; return; }
+    if(String(el.value||'').trim()) any = true;
+  });
+  return any || !!panel.querySelector('.upload-row.has-file');
+}
+[
+  ['panel-personal',  'saveDraftPersonal',  'submitPersonalBtn'],
+  ['panel-academic',  'saveDraftAcademic',  'submitAcademicBtn'],
+  ['panel-financial', 'saveDraftFinancial', 'submitFinancialBtn'],
+  ['panel-health',    'saveDraftHealth',    'submitHealthBtn']
+].forEach(function(row){
+  var panelId = row[0], panel = document.getElementById(panelId);
+  abRegister(document.getElementById(row[1]), panel, function(){ return abPanelHasContent(panelId); });
+  abRegister(document.getElementById(row[2]), panel, function(){ return abMissingRequired(panelId).length === 0; });
+});
+abRegister(document.getElementById('submitAppealBtn'), document.getElementById('panel-appeals'),
+  function(){ return abMissingRequired('panel-appeals').length === 0; });
 </script>
 </body>
 </html>
