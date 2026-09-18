@@ -506,6 +506,8 @@ img,svg,video,canvas{max-width:100%}
   .footer-logo-col img{height:68px}
   .map-overlay-label{max-width:calc(100% - 16px);font-size:.92em}
 }
+
+.icon-inline{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;flex-shrink:0}
 </style>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
@@ -652,8 +654,8 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <div class="carousel-slide"><div class="carousel-text-slide"><h3>No announcements yet</h3><p>Official announcements such as qualifications, steps, and exam schedules will appear here once they are posted.</p></div></div>
       </div>
     </div>
-    <button class="carousel-btn carousel-prev" onclick="moveCarousel(-1)" aria-label="Previous slide">&#8592;</button>
-    <button class="carousel-btn carousel-next" onclick="moveCarousel(1)" aria-label="Next slide">&#8594;</button>
+    <button class="carousel-btn carousel-prev" onclick="moveCarousel(-1)" aria-label="Previous slide"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="carousel-btn carousel-next" onclick="moveCarousel(1)" aria-label="Next slide"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     <div class="carousel-dots" id="carouselDots"></div>
     <div class="carousel-counter" id="carouselCounter">0 / 0</div>
   </div>
@@ -675,7 +677,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <div class="step-desc">Sign up with your email and verify your identity</div>
       </div>
 
-      <div class="step-arrow">&#8594;</div>
+      <div class="step-arrow"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 
       <div class="step-item" onclick="toggleStepGuide(2)" id="step-2">
         <div class="step-circle">2</div>
@@ -683,7 +685,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <div class="step-desc">Enter your personal, academic, and financial information</div>
       </div>
 
-      <div class="step-arrow">&#8594;</div>
+      <div class="step-arrow"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 
       <div class="step-item" onclick="toggleStepGuide(3)" id="step-3">
         <div class="step-circle">3</div>
@@ -691,7 +693,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <div class="step-desc">Submit required documents securely through the portal</div>
       </div>
 
-      <div class="step-arrow">&#8594;</div>
+      <div class="step-arrow"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 
       <div class="step-item" onclick="toggleStepGuide(4)" id="step-4">
         <div class="step-circle">4</div>
@@ -699,7 +701,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <div class="step-desc">View your scholarship qualification based on submitted documents</div>
       </div>
 
-      <div class="step-arrow">&#8594;</div>
+      <div class="step-arrow"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 
       <div class="step-item" onclick="toggleStepGuide(5)" id="step-5">
         <div class="step-circle">5</div>
@@ -707,7 +709,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <div class="step-desc">Complete the scholarship qualifying exam on schedule</div>
       </div>
 
-      <div class="step-arrow">&#8594;</div>
+      <div class="step-arrow"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 
       <div class="step-item" onclick="toggleStepGuide(6)" id="step-6">
         <div class="step-circle">6</div>
@@ -752,8 +754,8 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
             </ul>
           </div>
 
-          <p class="guide-note">&#9432; Make sure to use a valid and accessible email address. Check your spam/junk folder if you don't receive the code within a few minutes.</p>
-          <button class="guide-close-btn" onclick="closeGuide(event)">&#x25B2; Close</button>
+          <p class="guide-note"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/><rect x="11" y="6.3" width="2" height="2.1" rx="1" fill="currentColor"/></svg> Make sure to use a valid and accessible email address. Check your spam/junk folder if you don't receive the code within a few minutes.</p>
+          <button class="guide-close-btn" onclick="closeGuide(event)"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8l6 7H6z" fill="currentColor"/></svg> Close</button>
         </div>
       </div>
 
@@ -772,8 +774,8 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
             <li><span class="gs-num">5</span><span>Review all entries for accuracy (incorrect information may delay or affect the processing of your application).</span></li>
             <li><span class="gs-num">6</span><span>Click <strong>Save Profile</strong> to store your information.</span></li>
           </ul>
-          <p class="guide-note">&#9432; You can update your profile before submitting your application. Once submitted, changes may require revalidation.</p>
-          <button class="guide-close-btn" onclick="closeGuide(event)">&#x25B2; Close</button>
+          <p class="guide-note"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/><rect x="11" y="6.3" width="2" height="2.1" rx="1" fill="currentColor"/></svg> You can update your profile before submitting your application. Once submitted, changes may require revalidation.</p>
+          <button class="guide-close-btn" onclick="closeGuide(event)"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8l6 7H6z" fill="currentColor"/></svg> Close</button>
         </div>
       </div>
 
@@ -792,8 +794,8 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
             <li><span class="gs-num">5</span><span>Once all documents are uploaded, click <strong>Submit Documents</strong>.</span></li>
             <li><span class="gs-num">6</span><span>You will receive a confirmation notification that your documents are under review.</span></li>
           </ul>
-          <p class="guide-note">&#9432; Ensure all documents are clear, complete, and unedited. Blurry or incomplete submissions will be flagged for resubmission.</p>
-          <button class="guide-close-btn" onclick="closeGuide(event)">&#x25B2; Close</button>
+          <p class="guide-note"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/><rect x="11" y="6.3" width="2" height="2.1" rx="1" fill="currentColor"/></svg> Ensure all documents are clear, complete, and unedited. Blurry or incomplete submissions will be flagged for resubmission.</p>
+          <button class="guide-close-btn" onclick="closeGuide(event)"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8l6 7H6z" fill="currentColor"/></svg> Close</button>
         </div>
       </div>
 
@@ -811,8 +813,8 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
             <li><span class="gs-num">4</span><span>If conditionally qualified, follow the instructions to submit any missing or corrected documents.</span></li>
             <li><span class="gs-num">5</span><span>If qualified, you will be scheduled for the scholarship qualifying exam. Proceed to Step 5.</span></li>
           </ul>
-          <p class="guide-note">&#9432; Qualification is based on submitted documents and eligibility criteria. Contact the <a href="#contact" style="color:var(--ccc-blue);font-weight:600;">GCTCDO office</a> if you have questions about your status.</p>
-          <button class="guide-close-btn" onclick="closeGuide(event)">&#x25B2; Close</button>
+          <p class="guide-note"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/><rect x="11" y="6.3" width="2" height="2.1" rx="1" fill="currentColor"/></svg> Qualification is based on submitted documents and eligibility criteria. Contact the <a href="#contact" style="color:var(--ccc-blue);font-weight:600;">GCTCDO office</a> if you have questions about your status.</p>
+          <button class="guide-close-btn" onclick="closeGuide(event)"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8l6 7H6z" fill="currentColor"/></svg> Close</button>
         </div>
       </div>
 
@@ -830,8 +832,8 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
             <li><span class="gs-num">4</span><span>Complete the exam within the allotted time. Do not close the browser tab during the exam.</span></li>
             <li><span class="gs-num">5</span><span>Submit your answers by clicking <strong>Submit Exam</strong> when done. A confirmation screen will appear.</span></li>
           </ul>
-          <p class="guide-note">&#9432; Make sure you have a stable internet connection before starting the exam. Missed exam schedules must be rebooked through the GCTCDO office.</p>
-          <button class="guide-close-btn" onclick="closeGuide(event)">&#x25B2; Close</button>
+          <p class="guide-note"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/><rect x="11" y="6.3" width="2" height="2.1" rx="1" fill="currentColor"/></svg> Make sure you have a stable internet connection before starting the exam. Missed exam schedules must be rebooked through the GCTCDO office.</p>
+          <button class="guide-close-btn" onclick="closeGuide(event)"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8l6 7H6z" fill="currentColor"/></svg> Close</button>
         </div>
       </div>
 
@@ -849,8 +851,8 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
             <li><span class="gs-num">4</span><span>Status updates include: <em>Under Review</em>, <em>For Interview</em>, <em>Scholarship Granted</em>, or <em>Not Selected</em>.</span></li>
             <li><span class="gs-num">5</span><span>If granted a scholarship, follow the onboarding instructions sent to your email to complete enrollment.</span></li>
           </ul>
-          <p class="guide-note">&#9432; Processing times may vary. For urgent concerns, contact the <a href="#contact" style="color:var(--ccc-blue);font-weight:600;">GCTCDO office</a> directly via email or Facebook Messenger.</p>
-          <button class="guide-close-btn" onclick="closeGuide(event)">&#x25B2; Close</button>
+          <p class="guide-note"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/><rect x="11" y="6.3" width="2" height="2.1" rx="1" fill="currentColor"/></svg> Processing times may vary. For urgent concerns, contact the <a href="#contact" style="color:var(--ccc-blue);font-weight:600;">GCTCDO office</a> directly via email or Facebook Messenger.</p>
+          <button class="guide-close-btn" onclick="closeGuide(event)"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8l6 7H6z" fill="currentColor"/></svg> Close</button>
         </div>
       </div>
 
@@ -873,7 +875,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       <div class="bya-l1 open" id="bya-l1-0">
         <button class="bya-l1-header" onclick="toggleBYA(this)" aria-expanded="true">
           <span class="bya-l1-title"><span class="bya-l1-num">01</span>Programs Offered</span>
-          <span class="bya-l1-arrow" aria-hidden="true">&#9662;</span>
+          <span class="bya-l1-arrow" aria-hidden="true"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16 6 9h12z" fill="currentColor"/></svg></span>
         </button>
         <div class="bya-l1-body">
           <p class="bya-intro">Open for Academic Year 2027-2028.</p>
@@ -927,7 +929,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       <div class="bya-l1" id="bya-l1-1">
         <button class="bya-l1-header" onclick="toggleBYA(this)" aria-expanded="false">
           <span class="bya-l1-title"><span class="bya-l1-num">02</span>Applicant Qualifications</span>
-          <span class="bya-l1-arrow" aria-hidden="true">&#9662;</span>
+          <span class="bya-l1-arrow" aria-hidden="true"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16 6 9h12z" fill="currentColor"/></svg></span>
         </button>
         <div class="bya-l1-body">
           <p style="font-size:.9rem;color:#4A5568;margin-bottom:.75rem;line-height:1.75">No student shall be denied admission to this College by reason of age, sex, nationality, religious belief, or political affiliation. However, all students seeking admission must be subject to the regulations for admission prescribed by the City College of Calamba&ndash;Academic Personnel Council.</p>
@@ -940,7 +942,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       <div class="bya-l1" id="bya-l1-2">
         <button class="bya-l1-header" onclick="toggleBYA(this)" aria-expanded="false">
           <span class="bya-l1-title"><span class="bya-l1-num">03</span>Admission Requirements</span>
-          <span class="bya-l1-arrow" aria-hidden="true">&#9662;</span>
+          <span class="bya-l1-arrow" aria-hidden="true"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16 6 9h12z" fill="currentColor"/></svg></span>
         </button>
         <div class="bya-l1-body">
           <p class="bya-intro">All qualified applicants must submit the following documents to the City College of Calamba for admission evaluation. The following requirements must be submitted to the CCC by the applicants:</p>
@@ -1270,7 +1272,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
 <div class="footer-bar">&#169; 2026 Iskolusyon Scholarship Management System &nbsp;|&nbsp; Developed for the City College of Calamba</div>
 
 <!-- SCROLL TO TOP -->
-<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">&#8679;</button>
+<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 
 <script>
 // ── STEP GUIDES DROPDOWN ──
@@ -1304,12 +1306,7 @@ function closeGuide(e) {
 }
 
 // ── CAROUSEL ──
-/* ── Backend base URL ──
-   This folder has no .env.local on purpose: no Supabase URL or key ever ships
-   to the browser. The carousel reads public.announcements through the backend
-   (the folder that holds .env.local). Leave as '/api' when both are served
-   from the same origin; otherwise set the full origin. */
-const ISKO_API_BASE = '/api';
+const ANN_STORAGE_KEY = 'iskolusyon_announcements';
 let currentSlide = 0;
 let totalSlides = 0; // set by loadCarouselFromAdmin() from published announcements
 let autoTimer;
@@ -1318,25 +1315,22 @@ function escapeHtml(str) {
   return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-// Renders the carousel from public.announcements, newest first. Columns used:
-// type ('text' | 'image'), category, title, body, image_url (a signed Storage
-// URL the backend resolves from announcements.image_path). Leaves the page's
-// empty-state slide in place when the table is empty or the backend is down.
-async function loadCarouselFromAdmin() {
+// If the admin has published announcements (via admin.html), render the
+// carousel from that data instead of the default placeholder images.
+function loadCarouselFromAdmin() {
   let data = null;
   try {
-    const res = await fetch(ISKO_API_BASE + '/announcements');
-    if (!res.ok) return;
-    data = await res.json();
-  } catch (e) { /* backend unavailable — keep the empty state */ }
+    const stored = localStorage.getItem(ANN_STORAGE_KEY);
+    if (stored) data = JSON.parse(stored);
+  } catch (e) { /* ignore malformed/blocked storage, keep default slides */ }
   if (!Array.isArray(data) || data.length === 0) return;
 
   const track = document.getElementById('carouselTrack');
   const dots = document.getElementById('carouselDots');
 
   track.innerHTML = data.map(n => {
-    if (n.type === 'image' && n.image_url) {
-      return `<div class="carousel-slide"><img src="${escapeHtml(n.image_url)}" alt="${escapeHtml(n.title || 'Announcement')}"/></div>`;
+    if (n.type === 'image' && n.imageData) {
+      return `<div class="carousel-slide"><img src="${n.imageData}" alt="${escapeHtml(n.title || 'Announcement')}"/></div>`;
     }
     return `<div class="carousel-slide"><div class="carousel-text-slide">` +
       `<span class="carousel-text-cat">${escapeHtml(n.category || 'General')}</span>` +
@@ -1490,7 +1484,7 @@ window.addEventListener('scroll', () => {
 ═══════════════════════════════════════════════════════ -->
 <div class="modal-backdrop" id="loginModal" onclick="handleBackdropClick(event)">
   <div class="auth-shell" role="dialog" aria-modal="true" aria-labelledby="loginTitle" onclick="event.stopPropagation()">
-    <button class="modal-close-x" onclick="closeLogin()" aria-label="Close">&#10005;</button>
+    <button class="modal-close-x" onclick="closeLogin()" aria-label="Close"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
 
     <!-- LEFT: brand / info panel -->
     <div class="auth-side">
@@ -1524,7 +1518,7 @@ window.addEventListener('scroll', () => {
       </div>
 
       <div class="auth-back">
-        <a href="#" onclick="closeLogin();return false;">&#8592; Close</a>
+        <a href="#" onclick="closeLogin();return false;"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Close</a>
       </div>
     </div>
 
@@ -1567,7 +1561,7 @@ window.addEventListener('scroll', () => {
           <a href="#" onclick="showForgotFlow();return false;" style="font-size:.75rem;color:var(--ccc-blue);font-weight:600;text-decoration:none;white-space:nowrap">Forgot password?</a>
         </div>
 
-        <button class="mbtn mbtn-primary" id="loginContinueBtn" onclick="loginStep1()">Continue &rarr;</button>
+        <button class="mbtn mbtn-primary" id="loginContinueBtn" onclick="loginStep1()">Continue <svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 
         <div class="modal-footer-note">
           Don&rsquo;t have an account? <a href="signup.html">Sign up here</a>
@@ -1599,7 +1593,7 @@ window.addEventListener('scroll', () => {
         </div>
 
         <button class="mbtn mbtn-primary" id="loginVerifyBtn" onclick="loginStep2()">Verify &amp; Log In</button>
-        <button class="mbtn mbtn-ghost" onclick="backToStep1()">&#8592; Back</button>
+        <button class="mbtn mbtn-ghost" onclick="backToStep1()"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
 
         <div class="modal-footer-note" style="margin-top:.5rem">
           Please check your spam folder if you haven&rsquo;t received an email within a minute.
@@ -1626,8 +1620,8 @@ window.addEventListener('scroll', () => {
             <div class="field-err" id="fp-email-err">Please enter a valid email address.</div>
           </div>
 
-          <button class="mbtn mbtn-primary" id="fpSendCodeBtn" onclick="forgotStep1()">Send Code &rarr;</button>
-          <button class="mbtn mbtn-ghost" onclick="backToLogin()">&#8592; Back to Log In</button>
+          <button class="mbtn mbtn-primary" id="fpSendCodeBtn" onclick="forgotStep1()">Send Code <svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="mbtn mbtn-ghost" onclick="backToLogin()"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to Log In</button>
         </div>
 
         <!-- FORGOT STEP 2: Authenticator code -->
@@ -1657,7 +1651,7 @@ window.addEventListener('scroll', () => {
           </div>
 
           <button class="mbtn mbtn-primary" id="fpVerifyBtn" onclick="forgotStep2()">Verify Code</button>
-          <button class="mbtn mbtn-ghost" onclick="forgotBackTo(1)">&#8592; Back</button>
+          <button class="mbtn mbtn-ghost" onclick="forgotBackTo(1)"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
         </div>
 
         <!-- FORGOT STEP 3: New password -->
@@ -1684,7 +1678,7 @@ window.addEventListener('scroll', () => {
           </div>
 
           <button class="mbtn mbtn-primary" id="fpResetBtn" onclick="forgotStep3()">Reset Password</button>
-          <button class="mbtn mbtn-ghost" onclick="forgotBackTo(2)">&#8592; Back</button>
+          <button class="mbtn mbtn-ghost" onclick="forgotBackTo(2)"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
         </div>
 
         <!-- FORGOT SUCCESS -->
@@ -1702,6 +1696,21 @@ window.addEventListener('scroll', () => {
 </div><!-- end modal-backdrop -->
 
 <script>
+/* -- Reusable button loading-state helper: disables + grays the button and
+   shows processing text for a moment before the action completes -- */
+function iskoBtnLoading(btn, text){
+  if(!btn || btn.dataset.iskoLoading) return;
+  btn.dataset.iskoLoading = '1';
+  btn.dataset.iskoOrigText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = text;
+}
+function iskoBtnDone(btn){
+  if(!btn) return;
+  btn.disabled = false;
+  if(btn.dataset.iskoOrigText !== undefined){ btn.innerHTML = btn.dataset.iskoOrigText; delete btn.dataset.iskoOrigText; }
+  delete btn.dataset.iskoLoading;
+}
 /* ── LOGIN MODAL ── */
 function openLogin(){
   document.getElementById('loginModal').classList.add('show');
@@ -1816,13 +1825,18 @@ function forgotStep1(){
   const email=document.getElementById('fp-email').value.trim();
   if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showFErr('fp-email-err'); return; }
   hideFErr('fp-email-err');
+  const btnEl=document.getElementById('fpSendCodeBtn');
+  iskoBtnLoading(btnEl,'Sending Code...');
+  setTimeout(()=>{
+  iskoBtnDone(btnEl);
   /* In production: POST /api/auth/forgot-password { email } → sends 6-digit code */
   const msgEl=document.getElementById('fp-verify-msg');
   if(msgEl) msgEl.innerHTML='A 6-digit verification code was sent to <strong id="fp-email-display">'+email+'</strong>. Enter it below.';
   showForgotStep(2);
   startForgotOTPTimer();
-  abDone(document.getElementById('fpSendCodeBtn'));
+  abDone(btnEl);
   setTimeout(()=>document.getElementById('fotp0').focus(),200);
+  },1600);
 }
 function forgotStep2(){
   const code=['fotp0','fotp1','fotp2','fotp3','fotp4','fotp5'].map(id=>document.getElementById(id).value).join('');
@@ -1832,11 +1846,16 @@ function forgotStep2(){
     el.style.display='block';
     return;
   }
+  const btnEl=document.getElementById('fpVerifyBtn');
+  iskoBtnLoading(btnEl,'Verifying...');
+  setTimeout(()=>{
   /* In production: POST /api/auth/verify-reset-otp { email, otp: code } */
   hideFErr('fotp-err');
   clearInterval(fOtpInterval);
   showForgotStep(3);
-  abDone(document.getElementById('fpVerifyBtn'));
+  abDone(btnEl);
+  iskoBtnDone(btnEl);
+  },1200);
 }
 function forgotStep3(){
   let ok=true;
@@ -1845,9 +1864,14 @@ function forgotStep3(){
   if(!pass||pass.length<8||!/\d/.test(pass)){showFErr('fp-pass-err');ok=false;}else{hideFErr('fp-pass-err');}
   if(!pass2||pass2!==pass){showFErr('fp-pass2-err');ok=false;}else{hideFErr('fp-pass2-err');}
   if(!ok) return;
+  const btnEl=document.getElementById('fpResetBtn');
+  iskoBtnLoading(btnEl,'Resetting...');
+  setTimeout(()=>{
   /* In production: POST /api/auth/reset-password { email, newPassword } */
   showForgotStep(4);
-  abDone(document.getElementById('fpResetBtn'));
+  abDone(btnEl);
+  iskoBtnDone(btnEl);
+  },1400);
 }
 let fOtpInterval;
 let fOtpCooldownSecs=0;
@@ -1918,6 +1942,10 @@ function loginStep1(){
   if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showFErr('l-email-err');ok=false;}else{hideFErr('l-email-err');}
   if(!pass){showFErr('l-pass-err');ok=false;}else{hideFErr('l-pass-err');}
   if(!ok)return;
+  const btnEl=document.getElementById('loginContinueBtn');
+  iskoBtnLoading(btnEl,'Sending Code...');
+  setTimeout(()=>{
+  iskoBtnDone(btnEl);
   /* In production:
      POST /api/auth/send-otp  { email, password }
      → backend verifies credentials, sends 6-digit OTP via Nodemailer/SendGrid,
@@ -1928,8 +1956,9 @@ function loginStep1(){
   if(msgEl) msgEl.innerHTML='A 6-digit verification code was sent to <strong id="l-email-display">'+email+'</strong>. Check your inbox and enter it below.';
   showLStep(2);
   startOTPTimer();
-  abDone(document.getElementById('loginContinueBtn'));
+  abDone(btnEl);
   setTimeout(()=>document.getElementById('otp0').focus(),200);
+  },1600);
 }
 function loginStep2(){
   const code=['otp0','otp1','otp2','otp3','otp4','otp5'].map(id=>document.getElementById(id).value).join('');
@@ -1939,6 +1968,9 @@ function loginStep2(){
     el.style.display='block';
     return;
   }
+  const btnEl=document.getElementById('loginVerifyBtn');
+  iskoBtnLoading(btnEl,'Verifying...');
+  setTimeout(()=>{
   /* In production:
      POST /api/auth/verify-otp  { email, otp: code }
      → backend verifies OTP (time-limited, single-use),
@@ -1947,7 +1979,7 @@ function loginStep2(){
   */
   hideFErr('otp-err');
   clearInterval(otpInterval);
-  abDone(document.getElementById('loginVerifyBtn'));
+  abDone(btnEl);
   const keepChk = document.getElementById('l-keep-signed-in');
   const email = document.getElementById('l-email').value.trim();
   if(keepChk && keepChk.checked){
@@ -1956,6 +1988,7 @@ function loginStep2(){
     try { localStorage.removeItem('iskolusyonApplicantKeepSignedIn'); } catch(e){}
   }
   window.location.href='home.html'; // redirect to applicant dashboard
+  },1200);
 }
 function backToStep1(){
   showLStep(1);
