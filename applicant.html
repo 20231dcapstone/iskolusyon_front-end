@@ -61,13 +61,21 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .profile-role{font-size:.68rem;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.6px;margin-top:3px;font-family:'Montserrat',sans-serif;font-weight:600}
 .profile-id{font-size:.68rem;color:rgba(255,255,255,.45);margin-top:6px}
 
-.sidebar-menu{display:flex;flex-direction:column;gap:.9rem;flex:1}
+.sidebar-menu{display:flex;flex-direction:column;gap:.75rem;flex:1}
 /* top-level portal divisions: Overview / Admission / Allowance — each is its own
    list wrapped in .sidebar-group so it can carry a shared contrasting background */
-.sidebar-group{list-style:none;display:flex;flex-direction:column;gap:3px;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:.7rem .65rem .8rem}
-.sidebar-section-label{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:1.1px;text-transform:uppercase;color:#fff;margin:0 .6rem .5rem}
+.sidebar-group{list-style:none;display:flex;flex-direction:column;gap:3px;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:.6rem .55rem .65rem}
+.sidebar-section-label{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.7rem;letter-spacing:1.1px;text-transform:uppercase;color:#fff;margin:0 .6rem .4rem;display:flex;align-items:center;gap:.5rem;cursor:default}
 .sidebar-section-label:first-child{margin-top:0}
 .sidebar-section-label.divider-before{border-top:1.5px solid rgba(255,255,255,.2);padding-top:.8rem}
+.section-icon{width:15px;height:15px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold)}
+.section-icon svg{width:100%;height:100%;display:block}
+/* wraps the rows below a section header so a thin tree-style guide line
+   (Discord-style channel connector) can run behind just those nested
+   options, without ever touching the (non-interactive) header itself */
+.sidebar-tree{list-style:none}
+.sidebar-subitems{list-style:none;display:flex;flex-direction:column;gap:3px;position:relative}
+.sidebar-subitems::before{content:'';position:absolute;top:2px;bottom:2px;left:2px;width:1px;background:rgba(255,255,255,.16)}
 /* sub-groupings within a top-level division (e.g. My Profile (Softcopy), Application) */
 .sidebar-menu-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:.9rem 0 .4rem .6rem}
 .sidebar-menu-label:first-child{margin-top:0}
@@ -79,7 +87,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
    solid divider above and doesn't feel repetitive */
 .sidebar-subgroup-divider{list-style:none;height:0;margin:.8rem .55rem .1rem;border-top:1px dashed rgba(200,168,75,.45)}
 .sidebar-subgroup-divider + .sidebar-menu-label{margin-top:.5rem}
-.menu-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:.79rem;color:rgba(255,255,255,.8);transition:background .2s,color .2s;width:100%}
+.menu-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:11px;padding:8px 11px;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:.7rem;color:rgba(255,255,255,.8);transition:background .2s,color .2s;width:100%}
 .menu-btn:hover{background:rgba(255,255,255,.1);color:#fff}
 .menu-btn.active{background:#fff;color:var(--ccc-blue)}
 .menu-icon{width:18px;text-align:center;flex-shrink:0;font-size:.9rem}
@@ -291,6 +299,12 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .doc-table th{text-align:left;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--border)}
 .doc-table td{padding:12px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
 .doc-table tr:last-child td{border-bottom:none}
+/* Documents & Verification Status: fixed column widths so the Document / Status /
+   Remarks / Action columns line up identically across all three stacked tables,
+   regardless of how much content each row holds. */
+.doc-status-table{table-layout:fixed}
+.doc-status-table td{overflow-wrap:break-word;word-break:break-word}
+.doc-status-table td:last-child,.doc-status-table th:last-child{text-align:right}
 .reupload-link{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;color:var(--ccc-blue);cursor:pointer;background:none;border:none;text-decoration:underline}
 
 /* ── LOGOUT CONFIRM MODAL ── */
@@ -310,6 +324,8 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
   .sidebar-profile{margin-bottom:0;padding-bottom:0;border-bottom:none;flex-shrink:0}
   .sidebar-menu{flex-direction:row;flex-wrap:wrap;margin-left:1rem}
   .sidebar-group{display:contents}
+  .sidebar-tree,.sidebar-subitems{display:contents}
+  .sidebar-subitems::before{display:none}
   .sidebar-menu-label{display:none}
   .sidebar-label-divider,.sidebar-subgroup-divider{display:none}
   .sidebar-logout{margin-top:0;padding-top:0;border-top:none;margin-left:auto}
@@ -466,6 +482,12 @@ function abSetBase(btn, cls){ var r = abFind(btn); if(r){ r.base = cls; abPaint(
 function abPaint(rec){
   var b = rec.btn;
   if(!b || !b.isConnected) return;
+  if(rec.loading){
+    b.disabled = true;
+    b.classList.add('mbtn-idle');
+    b.classList.remove('mbtn-secondary', rec.base);
+    return;
+  }
   var ready = false;
   try { ready = !!rec.isReady(); } catch(e){ ready = false; }
   if(b.dataset.abLocked === '1') ready = false;
@@ -487,7 +509,25 @@ function abTouch(target){
   });
   abRefresh();
 }
-function abDone(btn){ var r = abFind(btn); if(r) r.dirty = false; abRefresh(); }
+function abDone(btn){ var r = abFind(btn); if(r){ r.dirty = false; r.loading = false; } abRefresh(); }
+/* Puts a registered button into a temporary, unclickable "processing" state:
+   grayed out (via the existing mbtn-idle/disabled styling) and relabeled with
+   future-tense/processing text, until the caller resolves the action and
+   calls abDone() (which clears the loading flag and repaints). Falls back to
+   a plain disable if the button isn't registered with the AB engine. */
+function abSetLoading(btn, loadingText){
+  if(!btn) return;
+  var r = abFind(btn);
+  if(r){
+    r.loading = true;
+    btn.textContent = loadingText;
+    abPaint(r);
+  } else {
+    btn.disabled = true;
+    btn.classList.add('mbtn-idle');
+    btn.textContent = loadingText;
+  }
+}
 function abResetAll(){ AB_RECS.forEach(function(r){ r.dirty = false; }); abRefresh(); }
 function abLock(btn, locked){ if(btn){ btn.dataset.abLocked = locked ? '1' : '0'; abRefresh(); } }
 /* ── small readiness helpers ── */
@@ -563,33 +603,39 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
 
     <div class="sidebar-menu">
       <ul class="sidebar-group">
-        <li class="sidebar-section-label">Overview</li>
+        <li class="sidebar-section-label"><span class="section-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>Overview</li>
         <li class="sidebar-label-divider" aria-hidden="true"></li>
-        <li><button class="menu-btn active" data-panel="dashboard" onclick="showPanel('dashboard',this)"><span class="menu-icon"></span> Dashboard</button></li>
-        <li><button class="menu-btn" data-panel="messages" onclick="showPanel('messages',this)"><span class="menu-icon"></span> Messages <span class="menu-badge is-empty" id="messagesBadge" title="Unread messages">0</span></button></li>
+        <li class="sidebar-tree"><ul class="sidebar-subitems">
+          <li><button class="menu-btn active" data-panel="dashboard" onclick="showPanel('dashboard',this)"><span class="menu-icon"></span> Dashboard</button></li>
+          <li><button class="menu-btn" data-panel="messages" onclick="showPanel('messages',this)"><span class="menu-icon"></span> Messages <span class="menu-badge is-empty" id="messagesBadge" title="Unread messages">0</span></button></li>
+        </ul></li>
       </ul>
 
       <ul class="sidebar-group">
-        <li class="sidebar-section-label">Admission</li>
+        <li class="sidebar-section-label"><span class="section-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6a1 1 0 0 1 1 1v1H8V4a1 1 0 0 1 1-1z"/><path d="M8.5 13l2 2 4-4"/></svg></span>Admission</li>
         <li class="sidebar-label-divider" aria-hidden="true"></li>
-        <li class="sidebar-menu-label">My Profile (Softcopy)</li>
-        <li><button class="menu-btn" data-panel="personal" onclick="showPanel('personal',this)"><span class="menu-icon"></span> Personal Information</button></li>
-        <li><button class="menu-btn" data-panel="academic" onclick="showPanel('academic',this)"><span class="menu-icon"></span> Educational Background</button></li>
-        <li><button class="menu-btn" data-panel="financial" onclick="showPanel('financial',this)"><span class="menu-icon"></span> Family &amp; Financial Information</button></li>
-        <li class="sidebar-subgroup-divider" aria-hidden="true"></li>
-        <li class="sidebar-menu-label">Application</li>
-        <li><button class="menu-btn" data-panel="status" onclick="showPanel('status',this)"><span class="menu-icon"></span> Documents &amp; Status</button></li>
-        <li><button class="menu-btn" data-panel="appeals" onclick="showPanel('appeals',this)"><span class="menu-icon"></span> Appeals &amp; Rescheduling</button></li>
+        <li class="sidebar-tree"><ul class="sidebar-subitems">
+          <li class="sidebar-menu-label">My Profile (Softcopy)</li>
+          <li><button class="menu-btn" data-panel="personal" onclick="showPanel('personal',this)"><span class="menu-icon"></span> Personal Information</button></li>
+          <li><button class="menu-btn" data-panel="academic" onclick="showPanel('academic',this)"><span class="menu-icon"></span> Educational Background</button></li>
+          <li><button class="menu-btn" data-panel="financial" onclick="showPanel('financial',this)"><span class="menu-icon"></span> Family &amp; Financial Information</button></li>
+          <li class="sidebar-subgroup-divider" aria-hidden="true"></li>
+          <li class="sidebar-menu-label">Application</li>
+          <li><button class="menu-btn" data-panel="status" onclick="showPanel('status',this)"><span class="menu-icon"></span> Documents &amp; Status</button></li>
+          <li><button class="menu-btn" data-panel="appeals" onclick="showPanel('appeals',this)"><span class="menu-icon"></span> Appeals &amp; Rescheduling</button></li>
+        </ul></li>
       </ul>
 
       <ul class="sidebar-group">
-        <li class="sidebar-section-label">Scholarship Services</li>
+        <li class="sidebar-section-label"><span class="section-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5-10-5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/></svg></span>Scholarship Services</li>
         <li class="sidebar-label-divider" aria-hidden="true"></li>
-        <li class="sidebar-menu-label">During Enrollment</li>
-        <li><button class="menu-btn" data-panel="health" onclick="showPanel('health',this)"><span class="menu-icon"></span> Health &amp; Wellness</button></li>
-        <li class="sidebar-subgroup-divider" aria-hidden="true"></li>
-        <li class="sidebar-menu-label">Enrolled</li>
-        <li><button class="menu-btn" data-panel="allowance" onclick="showPanel('allowance',this)"><span class="menu-icon"></span> Allowance</button></li>
+        <li class="sidebar-tree"><ul class="sidebar-subitems">
+          <li class="sidebar-menu-label">During Enrollment</li>
+          <li><button class="menu-btn" data-panel="health" onclick="showPanel('health',this)"><span class="menu-icon"></span> Health &amp; Wellness</button></li>
+          <li class="sidebar-subgroup-divider" aria-hidden="true"></li>
+          <li class="sidebar-menu-label">Enrolled</li>
+          <li><button class="menu-btn" data-panel="allowance" onclick="showPanel('allowance',this)"><span class="menu-icon"></span> Allowance</button></li>
+        </ul></li>
       </ul>
     </div>
 
@@ -608,28 +654,10 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <p>Here's a quick look at your scholarship application progress with the City College of Calamba.</p>
       </div>
 
-      <div class="card status-hero">
-        <p class="status-hero-eyebrow">Application Status</p>
-        <div class="status-hero-value"><span class="badge badge-progress" id="statusHeroBadge">Not yet started</span></div>
-        <p class="status-hero-desc" id="statusHeroDesc">Your application progress will appear here once your record is loaded.</p>
-        <div class="status-hero-next">
-          <div>
-            <div class="next-label">Next Step</div>
-            <div class="next-action" id="statusHeroNext">&mdash;</div>
-          </div>
-          <a href="#" class="next-action-btn" onclick="showPanel('academic');return false;">Continue &rarr;</a>
-        </div>
-      </div>
-
-      <div class="section-divider">
-        <div class="section-divider-chip"><span class="divider-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="4" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.2-2.4"/></svg></span> Progress Milestones</div>
-      </div>
-      <p class="section-divider-sub">Each milestone below unlocks as you clear the corresponding step in the application process.</p>
-
       <div class="stat-grid" id="statGrid">
         <div class="stat-card unlocked-clickable tab-active" data-stage="profile" data-required-step="2" onclick="selectStage('profile', this)" role="button" tabindex="0" aria-label="View Profile Completion progress">
           <div class="stat-label">Profile Completion</div>
-          <div class="stat-value" id="profileCompletionValue">0 of 4 sections done</div>
+          <div class="stat-value" id="profileCompletionValue">0 of 5 sections done</div>
           <div class="stat-progress"><div class="stat-progress-bar" id="profileCompletionBar" style="width:0%"></div></div>
           <div class="stat-note">Includes filling out each section and uploading &amp; submitting its documents.</div>
           <div class="stat-card-hint">&#9660; Viewing details below</div>
@@ -697,7 +725,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       <div class="portal-header">
         <p class="portal-eyebrow eyebrow-yellow">Notifications</p>
         <h1>Messages</h1>
-        <p>Updates on exam schedules, results, and requirements from the Guidance (GCTCDO) office. And allowance from the Office of the Registrar.</p>
+        <p>Updates on admissions from the Guidance Office (GCTCDO) and allowance from the Office of the Registrar.</p>
       </div>
 
       <div class="card">
@@ -737,7 +765,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       </div>
 
       <div class="card topic-card">
-        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">2</span> Identity &amp; Civil Status</span> <span class="tag">Editable</span></div>
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">2</span> Identity &amp; Civil Status</span></div>
         <p class="topic-card-intro">These fields auto-fill once you upload your Birth Certificate below. Document text extraction isn't always perfect, so you can still correct any field manually.</p>
         <div class="form-grid">
           <div class="mfield"><label for="pi-firstname">First Name <span class="req-mark">*</span></label><input type="text" id="pi-firstname" placeholder="e.g. Juan" required oninput="syncProfileNameFromPersonalInfo()"/></div>
@@ -781,7 +809,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       </div>
 
       <div class="card topic-card">
-        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">3</span> Contact &amp; Residency</span> <span class="tag">Editable</span></div>
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">3</span> Contact &amp; Residency</span></div>
         <p class="topic-card-intro">Your address and precinct number auto-fill once you upload your Voter's ID below.</p>
         <div class="form-grid">
           <div class="mfield full">
@@ -818,7 +846,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       </div>
 
       <div class="card topic-card">
-        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">4</span> Additional Information</span> <span class="tag">Editable</span></div>
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">4</span> Additional Information</span></div>
         <p class="topic-card-intro">Used to help match you to special scholarship categories and accommodations. No document needed here.</p>
         <div class="form-grid">
           <div class="mfield">
@@ -831,7 +859,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       </div>
 
       <div class="card topic-card">
-        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">5</span> Organizational Involvement</span> <span class="tag">Optional</span></div>
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">5</span> Organizational Involvement</span></div>
         <p class="topic-card-intro">List any organization/s you are or were part of. This section is optional &mdash; leave it blank if not applicable.</p>
         <div class="edu-table-wrap">
           <table class="edu-table org-table" id="org-table">
@@ -858,7 +886,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       </div>
 
       <div class="card topic-card">
-        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">6</span> Motivation and Aspirations Questions</span> <span class="tag">Editable</span></div>
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">6</span> Motivation and Aspirations Questions</span></div>
         <p class="topic-card-intro">Help us get to know you better. All questions in this section are required.</p>
         <div class="form-grid">
           <div class="mfield full">
@@ -891,7 +919,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       </div>
 
       <div class="card">
-        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">1</span> Program Application</span> <span class="tag">Editable</span></div>
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">1</span> Program Application</span></div>
         <div class="form-grid">
           <div class="mfield">
             <label for="a-applyingas">Applying As <span class="req-mark">*</span></label>
@@ -914,7 +942,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       </div>
 
       <div class="card">
-        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">2</span> Preferred Program</span> <span class="tag">Editable</span></div>
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">2</span> Preferred Program</span></div>
         <div class="form-grid">
           <div class="mfield">
             <label for="pi-choice1">First Priority Program <span class="req-mark">*</span></label>
@@ -957,7 +985,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       </div>
 
       <div class="card topic-card">
-        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">3</span> Educational Background</span> <span class="tag">Editable</span></div>
+        <div class="card-title"><span style="display:flex;align-items:center;gap:10px"><span class="topic-card-number">3</span> Educational Background</span></div>
         <p class="topic-card-intro">Fill in your school details for each level you've completed. <strong>Primary / Elementary is required for all applicants.</strong> Secondary / Senior High and Tertiary / College are optional (except Honors / Awards Received, which is optional for all levels).</p>
         <div class="edu-table-wrap">
           <table class="edu-table">
@@ -1312,27 +1340,30 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
 
         <!-- Category: Personal Information -->
         <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 .5rem;padding:.6rem .5rem .3rem;border-bottom:2px solid var(--border);">Personal Information</p>
-        <table class="doc-table" style="margin-bottom:1.25rem">
+        <table class="doc-table doc-status-table" style="margin-bottom:1.25rem">
+          <colgroup><col style="width:36%"><col style="width:18%"><col style="width:34%"><col style="width:12%"></colgroup>
           <thead>
-            <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
+            <tr><th>Document</th><th>Status</th><th>Remarks</th><th></th></tr>
           </thead>
           <tbody id="docStatusPersonalBody"></tbody>
         </table>
 
         <!-- Category: Educational Background -->
         <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 .5rem;padding:.6rem .5rem .3rem;border-bottom:2px solid var(--border);">Educational Background</p>
-        <table class="doc-table" style="margin-bottom:1.25rem">
+        <table class="doc-table doc-status-table" style="margin-bottom:1.25rem">
+          <colgroup><col style="width:36%"><col style="width:18%"><col style="width:34%"><col style="width:12%"></colgroup>
           <thead>
-            <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
+            <tr><th>Document</th><th>Status</th><th>Remarks</th><th></th></tr>
           </thead>
           <tbody id="docStatusAcademicBody"></tbody>
         </table>
 
         <!-- Category: Financial & Employment -->
         <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);margin:0 0 .5rem;padding:.6rem .5rem .3rem;border-bottom:2px solid var(--border);">Family &amp; Financial Information</p>
-        <table class="doc-table">
+        <table class="doc-table doc-status-table">
+          <colgroup><col style="width:36%"><col style="width:18%"><col style="width:34%"><col style="width:12%"></colgroup>
           <thead>
-            <tr><th>Document</th><th>Status</th><th>Notes</th><th></th></tr>
+            <tr><th>Document</th><th>Status</th><th>Remarks</th><th></th></tr>
           </thead>
           <tbody id="docStatusFinancialBody"></tbody>
         </table>
@@ -1421,189 +1452,6 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
 </div>
 
 <script>
-
-/* ══════════════════════════════════════════════════════════════════════════
-   ISKO — SUPABASE DATA ACCESS LAYER
-   ══════════════════════════════════════════════════════════════════════════
-   This folder has no .env.local on purpose: no Supabase URL or key ever ships
-   to the browser. Every call goes to the backend folder (the one that DOES
-   hold .env.local), which talks to Supabase with the service role and scopes
-   every query to the signed-in applicant's own session.
-
-   Set ISKO.BASE to wherever that backend is served from. Leave it as '/api'
-   when both share an origin; otherwise use the full origin, e.g.
-   'http://localhost:3000/api'.
-
-   Every name inside ISKO.FIELD_TO_COLUMN / ISKO.DOC_KEYS / ISKO.SECTIONS is a
-   real Supabase column or value. Nothing outside this block had to change its
-   element ids.
-   ══════════════════════════════════════════════════════════════════════════ */
-const ISKO = {
-  BASE: '/api',
-
-  async req(path, opts){
-    const res = await fetch(ISKO.BASE + path, Object.assign({
-      headers: {'Content-Type':'application/json'},
-      credentials: 'include'
-    }, opts || {}));
-    if(!res.ok){
-      let msg = res.statusText;
-      try { msg = (await res.json()).error || msg; } catch(e){}
-      throw new Error(msg);
-    }
-    return res.status === 204 ? null : res.json();
-  },
-  get(p){ return ISKO.req(p); },
-  post(p, b){ return ISKO.req(p, {method:'POST', body:JSON.stringify(b)}); },
-  patch(p, b){ return ISKO.req(p, {method:'PATCH', body:JSON.stringify(b)}); },
-  send(fn){ Promise.resolve().then(fn).catch(e => console.warn('[ISKO]', e.message)); },
-
-  /* ── this page's element id  ->  public.applications column ──
-     The same string is what public.extracted_fields.field_name must hold, so
-     the OCR pass, this form and the admin console all use one identifier. */
-  FIELD_TO_COLUMN: {
-    'pi-firstname':'first_name', 'pi-middlename':'middle_name', 'pi-lastname':'last_name',
-    'pi-suffix':'suffix', 'pi-dob':'date_of_birth', 'pi-pob':'place_of_birth',
-    'pi-sex':'sex', 'pi-citizenship':'citizenship', 'pi-religion':'religion',
-    'pi-civilstatus':'civil_status', 'pi-spouse-name':'spouse_name',
-    'pi-spouse-occupation':'spouse_occupation', 'pi-spouse-contact':'spouse_contact',
-    'pi-email':'applicant_email', 'pi-contact':'contact_number',
-    'pi-address':'address', 'pi-precinct':'voter_precinct',
-    'pi-lgbtqi':'lgbtqi_member', 'pi-disability':'disability', 'pi-hobbies':'hobbies',
-    'pi-motivation':'motivation', 'pi-selfdescription':'self_description',
-    'pi-tenyears':'ten_year_aspiration',
-    'a-applyingas':'applying_as', 'a-termapplying':'term_applying',
-    'pi-choice1':'program_choice_1', 'pi-choice2':'program_choice_2',
-    'a-edu-prim-school':'primary_school', 'a-edu-prim-address':'primary_address',
-    'a-edu-prim-section':'primary_section', 'a-edu-prim-year':'primary_year',
-    'a-edu-prim-honors':'primary_honors',
-    'a-edu-sec-school':'secondary_school', 'a-edu-sec-address':'secondary_address',
-    'a-edu-sec-section':'secondary_section', 'a-edu-sec-year':'secondary_year',
-    'a-edu-sec-honors':'secondary_honors',
-    'a-edu-tert-school':'tertiary_school', 'a-edu-tert-address':'tertiary_address',
-    'a-edu-tert-section':'tertiary_section', 'a-edu-tert-year':'tertiary_year',
-    'a-edu-tert-honors':'tertiary_honors',
-    'a-techvoc':'techvoc_taken', 'a-techvoc-school':'techvoc_school',
-    'a-techvoc-course':'techvoc_course', 'a-techvoc-address':'techvoc_address',
-    'fam-mother-name':'mother_name', 'fam-mother-citizenship':'mother_citizenship',
-    'fam-mother-dob':'mother_date_of_birth', 'fam-mother-contact':'mother_contact',
-    'fam-mother-education':'mother_education', 'fam-mother-employment':'mother_employment',
-    'fam-father-name':'father_name', 'fam-father-citizenship':'father_citizenship',
-    'fam-father-dob':'father_date_of_birth', 'fam-father-contact':'father_contact',
-    'fam-father-education':'father_education', 'fam-father-employment':'father_employment',
-    'fam-guardian-name':'guardian_name', 'fam-guardian-citizenship':'guardian_citizenship',
-    'fam-guardian-dob':'guardian_date_of_birth', 'fam-guardian-contact':'guardian_contact',
-    'fam-guardian-education':'guardian_education', 'fam-guardian-employment':'guardian_employment',
-    'fam-onlychild':'only_child', 'fam-numsiblings':'num_siblings',
-    'fam-sibling-currentstudent':'sibling_current_student',
-    'fam-sibling-graduate':'sibling_graduate',
-    'fam-emergency-contact':'emergency_contact', 'h-ec-number':'emergency_contact_number',
-    'fam-workingstudent':'working_student', 'h-condition':'medical_condition',
-    'pi-email-updates':'email_updates_opt_in', 'pi-sms-updates':'sms_updates_opt_in'
-  },
-  /* Columns whose value is a boolean in Supabase but Yes/No or a checkbox here. */
-  BOOLEAN_COLUMNS: ['lgbtqi_member','techvoc_taken','only_child','sibling_current_student',
-                    'sibling_graduate','working_student','email_updates_opt_in','sms_updates_opt_in'],
-  NUMERIC_COLUMNS: ['num_siblings'],
-
-  /* ── upload row id  ->  public.documents.document_key + category ──
-     Sent explicitly so the backend never has to guess the slot from a DOM id. */
-  DOC_KEYS: {
-    'up-profilepic':       {document_key:'profilepic',      category:'personal'},
-    'up-birthcert':        {document_key:'birthcert',       category:'personal'},
-    'up-voterid':          {document_key:'voterid',         category:'personal'},
-    'up-form138':          {document_key:'form138',         category:'academic'},
-    'up-voterid-guardian': {document_key:'voteridguardian', category:'financial'},
-    'up-employment':       {document_key:'employment',      category:'financial'},
-    'up-indigency':        {document_key:'indigency',       category:'financial'},
-    'up-medcert':          {document_key:'medcert',         category:'health'},
-    'up-appeal':           {document_key:'appeal',          category:'appeal'}
-  },
-
-  /* Submit-button label  ->  public.application_sections.section */
-  SECTIONS: {
-    'Personal Information':    'personal',
-    'Educational Background':  'academic',
-    'Financial & Employment':  'financial',
-    'Health & Wellness':       'health'
-  },
-  /* The panel each section lives in, so a save can collect just that panel. */
-  SECTION_PANELS: {
-    personal:'panel-personal', academic:'panel-academic',
-    financial:'panel-financial', health:'panel-health'
-  },
-
-  /* Reads one panel (or the whole page) into a {column: value} object. */
-  collect(panelId){
-    const out = {};
-    const root = panelId ? document.getElementById(panelId) : document;
-    if(!root) return out;
-    Object.keys(ISKO.FIELD_TO_COLUMN).forEach(id=>{
-      const el = root.querySelector('#'+CSS.escape(id));
-      if(!el) return;
-      const col = ISKO.FIELD_TO_COLUMN[id];
-      let v = el.type === 'checkbox' ? el.checked : (el.value || '').trim();
-      if(ISKO.BOOLEAN_COLUMNS.includes(col)){
-        v = typeof v === 'boolean' ? v : (v === 'Yes' ? true : v === 'No' ? false : null);
-      } else if(ISKO.NUMERIC_COLUMNS.includes(col)){
-        v = v === '' ? null : Number(v);
-      } else if(v === ''){
-        v = null;
-      }
-      out[col] = v;
-    });
-    return out;
-  },
-  /* Writes a {column: value} object back into the form. */
-  fill(row){
-    if(!row) return;
-    Object.keys(ISKO.FIELD_TO_COLUMN).forEach(id=>{
-      const el = document.getElementById(id);
-      const col = ISKO.FIELD_TO_COLUMN[id];
-      if(!el || !(col in row) || row[col] == null) return;
-      if(el.type === 'checkbox') el.checked = !!row[col];
-      else if(ISKO.BOOLEAN_COLUMNS.includes(col)) el.value = row[col] ? 'Yes' : 'No';
-      else el.value = row[col];
-    });
-  },
-
-  /* public.organization_involvement rows <-> the "+"-row table. */
-  collectOrgRows(){
-    const body = document.getElementById('org-table-body');
-    if(!body) return [];
-    return Array.from(body.querySelectorAll('tr')).map((tr, i)=>{
-      const v = Array.from(tr.querySelectorAll('input')).map(x=>x.value.trim());
-      return {sort_order:i, organization:v[0]||null, position:v[1]||null,
-              nature:v[2]||null, year_joined:v[3]||null};
-    }).filter(r => r.organization || r.position || r.nature || r.year_joined);
-  },
-
-  /* public.siblings rows <-> the column-per-sibling income table. */
-  collectSiblingRows(){
-    const table = document.getElementById('sibling-income-table');
-    if(!table) return [];
-    const byField = {};
-    table.querySelectorAll('tbody tr[data-field]').forEach(tr=>{
-      byField[tr.dataset.field] = Array.from(tr.querySelectorAll('td'))
-        .map(td => { const i = td.querySelector('input,select'); return i ? i.value.trim() : ''; });
-    });
-    const n = (byField.name || []).length;
-    const rows = [];
-    for(let i=0;i<n;i++){
-      const r = {
-        sort_order: i,
-        name:           (byField.name||[])[i] || null,
-        date_of_birth:  (byField.dob||[])[i] || null,
-        civil_status:   (byField.civilstatus||[])[i] || null,
-        contact_number: (byField.contact||[])[i] || null,
-        education:      (byField.education||[])[i] || null
-      };
-      if(r.name || r.date_of_birth || r.contact_number || r.education) rows.push(r);
-    }
-    return rows;
-  }
-};
-
 /* ── MESSAGES PANEL: Announcements (public) &amp; Messages (private) with filter ──
    kind: 'announcement' (received by all applicants + guest page) or 'message'
    (sent to you specifically, or to your applicant category). */
@@ -1613,69 +1461,77 @@ const communications = [];
    Expected shape: {id, kind:'announcement'|'message', icon, iconStyle,
    title, body, date}. */
 
-/* public.applications.id for the signed-in applicant. Set by loadMyApplication()
-   from the session the backend resolves — never hardcoded, and never taken from
-   the URL, since that would let anyone read another applicant's record. */
-let CURRENT_APPLICANT_ID = null;
+/* This portal represents one applicant record on the Admin console; the id
+   below is a placeholder until the database integration supplies the
+   signed-in applicant's real record id. Compiled messages the admin sends when they edit or flag
+   something in that applicant's reviewed record (see admin.html >
+   logApplicantChangeMessage) are written to the same-origin localStorage
+   key below, one compiled message per calendar day the admin made changes
+   (a new thread starts the first time changes/flags happen on a new day). */
+const CURRENT_APPLICANT_ID = 'a1';
+const MSG_STORAGE_KEY = 'iskolusyon_messages';
 const ADMIN_MSG_ICON = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>';
-const ANN_ICON = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
-
-/* Pulls public.announcements (everyone) plus the public.messages rows scoped to
-   this applicant, and merges them into one list. Called at load, whenever the
-   Messages panel is opened, and when the tab regains focus — so a message the
-   admin sends while this portal is already open still arrives and still bumps
-   the unread badge.
+/* Re-reads the admin-written messages and merges them in. Called again
+   whenever the Messages panel is opened, when another tab writes to the key,
+   and when this tab regains focus — so a message the admin sends while this
+   portal is already open still arrives and still bumps the unread badge,
+   instead of only ever being picked up at first page load.
    Returns true when anything was added or an existing thread changed. */
-async function syncAdminMessages(){
+function syncAdminMessages(){
   let changed = false;
-  let rows;
   try {
-    rows = await ISKO.get('/applicant/communications');
-  } catch(e){ return false; }
-  (rows || []).forEach(r => {
-    const mapped = {
-      id:        String(r.id),
-      kind:      r.kind,                       // 'announcement' | 'message'
-      icon:      r.kind === 'announcement' ? ANN_ICON : ADMIN_MSG_ICON,
-      iconStyle: '',
-      title:     r.title,
-      body:      r.body,
-      date:      r.created_at
-                   ? 'Posted ' + new Date(r.created_at).toLocaleDateString(undefined,
-                       {month:'long', day:'numeric', year:'numeric'})
-                   : ''
-    };
-    const existing = communications.find(c => c.id === mapped.id && c.kind === mapped.kind);
-    if(!existing){
-      communications.push(mapped);
-      changed = true;
-    } else if(existing.body !== mapped.body || existing.title !== mapped.title){
-      /* An existing same-day thread the admin appended to: refresh it and
-         flag it unread again so the badge counts the new content. */
-      Object.assign(existing, mapped);
-      if(commsReadState[mapped.id]){
-        delete commsReadState[mapped.id];
-        saveCommsReadState();
-      }
-      changed = true;
-    }
-  });
+    const storedMsgs = localStorage.getItem(MSG_STORAGE_KEY);
+    if (!storedMsgs) return false;
+    JSON.parse(storedMsgs)
+      .filter(m => m.applicantId === CURRENT_APPLICANT_ID)
+      .forEach(m => {
+        const mapped = {
+          id: m.id,
+          kind: 'message',
+          icon: ADMIN_MSG_ICON,
+          iconStyle: '',
+          title: m.title,
+          body: m.body,
+          date: m.date
+        };
+        const existing = communications.find(c => c.id === m.id);
+        if(!existing){
+          communications.push(mapped);
+          changed = true;
+        } else if(existing.body !== m.body || existing.title !== m.title){
+          /* An existing same-day thread the admin appended to: refresh it and
+             flag it unread again so the badge counts the new content. */
+          Object.assign(existing, mapped);
+          if(commsReadState[m.id]){
+            delete commsReadState[m.id];
+            saveCommsReadState();
+          }
+          changed = true;
+        }
+      });
+  } catch (e) { /* ignore malformed/blocked storage, keep the defaults above */ }
   return changed;
 }
 
 /* ══ ALLOWANCE DISTRIBUTION (view-only) ══
-   Published by the Office of the Registrar in admin.html into
-   public.allowance_distributions. Read-only here; the backend already scopes
-   the query to this applicant's own rows (matched on application_id, with
-   student_id kept as the human-readable reference), so no client-side filter
-   is needed or trusted. */
+   Published by the Office of the Registrar in admin.html (see
+   disseminateAllowance) and written to the same-origin localStorage key
+   below. Rendered here strictly read-only, filtered to this applicant's
+   own account. Student ID format is not yet finalized admin-side, so this
+   demo matches it against CURRENT_APPLICANT_ID above; update the match
+   once a real Student ID format is set. */
+const ALLOWANCE_STORAGE_KEY = 'iskolusyon_allowance_distributions';
 let allowanceDistributions = [];
+try {
+  const storedAllowance = localStorage.getItem(ALLOWANCE_STORAGE_KEY);
+  if (storedAllowance) allowanceDistributions = JSON.parse(storedAllowance);
+} catch (e) { /* ignore malformed/blocked storage */ }
 function renderAllowanceDistributions(){
   const table = document.getElementById('allowanceTableWrap');
   const emptyNote = document.getElementById('allowanceEmptyNote');
   const tbody = document.getElementById('allowanceTableBody');
   if(!table || !emptyNote || !tbody) return;
-  const myRecords = allowanceDistributions;
+  const myRecords = allowanceDistributions.filter(d => d.studentId === CURRENT_APPLICANT_ID);
   if(!myRecords.length){
     table.style.display = 'none';
     emptyNote.style.display = '';
@@ -1685,7 +1541,7 @@ function renderAllowanceDistributions(){
   emptyNote.style.display = 'none';
   tbody.innerHTML = myRecords.map(d => `
     <tr>
-      <td>${d.distribution_date}</td>
+      <td>${d.date}</td>
       <td>${d.type}</td>
       <td>${d.type==='Other' ? (d.description || '&mdash;') : '&mdash;'}</td>
     </tr>
@@ -1793,24 +1649,25 @@ function renderComms(){
     });
   updateMessagesBadge();
 }
-/* Initial paint happens on the empty state; bootstrapFromApi() below fills it. */
+/* Initial load: pull in any admin-written messages, then paint + count. */
+syncAdminMessages();
 renderComms();
 updateMessagesBadge();
 
-/* Keep the badge live while the portal sits open: poll for anything the admin
-   sent since the last check, and re-check whenever the tab regains focus. */
-setInterval(async () => {
-  if(document.hidden) return;
-  if(await syncAdminMessages()){
+/* Keep the badge live while the portal sits open: another tab writing new
+   admin messages fires 'storage', and returning to this tab re-checks. */
+window.addEventListener('storage', e => {
+  if(e.key !== MSG_STORAGE_KEY) return;
+  if(syncAdminMessages()){
     const onMessagesPanel = document.getElementById('panel-messages').classList.contains('active');
     if(onMessagesPanel) markAllCommsRead();
     renderComms();
   }
   updateMessagesBadge();
-}, 60000);
-document.addEventListener('visibilitychange', async () => {
+});
+document.addEventListener('visibilitychange', () => {
   if(document.hidden) return;
-  if(await syncAdminMessages()) renderComms();
+  if(syncAdminMessages()) renderComms();
   updateMessagesBadge();
 });
 
@@ -1924,11 +1781,9 @@ function showPanel(name, btn){
     /* Pick up anything the admin sent since this page loaded, mark the list
        read (clearing the badge), then repaint so the newly-read items still
        show their unread flag for this visit. */
-    ISKO.send(async ()=>{
-      await syncAdminMessages();
-      markAllCommsRead();
-      renderComms();
-    });
+    syncAdminMessages();
+    markAllCommsRead();
+    renderComms();
   } else {
     /* Navigating away retires this visit's unread highlight. */
     if(commsJustOpenedUnread.size){
@@ -1937,10 +1792,11 @@ function showPanel(name, btn){
     }
   }
   if(name==='allowance'){
-    ISKO.send(async ()=>{
-      allowanceDistributions = await ISKO.get('/applicant/allowance-distributions');
-      renderAllowanceDistributions();
-    });
+    try {
+      const storedAllowance = localStorage.getItem(ALLOWANCE_STORAGE_KEY);
+      if(storedAllowance) allowanceDistributions = JSON.parse(storedAllowance);
+    } catch (e) { /* ignore malformed/blocked storage */ }
+    renderAllowanceDistributions();
   }
   if(name==='dashboard'){
     const active = document.querySelector('.stat-card.tab-active');
@@ -2017,9 +1873,12 @@ function renderAppHistory(){
 renderAppHistory();
 
 /* ── DOCUMENT UPLOAD ── */
-/* OCR extraction now happens server-side and lands in public.extracted_fields;
-   the upload response carries the rows back (see applyExtractedFields below),
-   so there is no client-side extraction table any more. */
+/* Field values pulled from each uploaded file by the OCR/text-extraction pass.
+   Empty by design — the upcoming backend integration fills this keyed by
+   upload-row id, e.g. {'up-birthcert': {'pi-firstname': '...'}}. It only ever
+   fills EMPTY fields below, so it never overwrites something the applicant
+   already typed, since extraction isn't always perfect. */
+const DOC_EXTRACTED_DATA = {};
 
 function handleDocUpload(input, rowId){
   const file = input.files[0];
@@ -2040,45 +1899,14 @@ function handleDocUpload(input, rowId){
     reader.readAsDataURL(file);
   }
 
-  /* Upload to Supabase Storage through the backend, which also inserts the
-     public.documents row (file_path, sha256_hash, document_key, category,
-     application_id, review_status='pending') and runs the OCR pass that
-     fills public.extracted_fields. It returns the extracted values keyed by
-     applications COLUMN NAME. */
-  const slot = ISKO.DOC_KEYS[rowId];
-  if(!slot) return;
-  const form = new FormData();
-  form.append('file', file);
-  form.append('document_key', slot.document_key);
-  form.append('category', slot.category);
-  ISKO.send(async ()=>{
-    const res = await fetch(ISKO.BASE + '/applicant/documents', {
-      method:'POST', credentials:'include', body: form
+  const extracted = DOC_EXTRACTED_DATA[rowId];
+  if(extracted){
+    Object.entries(extracted).forEach(([fieldId, value])=>{
+      const field = document.getElementById(fieldId);
+      if(field && !field.value.trim()) field.value = value;
     });
-    if(!res.ok) throw new Error('upload failed');
-    const doc = await res.json();
-    applyExtractedFields(doc.extracted_fields);
-    loadDocumentStatus();
-  });
-}
-
-/* extracted_fields rows arrive as {field_name: <applications column>, value}.
-   Only EMPTY inputs are filled, so OCR never overwrites something the
-   applicant already typed — extraction isn't always perfect. */
-const COLUMN_TO_INPUT = Object.fromEntries(
-  Object.entries(ISKO.FIELD_TO_COLUMN).map(([inputId, col]) => [col, inputId])
-);
-function applyExtractedFields(fields){
-  if(!Array.isArray(fields)) return;
-  fields.forEach(f=>{
-    const inputId = COLUMN_TO_INPUT[f.field_name];
-    if(!inputId) return;
-    const el = document.getElementById(inputId);
-    if(el && el.type !== 'checkbox' && !el.value.trim() && f.extracted_value){
-      el.value = f.extracted_value;
-    }
-  });
-  syncProfileNameFromPersonalInfo();
+    syncProfileNameFromPersonalInfo();
+  }
 }
 
 /* ── ORGANIZATIONAL INVOLVEMENT: expandable row table ── */
@@ -2170,29 +1998,15 @@ function toggleIfTechVoc(sel){
    state engine at the bottom of this file: gray while the section is empty or
    its required items are incomplete, blue when ready but untouched, green while
    there are pending changes, and blue again once saved/submitted. */
-function sectionKeyFor(btn){
-  const panel = btn.closest('.portal-panel');
-  if(!panel) return null;
-  const found = Object.entries(ISKO.SECTION_PANELS).find(([, id]) => id === panel.id);
-  return found ? found[0] : null;
-}
-/* Writes the panel's fields into public.applications and marks the matching
-   public.application_sections row 'draft'. The repeating tables travel
-   alongside as their own rows. */
 function saveDraft(btn){
   const original = btn.textContent;
-  btn.textContent = 'Saved ✓';
-  abDone(btn);
-  setTimeout(()=>{ btn.textContent = original; abRefresh(); }, 1600);
-
-  const section = sectionKeyFor(btn);
-  if(!section) return;
-  ISKO.send(()=>ISKO.patch('/applicant/section/' + section, {
-    status: 'draft',
-    fields: ISKO.collect(ISKO.SECTION_PANELS[section]),
-    organization_involvement: section === 'personal' ? ISKO.collectOrgRows() : undefined,
-    siblings:                 section === 'financial' ? ISKO.collectSiblingRows() : undefined
-  }));
+  abSetLoading(btn, 'Saving...');
+  setTimeout(()=>{
+    btn.textContent = 'Saved ✓';
+    abDone(btn);
+    setTimeout(()=>{ btn.textContent = original; abRefresh(); }, 1600);
+    /* In production: POST /api/applicant/save-draft { section, data } */
+  }, 900);
 }
 /* Returns the missing required-document labels for a panel, skipping any
    required upload row that's currently hidden (e.g. a document that only
@@ -2227,44 +2041,14 @@ function submitSection(btn, sectionName){
     }
   }
   const original = btn.textContent;
-  btn.textContent = 'Submitted ✓';
-  abLock(btn, true);
-  setTimeout(()=>{ btn.textContent = original; abLock(btn, false); abDone(btn); }, 1800);
-  const ownerPanel = btn.closest('.portal-panel');
-  if(ownerPanel) abDone(ownerPanel.querySelector('.save-draft-btn'));
-
-  if(sectionName === 'Appeal / Reschedule Request'){
-    /* public.appeals — the supporting file was already uploaded through
-       handleDocUpload() with document_key='appeal'; the backend links the
-       newest one as appeals.document_path. */
-    ISKO.send(async ()=>{
-      await ISKO.post('/applicant/appeals', {
-        request_type: document.getElementById('ap-type').value,
-        details:      document.getElementById('ap-details').value.trim()
-      });
-      document.getElementById('ap-type').value = '';
-      document.getElementById('ap-details').value = '';
-      loadApplicationHistory();
-    });
-    return;
-  }
-
-  const section = ISKO.SECTIONS[sectionName];
-  if(!section) return;
-  /* status='submitted' fires the trigger that recomputes
-     applications.profile_sections_done, which is what both this page's
-     progress card and the admin console's Profile column read. */
-  ISKO.send(async ()=>{
-    await ISKO.patch('/applicant/section/' + section, {
-      status: 'submitted',
-      fields: ISKO.collect(ISKO.SECTION_PANELS[section]),
-      organization_involvement: section === 'personal' ? ISKO.collectOrgRows() : undefined,
-      siblings:                 section === 'financial' ? ISKO.collectSiblingRows() : undefined
-    });
-    await loadMyApplication();
-    loadDocumentStatus();
-    loadApplicationHistory();
-  });
+  abSetLoading(btn, 'Submitting...');
+  setTimeout(()=>{
+    btn.textContent = 'Submitted ✓';
+    abLock(btn, true);
+    setTimeout(()=>{ btn.textContent = original; abLock(btn, false); abDone(btn); }, 1800);
+    const ownerPanel = btn.closest('.portal-panel');
+    if(ownerPanel) abDone(ownerPanel.querySelector('.save-draft-btn'));
+  }, 900);
 
   /* Educational Background: editable while in progress, but locked for good
      once submitted — matches the rest of the profile's "editable" fields,
@@ -2361,123 +2145,6 @@ function abPanelHasContent(panelId){
 });
 abRegister(document.getElementById('submitAppealBtn'), document.getElementById('panel-appeals'),
   function(){ return abMissingRequired('panel-appeals').length === 0; });
-
-/* ══ BOOTSTRAP FROM SUPABASE ══
-   The page paints its empty state first (VER88), then fills from the backend.
-   Each leg fails independently so one unavailable endpoint cannot blank the
-   whole portal — that panel just stays on its empty state. */
-const APPLICATION_STATUS_TEXT = {
-  'pending':       'Under review',
-  'qualified':     'Qualified',
-  'not-qualified': 'Not qualified',
-  'waitlisted':    'Waitlisted',
-  'appealed':      'Appeal under review'
-};
-
-async function loadMyApplication(){
-  const row = await ISKO.get('/applicant/application');
-  CURRENT_APPLICANT_ID = String(row.id);
-
-  ISKO.fill(row);
-  fillOrgRows(row.organization_involvement || []);
-  fillSiblingRows(row.siblings || []);
-  syncProfileNameFromPersonalInfo();
-
-  const done = row.profile_sections_done || 0;
-  const total = 4;                              // personal, academic, financial, health
-  const pv = document.getElementById('profileCompletionValue');
-  const pb = document.getElementById('profileCompletionBar');
-  if(pv) pv.textContent = done + ' of ' + total + ' sections done';
-  if(pb) pb.style.width = Math.round((done/total)*100) + '%';
-
-  const badge = document.getElementById('statusHeroBadge');
-  if(badge) badge.textContent = 'Step ' + (row.current_step || 0) + ' of 6 \u00b7 '
-    + (APPLICATION_STATUS_TEXT[row.status] || 'Not yet started');
-  return row;
-}
-
-/* public.organization_involvement -> the "+"-row table. One extra empty row is
-   always left at the end so the applicant can keep adding. */
-function fillOrgRows(rows){
-  const body = document.getElementById('org-table-body');
-  if(!body || !rows.length) return;
-  const cell = v => `<td><input type="text" value="${(v||'').replace(/"/g,'&quot;')}"/></td>`;
-  body.innerHTML = rows
-    .slice()
-    .sort((a,b)=>(a.sort_order||0)-(b.sort_order||0))
-    .map(r => '<tr>' + cell(r.organization) + cell(r.position) + cell(r.nature) + cell(r.year_joined) +
-      '<td class="org-row-action"><button type="button" class="org-row-btn org-row-remove" onclick="removeOrgRow(this)" title="Remove row">&times;</button></td></tr>')
-    .join('')
-    + '<tr>' + cell('') + cell('') + cell('') + cell('') +
-      '<td class="org-row-action"><button type="button" class="org-row-btn org-row-add" onclick="addOrgRow(this)" title="Add row">&plus;</button></td></tr>';
-}
-
-/* public.siblings -> the column-per-sibling income table. The table renders
-   three sibling columns by default; addSiblingColumn() appends more. */
-function fillSiblingRows(rows){
-  const table = document.getElementById('sibling-income-table');
-  if(!table || !rows.length) return;
-  const ordered = rows.slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
-  const addBtn = table.querySelector('.sib-col-btn');
-  while(table.querySelectorAll('thead th.sib-col').length < ordered.length && addBtn){
-    addSiblingColumn(addBtn);
-  }
-  const colFor = {name:'name', dob:'date_of_birth', civilstatus:'civil_status',
-                  contact:'contact_number', education:'education'};
-  table.querySelectorAll('tbody tr[data-field]').forEach(tr=>{
-    const col = colFor[tr.dataset.field];
-    tr.querySelectorAll('td').forEach((td, i)=>{
-      const input = td.querySelector('input,select');
-      if(input && ordered[i] && ordered[i][col] != null) input.value = ordered[i][col];
-    });
-  });
-}
-
-async function loadDocumentStatus(){
-  const rows = await ISKO.get('/applicant/documents');
-  DOC_STATUS_ROWS.personal.length = 0;
-  DOC_STATUS_ROWS.academic.length = 0;
-  DOC_STATUS_ROWS.financial.length = 0;
-  rows.forEach(d=>{
-    const bucket = DOC_STATUS_ROWS[d.category];
-    if(!bucket) return;                          // 'health' and 'appeal' have no table here
-    bucket.push({
-      name: d.document_label || d.document_key,
-      status: d.review_status === 'not-submitted' ? 'pending' : d.review_status,
-      note: d.flag_note
-            || (d.reviewed_at ? 'Verified ' + new Date(d.reviewed_at).toLocaleDateString()
-                              : 'Submitted ' + new Date(d.created_at).toLocaleDateString()),
-      reuploadPanel: d.review_status === 'deficient' ? ISKO.SECTION_PANELS[d.category].replace('panel-','') : null
-    });
-  });
-  renderDocStatusTables();
-}
-
-async function loadApplicationHistory(){
-  const rows = await ISKO.get('/applicant/history');
-  APP_HISTORY_ENTRIES.length = 0;
-  rows.forEach(r => APP_HISTORY_ENTRIES.push({
-    title: r.action,
-    detail: r.detail,
-    state: r.kind === 'warn' ? 'warn' : 'done'
-  }));
-  renderAppHistory();
-}
-
-async function bootstrapFromApi(){
-  const leg = (name, fn) => fn().catch(e => console.warn('[ISKO] ' + name + ':', e.message));
-  await leg('applications', loadMyApplication);
-  await Promise.all([
-    leg('documents', loadDocumentStatus),
-    leg('audit_log', loadApplicationHistory),
-    leg('communications', async ()=>{ await syncAdminMessages(); renderComms(); updateMessagesBadge(); }),
-    leg('allowance_distributions', async ()=>{
-      allowanceDistributions = await ISKO.get('/applicant/allowance-distributions');
-      renderAllowanceDistributions();
-    })
-  ]);
-}
-bootstrapFromApi();
 </script>
 </body>
 </html>
