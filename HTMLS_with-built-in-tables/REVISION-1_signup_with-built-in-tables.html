@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sign Up — Iskolusyon | City College of Calamba</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D2F6E;
+  --ccc-blue:#003CD0;
+  --blue:#1A4FA0;
+  --blue-light:#2563B0;
+  --green:#1B6B3A;
+  --green-dark:#155230;
+  --gold:#C8A84B;
+  --white:#fff;
+  --off:#F5F6F8;
+  --text:#2C3E50;
+  --muted:#6B7E9A;
+  --border:#E0E6F0;
+  --orange:#E07B39;
+  --cyan:#00BFFF;
+}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--white);line-height:1.65}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--ccc-blue);color:#fff;font-size:.75rem;padding:6px 0;font-family:'Montserrat',sans-serif;letter-spacing:.3px}
+.topbar .inner{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;justify-content:flex-end;gap:1.5rem;align-items:center}
+.topbar a{color:#fff;text-decoration:none;font-weight:700}
+.topbar a:hover{opacity:.8}
+.topbar span{color:#fff;font-weight:700}
+
+/* ── NAVBAR ── */
+.navbar{background:var(--white);border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:300;box-shadow:0 2px 12px rgba(13,47,110,.08)}
+.nav-inner{width:100%;margin:0;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:72px;gap:1rem;position:relative}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-logos{display:flex;align-items:center;gap:6px}
+.brand-logos img{height:52px;width:auto;object-fit:contain}
+.brand-text{font-family:'Montserrat',sans-serif;border-left:2px solid var(--border);padding-left:10px}
+.brand-text .main{font-size:1rem;font-weight:900;color:var(--navy);letter-spacing:.5px;text-transform:uppercase;display:block;line-height:1.1}
+.brand-text .sub{font-size:.58rem;font-weight:600;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-top:1px;display:block}
+.nav-links{display:flex;align-items:center;gap:2px;font-family:'Montserrat',sans-serif;flex-shrink:0;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.nav-links a{font-size:.68rem;font-weight:600;color:var(--text);padding:6px 10px;border-radius:4px;text-decoration:none;letter-spacing:.4px;text-transform:uppercase;transition:all .2s;white-space:nowrap}
+.nav-links a:hover{color:var(--blue);background:rgba(26,79,160,.06)}
+.nav-links a.active{color:var(--blue);border-bottom:2px solid var(--blue)}
+.nav-actions{display:flex;align-items:center;gap:8px;font-family:'Montserrat',sans-serif;flex-shrink:0}
+.nav-actions a{font-size:.68rem;font-weight:600;padding:6px 10px;border-radius:4px;text-decoration:none;letter-spacing:.4px;text-transform:uppercase;transition:all .2s;white-space:nowrap;color:var(--text)}
+.btn-nav-login{border:1.5px solid var(--navy)!important;color:var(--navy)!important;border-radius:4px!important}
+.btn-nav-signup{background:var(--green)!important;color:#fff!important;border-radius:4px!important}
+.btn-nav-signup:hover{background:var(--green-dark)!important;color:#fff!important}
+
+/* ── HERO BANNER ── */
+.hero{background:var(--green);position:relative;overflow:hidden;padding:4.5rem 2rem;text-align:center}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,0) 0px,rgba(255,255,255,0) 18px,rgba(255,255,255,.045) 18px,rgba(255,255,255,.045) 36px)}
+.hero::after{content:'';position:absolute;right:0;top:0;bottom:0;width:320px;background:repeating-linear-gradient(-45deg,transparent 0,transparent 28px,rgba(255,255,255,.07) 28px,rgba(255,255,255,.07) 56px);clip-path:polygon(18% 0%,100% 0%,100% 100%,0% 100%)}
+.hero-content{position:relative;z-index:2}
+.hero h1{font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(1.8rem,5vw,3.2rem);color:#fff;letter-spacing:6px;text-transform:uppercase;text-shadow:0 2px 12px rgba(0,0,0,.18);margin-bottom:.75rem}
+.hero p{color:rgba(255,255,255,.88);font-size:.95rem;max-width:600px;margin:0 auto 1.75rem;font-weight:500}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-btns a{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.8px;text-transform:uppercase;text-decoration:none;padding:11px 26px;border-radius:4px;transition:all .2s}
+.btn-white{background:#fff;color:var(--green)}
+.btn-white:hover{background:#e8f5ed}
+.btn-outline-w{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.55)}
+.btn-outline-w:hover{background:rgba(255,255,255,.1)}
+
+/* ── GOLD RULE ── */
+.gold-rule{height:3px;background:var(--gold);border:none;margin:0}
+
+/* ── PAGE SUBTITLE ── */
+.page-sub{background:var(--white);padding:1.25rem 2rem;text-align:center;border-bottom:1px solid var(--border)}
+.page-sub h2{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.9rem;color:var(--blue);letter-spacing:.4px;text-transform:uppercase}
+
+/* ── ANNOUNCEMENT ── */
+.announce-wrap{background:var(--off);padding:2.5rem 2rem}
+.section-heading{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.6rem;color:var(--blue);text-align:center;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1.5rem}
+
+/* ── CAROUSEL ── */
+.carousel-outer{max-width:900px;margin:0 auto;position:relative}
+.carousel-track-wrap{overflow:hidden;border-radius:8px;box-shadow:0 4px 28px rgba(13,47,110,.13)}
+.carousel-track{display:flex;transition:transform .45s cubic-bezier(.4,0,.2,1)}
+.carousel-slide{min-width:100%;position:relative}
+.carousel-slide img{width:100%;height:auto;display:block;object-fit:contain;background:#f0f0f0;max-height:520px}
+.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(13,47,110,.72);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:1.1rem;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.carousel-btn:hover{background:var(--ccc-blue)}
+.carousel-prev{left:-20px}
+.carousel-next{right:-20px}
+.carousel-dots{display:flex;justify-content:center;gap:8px;margin-top:14px}
+.carousel-dot{width:10px;height:10px;border-radius:50%;background:var(--border);border:none;cursor:pointer;padding:0;transition:background .2s}
+.carousel-dot.active{background:var(--blue)}
+.carousel-counter{text-align:center;font-family:'Montserrat',sans-serif;font-size:.72rem;color:var(--muted);margin-top:6px;font-weight:600;letter-spacing:.5px}
+
+/* ── HOW TO APPLY ── */
+.how-section{background:var(--ccc-blue);padding:3rem 2rem}
+.how-inner{max-width:1100px;margin:0 auto;background:#fff;border-radius:8px;box-shadow:0 6px 32px rgba(0,0,0,.22);padding:2.5rem 2.5rem 2.75rem}
+.how-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.6rem;color:var(--blue);text-align:center;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.4rem}
+.how-sub{text-align:center;font-size:.85rem;color:var(--muted);margin-bottom:2.5rem}
+.steps-map{display:flex;align-items:flex-start;justify-content:center;gap:0;flex-wrap:wrap;position:relative}
+.step-item{display:flex;flex-direction:column;align-items:center;width:160px;position:relative;z-index:1}
+.step-circle{width:58px;height:58px;border-radius:50%;background:var(--ccc-blue);border:3px solid #fff;box-shadow:0 3px 14px rgba(0,60,208,.22);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.3rem;color:#fff;margin-bottom:.75rem;flex-shrink:0;transition:transform .2s}
+.step-item:hover .step-circle{transform:scale(1.08)}
+.step-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:var(--navy);text-align:center;margin-bottom:.3rem}
+.step-desc{font-size:.75rem;color:var(--muted);text-align:center;line-height:1.5;max-width:130px}
+/* Arrow connector */
+.step-arrow{display:flex;align-items:center;padding-bottom:58px;color:var(--gold);font-size:1.4rem;font-weight:900;margin:0 -8px;flex-shrink:0}
+@media(max-width:860px){
+  .step-arrow{display:none}
+  .steps-map{gap:1.25rem}
+  .step-item{width:140px}
+}
+
+/* ── STEP DROPDOWN GUIDES ── */
+.step-item{cursor:pointer}
+.step-circle{cursor:pointer;transition:transform .2s,background .2s,box-shadow .2s}
+.step-item.active .step-circle{background:var(--gold);box-shadow:0 4px 18px rgba(200,168,75,.45);transform:scale(1.12)}
+.step-item .step-title{transition:color .2s}
+.step-item.active .step-title{color:var(--gold)}
+.steps-dropdown-wrap{width:100%;margin-top:1.75rem;overflow:hidden}
+.step-guide{display:none;background:var(--off);border-radius:8px;border:1.5px solid var(--border);padding:0;animation:slideDown .3s ease}
+.step-guide.active{display:block}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.step-guide-header{background:var(--ccc-blue);border-radius:6px 6px 0 0;padding:1rem 1.5rem;display:flex;align-items:center;gap:10px}
+.step-guide-header .guide-num{font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.2rem;color:#fff;background:rgba(255,255,255,.2);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-guide-header .guide-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.95rem;color:#fff;text-transform:uppercase;letter-spacing:.5px}
+.step-guide-body{padding:1.5rem}
+.guide-branch{margin-bottom:1.25rem}
+.guide-branch-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.6px;color:var(--white);background:var(--navy);display:inline-block;padding:3px 10px;border-radius:3px;margin-bottom:.75rem}
+.guide-branch-label.alt{background:var(--green)}
+.guide-steps{display:flex;flex-direction:column;gap:.6rem;padding-left:0;list-style:none}
+.guide-steps li{display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:#4A5568;line-height:1.6}
+.guide-steps li .gs-num{min-width:22px;height:22px;border-radius:50%;background:var(--ccc-blue);color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.7rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.guide-steps li .gs-num.green{background:var(--green)}
+.guide-divider{border:none;border-top:1px solid var(--border);margin:.75rem 0}
+.guide-note{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:.5rem}
+.guide-close-btn{display:block;margin:.25rem auto 0;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);background:none;border:1px solid var(--border);border-radius:3px;padding:5px 16px;cursor:pointer;transition:all .2s}
+.guide-close-btn:hover{background:var(--border);color:var(--text)}
+
+/* ── QUALIFICATIONS ── */
+.content-wrap{max-width:1100px;margin:0 auto;padding:0 2rem}
+.programs-heading{font-family:'Montserrat',sans-serif;font-weight:400;font-size:1.5rem;color:var(--text);margin:2rem 0 1rem}
+.programs-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 3rem}
+.programs-list{list-style:disc;padding-left:1.5rem;display:flex;flex-direction:column;gap:5px}
+.programs-list li{font-size:.88rem;color:#4A5568}
+
+/* ── BEFORE YOU APPLY (2-LEVEL ACCORDION) ── */
+.bya-section{padding:3rem 0}
+.bya-heading{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.6rem;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.35rem}
+.bya-sub{font-size:.85rem;color:var(--muted);margin-bottom:2.25rem}
+
+.bya-accordion{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 4px 24px rgba(13,47,110,.08);overflow:hidden}
+.bya-l1{border-bottom:1px solid var(--border)}
+.bya-l1:last-child{border-bottom:none}
+.bya-l1-header{width:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.35rem 1.75rem;background:none;border:none;cursor:pointer;text-align:left;transition:background .15s}
+.bya-l1-header:hover{background:var(--off)}
+.bya-l1-title{display:flex;align-items:center;gap:.9rem;font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.05rem;color:var(--navy)}
+.bya-l1-num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--off);color:var(--ccc-blue);font-size:.78rem;font-weight:800;flex-shrink:0;transition:background .2s,color .2s}
+.bya-l1.open .bya-l1-num{background:var(--ccc-blue);color:#fff}
+.bya-l1-arrow{color:var(--muted);font-size:1.1rem;line-height:1;transition:transform .25s,color .2s;flex-shrink:0}
+.bya-l1.open .bya-l1-arrow{transform:rotate(180deg);color:var(--ccc-blue)}
+.bya-l1-body{display:none;padding:0 1.75rem 1.85rem;margin-top:-.35rem}
+.bya-l1.open .bya-l1-body{display:block;animation:slideDown .3s ease}
+.bya-l1-body .bya-intro{font-size:.88rem;color:#4A5568;margin-bottom:1.25rem}
+
+/* nested level-2 group (Admission Requirements categories) gets a touch more breathing room */
+.bya-l1-body .req-tabs-wrap{margin-top:.5rem}
+
+@media(max-width:640px){
+  .bya-l1-header{padding:1.05rem 1.1rem}
+  .bya-l1-title{font-size:.92rem;gap:.6rem}
+  .bya-l1-num{width:24px;height:24px;font-size:.68rem}
+  .bya-l1-body{padding:0 1.1rem 1.4rem}
+}
+
+/* ── ADMISSION REQUIREMENTS: CATEGORY TAB-SWITCHER ──
+   Deliberately NOT another accordion — this is a tab strip + content
+   panel, so it reads as a distinct, nested selector rather than a
+   repeat of the "Admission Requirements" dropdown that contains it. */
+.req-tabs-wrap{margin-top:.25rem}
+.req-tabs{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;border-bottom:2px solid var(--border);scrollbar-width:thin}
+.req-tabs::-webkit-scrollbar{height:4px}
+.req-tabs::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.req-tab{flex-shrink:0;padding:12px 18px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);background:transparent;border:none;cursor:pointer;white-space:nowrap;position:relative;transition:color .2s}
+.req-tab:hover{color:var(--ccc-blue)}
+.req-tab.active{color:var(--ccc-blue)}
+.req-tab.active::after{content:'';position:absolute;left:10px;right:10px;bottom:-2px;height:3px;background:var(--gold);border-radius:2px 2px 0 0}
+.req-panel-wrap{background:var(--off);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;padding:1.5rem 1.5rem 1.75rem}
+.req-panel{display:none;animation:slideDown .3s ease}
+.req-panel.active{display:block}
+.req-panel-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.92rem;color:var(--navy);letter-spacing:.2px;margin-bottom:.9rem;padding-bottom:.65rem;border-bottom:1px solid var(--border)}
+.req-panel ul{list-style:disc;padding-left:1.3rem;display:flex;flex-direction:column;gap:5px}
+.req-panel li{font-size:.85rem;color:#4A5568;line-height:1.6}
+.req-panel p{font-size:.85rem;color:#4A5568;line-height:1.7;margin-bottom:.5rem}
+.req-panel .qual-head{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.82rem;color:var(--navy);margin:.75rem 0 .3rem;text-transform:uppercase;letter-spacing:.4px}
+@media(max-width:640px){
+  .req-tab{padding:10px 13px;font-size:.64rem}
+  .req-panel-wrap{padding:1.25rem 1.1rem 1.5rem}
+}
+
+/* ── FAQ ── */
+.faq-section{padding:3rem 2rem;background:var(--white)}
+.faq-card{max-width:900px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:4px;padding:3rem}
+.faq-card h2{font-family:'Montserrat',sans-serif;font-weight:400;font-size:1.8rem;color:var(--text);margin-bottom:2rem}
+.faq-item{margin-bottom:4px}
+.faq-q{display:flex;align-items:center;gap:12px;padding:.85rem 0;cursor:pointer;font-size:.9rem;color:var(--text);font-weight:600;border-bottom:1px solid var(--border)}
+.faq-icon{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;flex-shrink:0;transition:transform .2s}
+.faq-item.open .faq-icon{background:var(--navy);transform:rotate(45deg)}
+.faq-a{display:none;padding:.75rem 0 .75rem 38px;font-size:.85rem;color:#4A5568;line-height:1.7}
+.faq-item.open .faq-a{display:block}
+.faq-item.open .faq-q{border-bottom:none}
+.faq-a ul{list-style:disc;padding-left:1.3rem;display:flex;flex-direction:column;gap:4px}
+.faq-dept{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.8rem;color:var(--navy);margin:.6rem 0 .2rem;text-transform:uppercase;letter-spacing:.3px}
+
+/* ── CONTACT BANNER ── */
+.contact-banner{width:100%;display:block;line-height:0}
+.contact-banner img{width:100%;height:auto;display:block;object-fit:cover}
+
+/* ── CONTACT US ── */
+.contact-section{background:var(--ccc-blue);padding:3rem 2rem}
+.contact-inner{max-width:1100px;margin:0 auto;background:#fff;border-radius:8px;box-shadow:0 6px 32px rgba(0,0,0,.22);padding:2.5rem 2.5rem 2.75rem}
+.contact-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.6rem;color:var(--blue);text-align:center;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.4rem}
+.contact-sub-text{text-align:center;font-size:.85rem;color:var(--muted);margin-bottom:2rem}
+.contact-hours-block{margin-bottom:1rem}
+.contact-hours-block p{font-size:.88rem;color:#4A5568;margin-bottom:.25rem}
+.contact-hours-block strong{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.88rem;color:var(--text)}
+.contact-acc-item{border:1px solid var(--border);margin-bottom:4px}
+.contact-acc-header{display:flex;align-items:center;gap:12px;padding:13px 18px;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.88rem;color:#fff;background:var(--ccc-blue);user-select:none;border:none;width:100%;text-align:left}
+.contact-acc-item.open .contact-acc-header{background:var(--ccc-blue)}
+.contact-acc-toggle{font-size:1.1rem;line-height:1;font-weight:400;width:22px;flex-shrink:0;text-align:center}
+.contact-acc-body{display:none;background:#F5F6F8;padding:1.25rem 1.5rem}
+.contact-acc-item.open .contact-acc-body{display:block}
+.contact-acc-body p{font-size:.85rem;color:#4A5568;margin-bottom:1rem}
+.contact-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.contact-table th{background:var(--ccc-blue);color:#fff;padding:10px 14px;text-align:center;font-family:'Montserrat',sans-serif;font-weight:600;font-size:.78rem;letter-spacing:.3px}
+.contact-table td{padding:9px 14px;text-align:center;border:1px solid var(--border);color:#4A5568}
+.contact-table a{color:var(--blue);text-decoration:underline;display:inline}
+.contact-table .note-row td{background:#fff;border:1px solid var(--border);font-size:.78rem;color:var(--muted);text-align:center;padding:10px 14px}
+
+/* ── FOOTER ── */
+.footer{background:#1a1f36;color:rgba(255,255,255,.65);padding:3.5rem 0 0}
+.footer-inner{max-width:1200px;margin:0 auto;padding:0 2rem}
+.footer-main{display:flex;align-items:stretch;gap:0;margin-bottom:0}
+.footer-logo-col{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:24px;padding:0 3rem 3rem 0;flex-shrink:0}
+.footer-logo-col img{height:120px;width:auto;object-fit:contain}
+.footer-vdivider{width:1px;background:rgba(255,255,255,.15);align-self:stretch;flex-shrink:0}
+.footer-content-col{flex:1;padding:0 0 3rem 3rem;display:flex;flex-direction:column;gap:1.75rem}
+.footer-content-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem}
+.footer h4{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:#fff;margin-bottom:1rem}
+.footer a{display:block;font-size:.8rem;color:rgba(255,255,255,.5);text-decoration:none;margin-bottom:5px;transition:color .2s}
+.footer a:hover{color:#fff}
+.footer p{font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:4px}
+.footer-logo-block img{height:90px;width:auto;object-fit:contain}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:1.25rem 2rem;text-align:center}
+.footer-bottom p{font-size:.72rem;color:rgba(255,255,255,.35)}
+.footer-bar{background:var(--ccc-blue);text-align:center;padding:.65rem;font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:.5px;text-transform:uppercase}
+@media(max-width:900px){
+  .footer-main{flex-direction:column}
+  .footer-logo-col{padding:0 0 2rem;justify-content:flex-start}
+  .footer-vdivider{width:100%;height:1px;align-self:auto}
+  .footer-content-col{padding:2rem 0 2rem}
+  .footer-content-row{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .footer-content-row{grid-template-columns:1fr}
+  .brand-logos img{height:40px}
+  .nav-links .hide-m{display:none}
+}
+
+/* ── SCROLL TO TOP ── */
+.to-top{position:fixed;bottom:24px;right:24px;width:36px;height:36px;background:var(--blue);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;box-shadow:0 3px 12px rgba(26,79,160,.35);opacity:0;transition:opacity .3s;z-index:999;border:none}
+.to-top.show{opacity:1}
+
+@media(max-width:900px){
+  .programs-grid{grid-template-columns:1fr}
+  .faq-card{padding:2rem 1.5rem}
+}
+
+/* ── LOGIN MODAL ── */
+.modal-backdrop{position:fixed;inset:0;background:rgba(10,20,50,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-backdrop.show{opacity:1;pointer-events:all}
+.modal-box{background:#fff;border-radius:12px;width:100%;max-width:420px;box-shadow:0 12px 48px rgba(13,47,110,.22);overflow:hidden;transform:translateY(18px);transition:transform .3s;position:relative}
+.modal-backdrop.show .modal-box{transform:translateY(0)}
+.modal-topbar{background:var(--ccc-blue);padding:.55rem 1.25rem;display:flex;align-items:center;justify-content:space-between}
+.modal-topbar span{font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.75);letter-spacing:.5px;text-transform:uppercase}
+.modal-close{background:none;border:none;color:rgba(255,255,255,.75);font-size:1.1rem;cursor:pointer;line-height:1;padding:2px 4px}
+.modal-close:hover{color:#fff}
+.modal-header{background:var(--navy);padding:1.5rem 1.75rem 1.25rem;text-align:center}
+.modal-header .mh-logos{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:.75rem}
+.modal-header .mh-logos img{height:40px;width:auto;object-fit:contain}
+.modal-header h2{font-family:'Montserrat',sans-serif;font-weight:900;font-size:1rem;color:#fff;letter-spacing:.3px;margin-bottom:3px}
+.modal-header p{font-size:.72rem;color:rgba(255,255,255,.6);font-weight:500}
+.modal-body{padding:1.75rem 1.75rem 1.5rem}
+/* ── LEAVE SIGN UP CONFIRMATION POPUP ── */
+.leave-confirm-box{max-width:380px}
+.leave-confirm-body{padding:2.25rem 2rem 2rem;text-align:center}
+.leave-confirm-icon{width:64px;height:64px;border-radius:50%;background:#FDECEA;color:#C0392B;display:flex;align-items:center;justify-content:center;margin:0 auto 1.15rem}
+.leave-confirm-body h3{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.1rem;color:var(--navy);margin-bottom:.6rem}
+.leave-confirm-body p{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:1.6rem}
+.leave-confirm-actions{display:flex;gap:.75rem}
+.lc-btn{flex:1;padding:11px;border-radius:6px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.4px;text-transform:uppercase;cursor:pointer;transition:all .2s;border:1.5px solid transparent}
+.lc-btn-no{background:none;border-color:var(--border);color:var(--muted)}
+.lc-btn-no:hover{background:var(--off);color:var(--text)}
+.lc-btn-yes{background:#C0392B;color:#fff}
+.lc-btn-yes:hover{background:#a52f22}
+/* step indicator inside modal */
+.modal-steps{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:1.5rem}
+.modal-step-dot{width:28px;height:6px;border-radius:3px;background:var(--border);transition:background .3s}
+.modal-step-dot.active{background:var(--ccc-blue)}
+.modal-step-dot.done{background:var(--green)}
+/* form fields */
+.mfield{margin-bottom:1rem}
+.mfield label{display:block;font-size:.75rem;font-weight:700;color:var(--navy);margin-bottom:5px;font-family:'Montserrat',sans-serif;letter-spacing:.3px;text-transform:uppercase}
+.mfield input{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:6px;font-family:'Open Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s}
+.mfield input:focus{border-color:var(--ccc-blue);box-shadow:0 0 0 3px rgba(0,60,208,.1)}
+.mfield input.err{border-color:#C0392B}
+.mfield .field-hint{font-size:.72rem;color:var(--muted);margin-top:4px}
+.mfield .field-err{font-size:.72rem;color:#C0392B;margin-top:4px;display:none}
+#s-terms-err,#s-privacy-err{font-size:.8rem;color:#C0392B;margin:.15rem 0 .75rem 25px;display:none;line-height:1.55}
+/* otp boxes */
+.otp-wrap{display:flex;gap:8px;justify-content:center;margin:1rem 0}
+.otp-box{width:46px;height:54px;border:2px solid var(--border);border-radius:8px;text-align:center;font-size:1.3rem;font-weight:700;font-family:'Montserrat',sans-serif;color:var(--navy);outline:none;transition:border-color .2s,box-shadow .2s}
+.otp-box:focus{border-color:var(--ccc-blue);box-shadow:0 0 0 3px rgba(0,60,208,.12)}
+/* buttons */
+.mbtn{width:100%;padding:10px;border:none;border-radius:6px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-bottom:.6rem}
+.mbtn-primary{background:var(--ccc-blue);color:#fff}
+.mbtn-primary:hover{background:#002fa8}
+.mbtn-secondary{background:var(--green);color:#fff}
+.mbtn-secondary:hover{background:var(--green-dark)}
+.mbtn-ghost{background:none;border:1.5px solid var(--border);color:var(--muted)}
+.mbtn-ghost:hover{background:var(--off);color:var(--text)}
+/* Shared state for every send/publish/submit/save button — gray + unclickable
+   while a required field is still empty or there is simply nothing to send. */
+.mbtn-idle,.mbtn:disabled{background:#D5D9DF !important;color:#8A9199 !important;cursor:not-allowed !important;box-shadow:none;opacity:1}
+.mbtn-idle:hover,.mbtn:disabled:hover{background:#D5D9DF !important;color:#8A9199 !important}
+.modal-footer-note{text-align:center;font-size:.75rem;color:var(--muted);padding-top:.25rem}
+.modal-footer-note a{color:var(--ccc-blue);font-weight:700;text-decoration:none}
+.modal-footer-note a:hover{text-decoration:underline}
+/* alert strip inside modal */
+.modal-alert{border-radius:6px;padding:.7rem 1rem;font-size:.78rem;margin-bottom:1rem;display:flex;align-items:flex-start;gap:8px}
+.modal-alert.info{background:#E8F0FA;color:#0D2F6E;border:1px solid #B5D0F0}
+.modal-alert.success{background:#E6F4EC;color:#1A5C3A;border:1px solid #A8D8BC}
+.modal-alert.warn{background:#FEF3E8;color:#7A4210;border:1px solid #FDDBB4}
+.modal-alert .ai{flex-shrink:0;font-size:.9rem;margin-top:1px}
+.icon-i-circle{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--ccc-blue);color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;font-style:normal;font-size:.66rem;line-height:1;margin-top:1px}
+.resend-btn{background:none;border:none;color:var(--ccc-blue);font-size:.75rem;font-weight:700;cursor:pointer;padding:0;text-decoration:underline;font-family:'Montserrat',sans-serif}
+.resend-btn:disabled{color:var(--muted);text-decoration:none;cursor:default}
+.resend-btn.is-cooldown{color:var(--muted);text-decoration:none}
+.timer-text{font-size:.72rem;color:var(--muted);text-align:center;margin-top:.25rem}
+/* resend-code tooltip */
+.resend-wrap{position:relative;display:inline-block}
+.resend-tooltip{position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%) translateY(4px);background:var(--navy);color:#fff;font-size:.7rem;font-weight:600;line-height:1.4;padding:7px 12px;border-radius:6px;white-space:nowrap;box-shadow:0 6px 18px rgba(13,47,110,.3);opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;z-index:40}
+.resend-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--navy)}
+.resend-tooltip.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+/* password toggle */
+.pass-wrap{position:relative}
+.pass-wrap input{padding-right:2.5rem}
+.pass-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);padding:0;align-items:center;justify-content:center}
+.pass-toggle svg{display:block}
+/* disable native browser password-reveal icon so only our custom eye toggle shows */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear{display:none}
+
+/* ══════════════════════════════════════════
+   AUTH PAGES (Login / Sign Up) — shared styles
+   ══════════════════════════════════════════ */
+.auth-section{background:var(--off);padding:3rem 1.5rem 4rem}
+.auth-shell{max-width:1000px;margin:0 auto;background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(13,47,110,.14);overflow:hidden;display:grid;grid-template-columns:320px 1fr;align-items:stretch}
+
+/* left brand/info panel */
+.auth-side{background:linear-gradient(160deg,var(--navy) 0%,var(--ccc-blue) 100%);color:#fff;padding:2.5rem 2.1rem;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.auth-side::after{content:'';position:absolute;right:-60px;bottom:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.05)}
+.as-logos{display:flex;gap:8px;margin-bottom:1.75rem;position:relative;z-index:1}
+.as-logo-chip{background:#fff;border-radius:8px;padding:5px 6px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.as-logo-chip img{height:30px;width:auto;object-fit:contain;display:block}
+.auth-side h1{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:.2px;line-height:1.35;margin-bottom:.65rem;position:relative;z-index:1}
+.as-sub{font-size:.8rem;color:rgba(255,255,255,.72);line-height:1.65;margin-bottom:2rem;position:relative;z-index:1}
+
+.as-benefits{display:flex;flex-direction:column;gap:16px;position:relative;z-index:1}
+.as-benefit{display:flex;gap:10px;align-items:flex-start}
+.as-benefit .bicon{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.72rem;margin-top:1px}
+.as-benefit span.btext{font-size:.8rem;color:rgba(255,255,255,.92);line-height:1.55}
+
+.as-steps{display:flex;flex-direction:column;position:relative;z-index:1}
+.as-step{display:flex;gap:12px;padding-bottom:22px;position:relative}
+.as-step:last-child{padding-bottom:0}
+.as-step:not(:last-child)::after{content:'';position:absolute;left:13px;top:30px;bottom:0;width:2px;background:rgba(255,255,255,.16)}
+.as-step-num{width:27px;height:27px;border-radius:50%;background:rgba(255,255,255,.14);color:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.72rem;flex-shrink:0;transition:background .25s,color .25s;z-index:1}
+.as-step.done .as-step-num{background:#2ECC71;color:#fff}
+.as-step.current .as-step-num{background:#fff;color:var(--ccc-blue);box-shadow:0 0 0 4px rgba(255,255,255,.22)}
+.as-step-label{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.55);padding-top:5px;transition:color .25s}
+.as-step.current .as-step-label,.as-step.done .as-step-label{color:#fff}
+
+.auth-back{margin-top:auto;position:relative;z-index:1;padding-top:1.75rem}
+.auth-back a{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;color:rgba(255,255,255,.75);text-decoration:none;font-weight:600}
+.auth-back a:hover{color:#fff}
+
+/* right form panel */
+.auth-main{padding:2.5rem 2.75rem 2.25rem}
+.auth-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.28rem;color:var(--navy);margin-bottom:.3rem;letter-spacing:.2px}
+.auth-subtitle{font-size:.85rem;color:var(--muted);margin-bottom:1.75rem}
+.mobile-step-indicator{display:none;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.5px;text-transform:uppercase;color:var(--ccc-blue);background:#EEF3FD;padding:9px 14px;border-radius:6px;margin-bottom:1.5rem}
+
+.auth-panel{display:none;animation:slideDown .3s ease}
+.auth-panel.active{display:block}
+
+/* form grid */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 1.1rem}
+.mfield.full{grid-column:1/-1}
+.mfield select{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:6px;font-family:'Open Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;background:#fff;transition:border-color .2s,box-shadow .2s;cursor:pointer}
+.mfield select:focus{border-color:var(--ccc-blue);box-shadow:0 0 0 3px rgba(0,60,208,.1)}
+.mfield textarea{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:6px;font-family:'Open Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;resize:vertical;min-height:68px;transition:border-color .2s,box-shadow .2s}
+.mfield textarea:focus{border-color:var(--ccc-blue);box-shadow:0 0 0 3px rgba(0,60,208,.1)}
+.mfield input::placeholder,.mfield textarea::placeholder{color:#A9B4C7;opacity:1}
+.residency-label-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;position:relative}
+.residency-label-row label{margin-bottom:0}
+.residency-label-row .icon-i-circle{cursor:pointer}
+.residency-info-popup{position:absolute;top:calc(100% + 6px);left:0;z-index:20;width:250px;max-width:80vw;margin-bottom:0;display:none}
+.field-note{font-size:.72rem;color:var(--muted);margin-top:4px}
+
+/* checkbox group (special demographics) */
+.check-grid{display:flex;flex-direction:column;gap:9px;margin-bottom:.5rem}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;transition:border-color .2s,background .2s;font-size:.83rem;color:var(--text);user-select:none}
+.check-item:hover{background:var(--off)}
+.check-item input{margin-top:2px;width:16px;height:16px;accent-color:var(--ccc-blue);flex-shrink:0;cursor:pointer}
+.check-item.checked{border-color:var(--ccc-blue);background:#EEF3FD}
+
+/* section eyebrow inside a step */
+.step-eyebrow{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.6px;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem}
+
+/* form action buttons row */
+.form-actions{display:flex;gap:.75rem;margin-top:1.6rem}
+.form-actions .mbtn{width:auto;flex:1;margin-bottom:0}
+
+/* review summary */
+.review-group{margin-bottom:1.35rem}
+.review-group h4{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.74rem;text-transform:uppercase;letter-spacing:.5px;color:var(--navy);margin-bottom:.55rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.review-row{display:flex;justify-content:space-between;gap:1rem;font-size:.82rem;padding:4px 0;color:#4A5568}
+.review-row span:first-child{color:var(--muted);flex-shrink:0}
+.review-row span:last-child{font-weight:600;color:var(--text);text-align:right}
+.review-edit{font-size:.7rem;font-weight:700;color:var(--ccc-blue);text-decoration:none;text-transform:uppercase;letter-spacing:.3px;cursor:pointer;background:none;border:none;padding:0}
+
+.terms-row{display:flex;align-items:flex-start;gap:9px;margin:1rem 0 .25rem;font-size:.8rem;color:#4A5568;line-height:1.55}
+.terms-row input{margin-top:3px;width:16px;height:16px;accent-color:var(--ccc-blue);flex-shrink:0;cursor:pointer}
+.privacy-link{color:var(--ccc-blue);font-weight:800;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.privacy-link:hover{color:var(--navy)}
+
+/* success state */
+.auth-success{text-align:center;padding:1rem 0}
+.auth-success .succ-icon{width:64px;height:64px;border-radius:50%;background:#E6F4EC;color:var(--green);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1.25rem}
+.auth-success h3{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.15rem;color:var(--navy);margin-bottom:.5rem}
+.auth-success p{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6}
+.auth-main.is-success-view{display:flex;flex-direction:column;justify-content:center}
+
+@media(max-width:860px){
+  .auth-shell{grid-template-columns:1fr}
+  .auth-side{display:none}
+  .mobile-step-indicator{display:block}
+  .auth-main{padding:2rem 1.5rem}
+}
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr}
+  .form-actions{flex-direction:column}
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE LAYER — fluid layout hardening
+   Appended last so it only ever refines the rules above it. Everything here
+   is either a no-op at desktop widths or lives inside a media query, so all
+   existing colours, component styling and behaviour are untouched.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Nothing may spill out of its container horizontally. Note: overflow-x:hidden
+   is deliberately NOT used on html/body — it silently breaks the sticky
+   navbar. Overflow is fixed at its source instead. */
+img,svg,video,canvas{max-width:100%}
+/* Flex/grid children default to min-width:auto, which refuses to shrink below
+   their content and is the usual cause of a blown-out row. */
+.nav-inner>*,.hero-content>*,.footer-content-row>*,.programs-grid>*,
+.auth-shell>*,.footer-main>*,.contact-inner>*{min-width:0}
+/* Long unbroken strings (emails, URLs, reference codes) wrap instead of
+   forcing the page wider. */
+.contact-table td,.faq-card,.req-panel-wrap,.bya-l1-body,.auth-main,
+.footer-content-col,.modal-alert{overflow-wrap:break-word;word-break:break-word}
+/* Any horizontally-scrolling strip should scroll smoothly on touch. */
+.req-tabs,.carousel-track-wrap{-webkit-overflow-scrolling:touch}
+
+/* ── ≤1080px: the centred nav links are absolutely positioned, so they ride
+   over the brand and the auth buttons as soon as the bar narrows. Put them
+   back in normal flow before that can happen. ── */
+@media(max-width:1080px){
+  .nav-inner{padding:0 1.5rem;gap:.85rem}
+  .nav-links{position:static;transform:none;left:auto;top:auto;flex-shrink:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .brand-text .main{font-size:.92rem}
+  .brand-logos img{height:44px}
+}
+
+/* ── ≤860px: stack the bar onto two rows rather than letting three groups
+   fight over one line. ── */
+@media(max-width:860px){
+  .nav-inner{flex-wrap:wrap;height:auto;padding:.7rem 1.25rem;row-gap:.55rem}
+  .brand{flex:1 1 auto}
+  .nav-actions{flex:0 0 auto;margin-left:auto}
+  .nav-links{order:3;flex:1 0 100%;justify-content:flex-start;gap:4px;padding-bottom:2px}
+  .topbar .inner{flex-wrap:wrap;gap:.5rem;padding:0 1.25rem}
+  .content-wrap,.how-inner,.faq-inner,.contact-inner{padding-left:1.5rem;padding-right:1.5rem}
+  .hero{padding:3.25rem 1.5rem}
+}
+
+/* ── ≤640px ── */
+@media(max-width:640px){
+  .nav-inner{padding:.6rem 1rem}
+  .brand-logos{gap:4px}
+  .brand-logos img{height:36px}
+  .brand-text{padding-left:8px}
+  .brand-text .main{font-size:.82rem;letter-spacing:.3px}
+  .brand-text .sub{font-size:.52rem;letter-spacing:.8px}
+  .nav-actions{gap:6px}
+  .btn-nav-login,.btn-nav-signup{padding:7px 12px;font-size:.68rem}
+  .hero{padding:2.5rem 1.15rem}
+  .hero-btns{flex-direction:column;align-items:stretch}
+  .hero-btns>*{width:100%;text-align:center;justify-content:center}
+  .content-wrap,.how-inner,.faq-inner{padding-left:1.15rem;padding-right:1.15rem}
+  .contact-inner{padding:1.75rem 1.15rem 2rem}
+  .section-heading,.programs-heading,.bya-heading{overflow-wrap:break-word}
+  /* Contact/details tables scroll inside their own box instead of widening
+     the page (same treatment the applicant table already uses). */
+  .contact-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Six fixed 46px boxes plus gaps overflow a 360px screen. */
+  .otp-wrap{gap:6px}
+  .otp-box{width:clamp(34px,13vw,46px);height:50px;font-size:1.1rem}
+  .auth-shell{border-radius:10px}
+  .steps-map{gap:1rem}
+  .step-item{width:100%;max-width:220px}
+  .modal-backdrop{padding:1rem .85rem}
+  .modal-alert{width:100%}
+}
+
+/* ── ≤480px ── */
+@media(max-width:480px){
+  .nav-inner{padding:.55rem .85rem;gap:.5rem}
+  .brand-text{display:none}
+  .btn-nav-login,.btn-nav-signup{padding:6px 10px;font-size:.64rem}
+  .topbar .inner{padding:0 .85rem;font-size:.68rem}
+  .content-wrap,.how-inner,.faq-inner{padding-left:.9rem;padding-right:.9rem}
+  .contact-inner{padding:1.5rem .95rem 1.75rem}
+  .hero{padding:2.15rem .95rem}
+  .req-panel-wrap{padding:1.1rem .9rem 1.25rem}
+  .otp-box{height:46px;font-size:1rem}
+  .footer-inner{padding-left:.9rem;padding-right:.9rem}
+}
+
+/* ── PASS 2: remaining fixed-width / nowrap overflow ── */
+/* Three stacked brand logos at a fixed 120px tall could not fit a phone
+   row, pushing the whole footer past the viewport edge. */
+@media(max-width:640px){
+  .footer-logo-col{flex-wrap:wrap;gap:16px;justify-content:center}
+  .footer-logo-col img{height:88px}
+  /* Tooltip text is nowrap and centred on its trigger, so near a screen edge
+     it ran off-screen. Let it wrap and cap it to the viewport. */
+  .resend-tooltip{white-space:normal;width:max-content;max-width:min(260px,calc(100vw - 32px));text-align:center}
+  /* Map caption: inline-styled nowrap label centred over the map. */
+  .map-overlay-label{white-space:normal !important;width:max-content;max-width:calc(100% - 24px);padding:7px 12px !important;text-align:center}
+}
+@media(max-width:480px){
+  .footer-logo-col img{height:68px}
+  .map-overlay-label{max-width:calc(100% - 16px);font-size:.92em}
+}
+
+.icon-inline{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;flex-shrink:0}
+</style>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   ACTION-BUTTON STATE ENGINE
+   One shared rule for every send / publish / submit / save button:
+     • GRAY + unclickable      — required fields aren't filled in yet, or
+                                 there's simply nothing to send
+     • BLUE  (mbtn-primary)    — ready to go, but nothing has been touched
+     • GREEN (mbtn-secondary)  — information changed, waiting to be sent
+     • back to BLUE            — the moment the action goes through
+   Register a button with abRegister(btn, scope, isReadyFn) and call
+   abDone(btn) after the action succeeds.
+   ══════════════════════════════════════════════════════════════════════════ */
+var AB_RECS = [];
+function abRegister(btn, scope, isReady, opts){
+  if(!btn) return null;
+  opts = opts || {};
+  var existing = abFind(btn);
+  if(existing){
+    existing.scope = scope || null;
+    if(isReady) existing.isReady = isReady;
+    abPaint(existing);
+    return existing;
+  }
+  var base = opts.base || (btn.classList.contains('mbtn-danger') ? 'mbtn-danger' : 'mbtn-primary');
+  var rec = {
+    btn: btn,
+    scope: scope || null,
+    isReady: isReady || function(){ return true; },
+    dirty: !!opts.startDirty,
+    live: !!opts.live,          /* live buttons are green whenever actionable */
+    base: base
+  };
+  btn.classList.remove('mbtn-secondary');
+  AB_RECS.push(rec);
+  abPaint(rec);
+  return rec;
+}
+function abFind(btn){
+  for(var i=0;i<AB_RECS.length;i++){ if(AB_RECS[i].btn === btn) return AB_RECS[i]; }
+  return null;
+}
+function abSetBase(btn, cls){ var r = abFind(btn); if(r){ r.base = cls; abPaint(r); } }
+function abPaint(rec){
+  var b = rec.btn;
+  if(!b || !b.isConnected) return;
+  var ready = false;
+  try { ready = !!rec.isReady(); } catch(e){ ready = false; }
+  if(b.dataset.abLocked === '1') ready = false;
+  var dirty = ready && (rec.live || rec.dirty);
+  b.disabled = !ready;
+  b.classList.toggle('mbtn-idle', !ready);
+  b.classList.toggle('mbtn-secondary', dirty);
+  b.classList.toggle(rec.base, ready && !dirty);
+}
+function abRefresh(){
+  for(var i=AB_RECS.length-1;i>=0;i--){
+    if(!AB_RECS[i].btn || !AB_RECS[i].btn.isConnected) AB_RECS.splice(i,1);
+    else abPaint(AB_RECS[i]);
+  }
+}
+function abTouch(target){
+  AB_RECS.forEach(function(rec){
+    if(rec.scope && target && rec.scope.contains && rec.scope.contains(target)) rec.dirty = true;
+  });
+  abRefresh();
+}
+function abDone(btn){ var r = abFind(btn); if(r) r.dirty = false; abRefresh(); }
+function abResetAll(){ AB_RECS.forEach(function(r){ r.dirty = false; }); abRefresh(); }
+function abLock(btn, locked){ if(btn){ btn.dataset.abLocked = locked ? '1' : '0'; abRefresh(); } }
+/* ── small readiness helpers ── */
+function abFilled(id){ var el = document.getElementById(id); return !!(el && String(el.value||'').trim()); }
+function abAllFilled(ids){ return ids.every(abFilled); }
+function abChecked(id){ var el = document.getElementById(id); return !!(el && el.checked); }
+function abOtpFilled(prefix){ for(var i=0;i<6;i++){ if(!abFilled(prefix+i)) return false; } return true; }
+/* Any edit anywhere marks the owning button green; any click re-evaluates. */
+['input','change','paste','keyup'].forEach(function(ev){
+  document.addEventListener(ev, function(e){ var t = e.target; setTimeout(function(){ abTouch(t); }, 0); }, true);
+});
+document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true);
+</script>
+</head>
+<body>
+
+<!-- ══ TOPBAR ══ -->
+<div class="topbar">
+  <div class="inner">
+    <span>(049) 559-8900 to 8907 / (02) 8-539-5170 to 5171</span>
+    <a href="mailto:gctcdo@ccc.edu.ph">gctcdo@ccc.edu.ph</a>
+    <a href="https://www.ccc.edu.ph" target="_blank" rel="noopener">www.ccc.edu.ph</a>
+  </div>
+</div>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-logos">
+        <img src="LOGO_CCC.png" alt="City College of Calamba Logo"/>
+        <img src="LOGO_CCC_Admissions.png" alt="CCC Admissions Logo"/>
+      </div>
+      <div class="brand-text">
+        <span class="main">City College of Calamba</span>
+        <span class="sub">Scholarship Application Portal</span>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html" class="hide-m">Home</a>
+      <a href="index.html#how-to-apply" class="hide-m">How to Apply</a>
+      <a href="index.html#before-you-apply" class="hide-m">Before You Apply</a>
+      <a href="index.html#faq">Admission</a>
+      <a href="index.html#contact" class="hide-m">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-nav-login">Log In</a>
+      <a href="signup.html" class="btn-nav-signup" style="opacity:.55;pointer-events:none">Sign Up</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ SIGN UP PAGE ══ -->
+<section class="auth-section">
+  <div class="auth-shell">
+
+    <!-- LEFT: brand / vertical stepper panel -->
+    <div class="auth-side">
+      <h1>Start your scholarship journey.</h1>
+      <p class="as-sub">Create your account to apply, track, and manage your City College of Calamba scholarship application.</p>
+
+      <div class="as-steps" id="sideSteps">
+        <div class="as-step current" data-side-step="1"><span class="as-step-num">1</span><span class="as-step-label">Account Setup</span></div>
+        <div class="as-step" data-side-step="2"><span class="as-step-num">2</span><span class="as-step-label">Program Application</span></div>
+        <div class="as-step" data-side-step="3"><span class="as-step-num">3</span><span class="as-step-label">Personal Information</span></div>
+        <div class="as-step" data-side-step="4"><span class="as-step-num">4</span><span class="as-step-label">Review &amp; Verify</span></div>
+      </div>
+
+      <div class="auth-back">
+        <a href="index.html" onclick="confirmLeaveSignup(event)"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to homepage</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: signup wizard -->
+    <div class="auth-main">
+      <div class="mobile-step-indicator" id="mobileStepIndicator">Step 1 of 4 — Account Setup</div>
+
+      <h2 class="auth-title" id="signupTitle">Create Your Applicant Account</h2>
+      <p class="auth-subtitle" id="signupSubtitle">Once your account is created, please complete your Academic, Financial, Special Demographics, and Health profile for the submission of your application.</p>
+
+      <!-- STEP 1: Account Setup -->
+      <div class="auth-panel active" data-step="1">
+        <p class="step-eyebrow">Account Setup</p>
+        <div class="modal-alert info">
+          <span class="ai icon-i-circle" aria-hidden="true">i</span>
+          <span>A verification code will be sent to this email once you finish your profile, so make sure it's active.</span>
+        </div>
+
+        <div class="mfield">
+          <label for="s-email">Email Address</label>
+          <input type="email" id="s-email" placeholder="e.g. yourname@email.com" autocomplete="email" required/>
+          <div class="field-err" id="s-email-err">Please enter a valid email address.</div>
+        </div>
+
+        <div class="mfield">
+          <label for="s-pass">Password</label>
+          <div class="pass-wrap">
+            <input type="password" id="s-pass" placeholder="Create a password" autocomplete="new-password" oninput="updatePassToggle('s-pass')" required/>
+            <button class="pass-toggle" id="s-pass-toggle" onclick="togglePass('s-pass',this)" type="button" aria-label="Toggle password" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+          </div>
+          <div class="field-note">Minimum 8 characters, with at least 1 number, 1 uppercase &amp; 1 lowercase letter, and 1 special character.</div>
+          <div class="field-err" id="s-pass-err">Password must be at least 8 characters and include a number, an uppercase letter, a lowercase letter, and a special character.</div>
+        </div>
+
+        <div class="mfield">
+          <label for="s-pass2">Confirm Password</label>
+          <div class="pass-wrap">
+            <input type="password" id="s-pass2" placeholder="Re-enter your password" autocomplete="new-password" oninput="updatePassToggle('s-pass2')" required/>
+            <button class="pass-toggle" id="s-pass2-toggle" onclick="togglePass('s-pass2',this)" type="button" aria-label="Toggle password" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+          </div>
+          <div class="field-err" id="s-pass2-err">Passwords do not match.</div>
+        </div>
+
+        <div class="form-actions">
+          <button class="mbtn mbtn-primary" id="signupStep1Btn" onclick="nextStep(1)" type="button">Continue <svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div class="modal-footer-note">
+          Already have an account? <a href="index.html#login">Log in here</a>
+        </div>
+      </div>
+
+      <!-- STEP 2: Program Application -->
+      <div class="auth-panel" data-step="2">
+        <p class="step-eyebrow">Program Application</p>
+
+        <div class="mfield">
+          <label for="pa-applying-as">Applying As</label>
+          <select id="pa-applying-as" required>
+            <option value="">Select&hellip;</option>
+            <option>First Year</option>
+            <option>Transferee</option>
+            <option>Old Curriculum and ALS Completer</option>
+          </select>
+          <div class="field-err" id="pa-applying-as-err">Please select how you are applying.</div>
+        </div>
+        <div class="mfield">
+          <label for="pa-term">Term Applying In</label>
+          <select id="pa-term" required>
+            <option value="">Select&hellip;</option>
+            <option>Term 1</option>
+            <option>Term 2</option>
+          </select>
+          <div class="field-err" id="pa-term-err">Please select the term you are applying in.</div>
+        </div>
+
+        <hr class="guide-divider"/>
+
+        <p class="step-eyebrow">Preferred Program</p>
+        <div class="mfield">
+          <label for="pa-choice1">First Priority Program</label>
+          <select id="pa-choice1" required>
+            <option value="">Select&hellip;</option>
+            <option>Bachelor of Science in Accounting Information System</option>
+            <option>Bachelor of Science in Accountancy</option>
+            <option>Bachelor of Early Childhood Education</option>
+            <option>Bachelor of Secondary Education Major in Filipino</option>
+            <option>Bachelor of Secondary Education Major in English</option>
+            <option>Bachelor of Elementary Education</option>
+            <option>Bachelor of Secondary Education Major in Social Studies</option>
+            <option>Bachelor of Secondary Education Major in Science</option>
+            <option>Bachelor of Secondary Education Major in Mathematics</option>
+            <option>Bachelor of Science in Computer Science</option>
+            <option>Bachelor of Science in Information Technology</option>
+            <option>Bachelor of Science in Psychology</option>
+          </select>
+          <div class="field-err" id="pa-choice1-err">Please select your first priority program.</div>
+        </div>
+        <div class="mfield">
+          <label for="pa-choice2">Second Priority Program</label>
+          <select id="pa-choice2" required>
+            <option value="">Select&hellip;</option>
+            <option>Bachelor of Science in Accounting Information System</option>
+            <option>Bachelor of Science in Accountancy</option>
+            <option>Bachelor of Early Childhood Education</option>
+            <option>Bachelor of Secondary Education Major in Filipino</option>
+            <option>Bachelor of Secondary Education Major in English</option>
+            <option>Bachelor of Elementary Education</option>
+            <option>Bachelor of Secondary Education Major in Social Studies</option>
+            <option>Bachelor of Secondary Education Major in Science</option>
+            <option>Bachelor of Secondary Education Major in Mathematics</option>
+            <option>Bachelor of Science in Computer Science</option>
+            <option>Bachelor of Science in Information Technology</option>
+            <option>Bachelor of Science in Psychology</option>
+            <option>None of the above</option>
+          </select>
+          <div class="field-err" id="pa-choice2-err">Please select your second priority program.</div>
+        </div>
+
+        <hr class="guide-divider"/>
+
+        <div class="form-actions">
+          <button class="mbtn mbtn-ghost" onclick="prevStep(2)" type="button"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
+          <button class="mbtn mbtn-primary" id="signupStep2Btn" onclick="nextStep(2)" type="button">Continue <svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Personal Information -->
+      <div class="auth-panel" data-step="3">
+        <p class="step-eyebrow">Personal &amp; Identity Information</p>
+        <div class="form-grid">
+          <div class="mfield">
+            <label for="p-last">Last Name</label>
+            <input type="text" id="p-last" placeholder="e.g. Dela Cruz" required/>
+            <div class="field-err" id="p-last-err">Please enter your last name.</div>
+          </div>
+          <div class="mfield">
+            <label for="p-first">First Name</label>
+            <input type="text" id="p-first" placeholder="e.g. Juan" required/>
+            <div class="field-err" id="p-first-err">Please enter your first name.</div>
+          </div>
+          <div class="mfield">
+            <label for="p-mi">Middle Name (if any)</label>
+            <input type="text" id="p-mi" placeholder="e.g. Santos"/>
+          </div>
+          <div class="mfield">
+            <label for="p-suffix">Suffix (if any)</label>
+            <select id="p-suffix">
+              <option value="">None</option>
+              <option>Jr.</option>
+              <option>Sr.</option>
+              <option>I</option>
+              <option>II</option>
+              <option>III</option>
+              <option>IV</option>
+              <option>V</option>
+              <option>VI</option>
+              <option>VII</option>
+              <option>VIII</option>
+            </select>
+          </div>
+          <div class="mfield">
+            <label for="p-sex">Sex</label>
+            <select id="p-sex" required>
+              <option value="">Select&hellip;</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+            <div class="field-err" id="p-sex-err">Please select your sex.</div>
+          </div>
+          <div class="mfield">
+            <label for="p-dob">Date of Birth</label>
+            <input type="date" id="p-dob" required/>
+            <div class="field-err" id="p-dob-err">Please enter your date of birth.</div>
+          </div>
+          <div class="mfield">
+            <label for="p-civil">Civil Status</label>
+            <select id="p-civil" required>
+              <option value="">Select&hellip;</option>
+              <option>Single</option>
+              <option>Married</option>
+              <option>Widowed</option>
+              <option>Separated</option>
+            </select>
+            <div class="field-err" id="p-civil-err">Please select your civil status.</div>
+          </div>
+          <div class="mfield">
+            <label for="p-contact">Contact Number</label>
+            <input type="tel" id="p-contact" placeholder="e.g. 09XX XXX XXXX" required/>
+            <div class="field-err" id="p-contact-err">Please enter your contact number.</div>
+          </div>
+          <div class="mfield full">
+            <label for="p-address">Present Home Address</label>
+            <textarea id="p-address" placeholder="e.g. 123 Rizal St., Brgy. Real, Calamba City" required></textarea>
+            <div class="field-err" id="p-address-err">Please enter your present home address.</div>
+          </div>
+          <div class="mfield">
+            <label for="p-barangay">Barangay of Residence</label>
+            <select id="p-barangay" required>
+              <option value="">Select&hellip;</option>
+              <option>Bagong Kalsada</option>
+              <option>Bañadero</option>
+              <option>Banlic</option>
+              <option>Barandal</option>
+              <option>Barangay 1</option>
+              <option>Barangay 2</option>
+              <option>Barangay 3</option>
+              <option>Barangay 4</option>
+              <option>Barangay 5</option>
+              <option>Barangay 6</option>
+              <option>Barangay 7</option>
+              <option>Batino</option>
+              <option>Bubuyan</option>
+              <option>Bucal</option>
+              <option>Bunggo</option>
+              <option>Burol</option>
+              <option>Camaligan</option>
+              <option>Canlubang</option>
+              <option>Halang</option>
+              <option>Hornalan</option>
+              <option>Kay-Anlog</option>
+              <option>La Mesa</option>
+              <option>Laguerta</option>
+              <option>Lawa</option>
+              <option>Lecheria</option>
+              <option>Lingga</option>
+              <option>Looc</option>
+              <option>Mabato</option>
+              <option>Majada Labas</option>
+              <option>Makiling</option>
+              <option>Mapagong</option>
+              <option>Masili</option>
+              <option>Maunong</option>
+              <option>Mayapa</option>
+              <option>Milagrosa</option>
+              <option>Paciano Rizal</option>
+              <option>Palingon</option>
+              <option>Palo-Alto</option>
+              <option>Pansol</option>
+              <option>Parian</option>
+              <option>Prinza</option>
+              <option>Punta</option>
+              <option>Puting Lupa</option>
+              <option>Real</option>
+              <option>Saimsim</option>
+              <option>Sampiruhan</option>
+              <option>San Cristobal</option>
+              <option>San Jose</option>
+              <option>San Juan</option>
+              <option>Sirang Lupa</option>
+              <option>Sucol</option>
+              <option>Turbina</option>
+              <option>Ulango</option>
+              <option>Uwisan</option>
+            </select>
+            <div class="field-err" id="p-barangay-err">Please enter your barangay of residence.</div>
+          </div>
+          <div class="mfield">
+            <div class="residency-label-row">
+              <label for="p-residency">Years of Residency in Calamba</label>
+              <span class="ai icon-i-circle" role="button" tabindex="0" aria-label="Residency proof reminder" onclick="clickResidencyInfo()" onmouseenter="showResidencyInfo()" onmouseleave="hideResidencyInfo()">i</span>
+              <div class="modal-alert info residency-info-popup" id="residencyInfoPopup" role="tooltip">
+                <span class="ai icon-i-circle" aria-hidden="true">i</span>
+                <span>The number of years of residency provided must be supported by a valid proof of residency for the applicant to qualify for a CCC scholarship.</span>
+              </div>
+            </div>
+            <input type="number" id="p-residency" min="0" placeholder="e.g. 12" required/>
+            <div class="field-err" id="p-residency-err">Please enter your years of residency.</div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="mbtn mbtn-ghost" onclick="prevStep(3)" type="button"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
+          <button class="mbtn mbtn-primary" id="signupStep3Btn" onclick="goToReview()" type="button">Review &amp; Continue <svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Review + Verify -->
+      <div class="auth-panel" data-step="4">
+        <div id="reviewWrap">
+          <p class="step-eyebrow">Review Your Information</p>
+
+          <div class="review-group">
+            <h4>Account</h4>
+            <div class="review-row"><span>Email</span><span id="rv-email"></span></div>
+          </div>
+
+          <div class="review-group">
+            <h4>Program Application</h4>
+            <div class="review-row"><span>Applying As</span><span id="rv-pa-applying-as"></span></div>
+            <div class="review-row"><span>Term Applying In</span><span id="rv-pa-term"></span></div>
+            <div class="review-row"><span>First Priority Program</span><span id="rv-pa-choice1"></span></div>
+            <div class="review-row"><span>Second Priority Program</span><span id="rv-pa-choice2"></span></div>
+          </div>
+
+          <div class="review-group">
+            <h4>Personal Information</h4>
+            <div class="review-row"><span>Name</span><span id="rv-name"></span></div>
+            <div class="review-row"><span>Sex / Date of Birth</span><span id="rv-sexdob"></span></div>
+            <div class="review-row"><span>Civil Status</span><span id="rv-civil"></span></div>
+            <div class="review-row"><span>Contact Number</span><span id="rv-contact"></span></div>
+            <div class="review-row"><span>Address</span><span id="rv-address"></span></div>
+          </div>
+
+          <label class="terms-row">
+            <input type="checkbox" id="s-terms"/>
+            <span>I certify that the information provided is true and correct, and I consent to its use for scholarship eligibility matching and verification purposes.</span>
+          </label>
+          <div class="field-err" id="s-terms-err">You must certify your information to continue.</div>
+
+          <label class="terms-row">
+            <input type="checkbox" id="s-privacy"/>
+            <span>I have read and agree to the <a href="https://ccc.edu.ph/public/upload/files/CCC-Privacy-Statement-June-2026.pdf" target="_blank" rel="noopener" class="privacy-link">Privacy Statement</a> terms governing the collection and use of my personal data.</span>
+          </label>
+          <div class="field-err" id="s-privacy-err">You must agree to the Privacy Statement terms to continue.</div>
+
+          <div class="form-actions">
+            <button class="mbtn mbtn-ghost" onclick="prevStep(4)" type="button"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
+            <button class="mbtn mbtn-primary" id="signupCreateBtn" onclick="submitSignup()" type="button">Create Account</button>
+          </div>
+        </div>
+
+        <!-- MFA / Email verification sub-step -->
+        <div id="verifyWrap" style="display:none">
+          <p class="step-eyebrow">Verify Your Email</p>
+          <div class="modal-alert success">
+            <span id="s-verify-msg">A 6-digit verification code was sent to <strong id="s-email-display"></strong>. Enter it below to activate your account.</span>
+          </div>
+
+          <div class="otp-wrap" id="otp-boxes">
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="sotp0" aria-label="Digit 1"/>
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="sotp1" aria-label="Digit 2"/>
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="sotp2" aria-label="Digit 3"/>
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="sotp3" aria-label="Digit 4"/>
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="sotp4" aria-label="Digit 5"/>
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" id="sotp5" aria-label="Digit 6"/>
+          </div>
+          <div class="field-err" id="sotp-err" style="text-align:center;display:none">Incorrect code. Please try again.</div>
+
+          <div class="timer-text" id="sotp-timer">Code expires in <strong id="sotp-countdown">10:00</strong></div>
+          <div style="text-align:center;margin:.5rem 0 1rem">
+            <span class="resend-wrap">
+              <button class="resend-btn is-cooldown" id="sresend-btn" onclick="resendSignupCode()" aria-disabled="true">Resend code</button>
+              <span class="resend-tooltip" id="sresend-tooltip" role="status"></span>
+            </span>
+          </div>
+
+          <button class="mbtn mbtn-primary" id="signupVerifyBtn" onclick="verifySignup()" type="button">Sign up</button>
+          <button class="mbtn mbtn-ghost" onclick="backToReview()" type="button"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
+        <div class="modal-footer-note" style="margin-top:.5rem">
+          Please check your spam folder if you haven&rsquo;t received an email within a minute.
+        </div>
+        </div>
+
+        <!-- Success state -->
+        <div id="successWrap" style="display:none">
+          <div class="auth-success">
+            <div class="succ-icon"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3>Account Created!</h3>
+            <p>Please wait while we redirect you&hellip;</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end auth-main -->
+  </div><!-- end auth-shell -->
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-main">
+
+      <!-- LEFT: Logo -->
+      <div class="footer-logo-col">
+        <img src="LOGO_CCC-WHITE-ONLY.png" alt="City College of Calamba White Logo" style="mix-blend-mode:lighten;"/>
+        <img src="LOGO_CCC-WHITE_GUIDANCE.png" alt="CCC Guidance White Logo" style="mix-blend-mode:lighten;"/>
+      </div>
+
+      <!-- Vertical Divider removed -->
+
+      <!-- RIGHT: All content -->
+      <div class="footer-content-col">
+
+        <div class="footer-content-row">
+
+          <!-- Contact Information -->
+          <div id="footer-contact" style="text-align:left;">
+            <h4>CONNECT DIRECTLY WITH CCC</h4>
+            <p style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span style="flex-shrink:0;display:flex;color:var(--gold);"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+              <span>(049) 559 8900</span>
+            </p>
+            <p style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span style="flex-shrink:0;display:flex;color:var(--gold);"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+              <span>(02) 8 539 5170</span>
+            </p>
+            <p style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span style="flex-shrink:0;display:flex;color:var(--gold);"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+              <a href="https://www.ccc.edu.ph" target="_blank" rel="noopener" style="color:rgba(255,255,255,.5);text-decoration:none;font-size:.8rem;">www.ccc.edu.ph</a>
+            </p>
+            <p style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span style="flex-shrink:0;display:flex;color:var(--gold);"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+              <a href="mailto:info@ccc.edu.ph" style="color:rgba(255,255,255,.5);text-decoration:none;font-size:.8rem;">info@ccc.edu.ph</a>
+            </p>
+            <p style="margin-bottom:4px;font-weight:700;color:#fff;font-size:.78rem;">Education Verification:</p>
+            <p style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+              <span style="flex-shrink:0;display:flex;color:var(--gold);"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+              <a href="mailto:verify@ccc.edu.ph" style="color:rgba(255,255,255,.5);text-decoration:none;font-size:.8rem;">verify@ccc.edu.ph</a>
+            </p>
+            <div style="display:flex;gap:10px;margin-top:4px;justify-content:flex-start;">
+              <a href="https://www.facebook.com/citycollegeofcalamba" target="_blank" rel="noopener" title="CCC Facebook Page"
+                 style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;text-decoration:none;color:#fff;flex-shrink:0;"
+                 onmouseover="this.style.background='rgba(255,255,255,0.28)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Collegiate Departments -->
+          <div>
+            <h4>Collegiate Departments</h4>
+            <a href="#">Department of Business and Accountancy</a>
+            <a href="#">Department of Teacher Education</a>
+            <a href="#">Department of Computing and Informatics</a>
+            <a href="#">Department of Arts &amp; Sciences</a>
+          </div>
+
+          <!-- Resources -->
+          <div>
+            <h4>Resources</h4>
+            <a href="index.html#before-you-apply">Admission Requirements</a>
+            <a href="index.html#faq">FAQs</a>
+            <a href="https://ccc.edu.ph/public/upload/files/CCC-Privacy-Statement-June-2026.pdf" target="_blank" rel="noopener">Privacy Statement</a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</footer>
+<div class="footer-bar">&#169; 2026 Iskolusyon Scholarship Management System &nbsp;|&nbsp; Developed for the City College of Calamba</div>
+
+<!-- SCROLL TO TOP -->
+<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+<!-- ══ LEAVE SIGN UP CONFIRMATION POPUP ══ -->
+<div class="modal-backdrop" id="leaveConfirmModal" onclick="handleLeaveBackdropClick(event)">
+  <div class="modal-box leave-confirm-box" role="dialog" aria-modal="true" aria-labelledby="leaveConfirmTitle" onclick="event.stopPropagation()">
+    <div class="leave-confirm-body">
+      <div class="leave-confirm-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+      <h3 id="leaveConfirmTitle">Leave Sign Up?</h3>
+      <p>Your progress will be lost. Do you want to go back to the homepage?</p>
+      <div class="leave-confirm-actions">
+        <button class="lc-btn lc-btn-no" onclick="closeLeaveConfirm()">No</button>
+        <button class="lc-btn lc-btn-yes" onclick="confirmLeaveYes()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Leave Sign Up confirmation popup ── */
+function confirmLeaveSignup(e){
+  if(e) e.preventDefault();
+  document.getElementById('leaveConfirmModal').classList.add('show');
+  document.body.style.overflow='hidden';
+  return false;
+}
+function closeLeaveConfirm(){
+  document.getElementById('leaveConfirmModal').classList.remove('show');
+  document.body.style.overflow='';
+}
+function handleLeaveBackdropClick(e){
+  if(e.target===document.getElementById('leaveConfirmModal')) closeLeaveConfirm();
+}
+function confirmLeaveYes(){
+  window.location.href='index.html';
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    const m=document.getElementById('leaveConfirmModal');
+    if(m && m.classList.contains('show')) closeLeaveConfirm();
+  }
+});
+</script>
+
+<script>
+/* ══ BACKEND BASE URL ══
+   This folder has no .env.local on purpose: no Supabase URL or key ever ships
+   to the browser. Registration goes through the backend (the folder that does
+   hold .env.local), which creates the Supabase Auth user and the
+   public.applications row. Leave as '/api' when both are served from the same
+   origin; otherwise set the full origin, e.g. 'http://localhost:3000/api'. */
+const ISKO_API_BASE = '/api';
+
+async function iskoPost(path, body){
+  const res = await fetch(ISKO_API_BASE + path, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    credentials: 'include',
+    body: JSON.stringify(body)
+  });
+  if(!res.ok){
+    let msg = res.statusText;
+    try { msg = (await res.json()).error || msg; } catch(e){}
+    throw new Error(msg);
+  }
+  return res.status === 204 ? null : res.json();
+}
+
+/* Every key below is a real public.applications column. The two password
+   fields go to Supabase Auth, not to a column. */
+function buildRegistrationPayload(){
+  const suffix    = val('p-suffix');
+  const residency = val('p-residency');
+  return {
+    email:    val('s-email'),
+    password: document.getElementById('s-pass').value,
+    application: {
+      applicant_email:  val('s-email'),
+      applicant_name:   [val('p-first'), val('p-last')].filter(Boolean).join(' '),
+      first_name:       val('p-first'),
+      middle_name:      val('p-mi') || null,
+      last_name:        val('p-last'),
+      suffix:           suffix || null,
+      sex:              val('p-sex'),
+      date_of_birth:    val('p-dob') || null,
+      civil_status:     val('p-civil'),
+      contact_number:   val('p-contact'),
+      address:          val('p-address'),
+      barangay:         val('p-barangay'),
+      residency_years:  residency === '' ? null : Number(residency),
+      applying_as:      val('pa-applying-as'),
+      term_applying:    val('pa-term'),
+      program_choice_1: val('pa-choice1'),
+      program_choice_2: val('pa-choice2'),
+      status:           'pending',
+      current_step:     1
+    },
+    consents: {
+      certified_info:   document.getElementById('s-terms').checked,
+      privacy_agreed:   document.getElementById('s-privacy').checked
+    }
+  };
+}
+
+
+/* -- Reusable button loading-state helper: disables + grays the button and
+   shows processing text for a moment before the action completes -- */
+function iskoBtnLoading(btn, text){
+  if(!btn || btn.dataset.iskoLoading) return;
+  btn.dataset.iskoLoading = '1';
+  btn.dataset.iskoOrigText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = text;
+}
+function iskoBtnDone(btn){
+  if(!btn) return;
+  btn.disabled = false;
+  if(btn.dataset.iskoOrigText !== undefined){ btn.innerHTML = btn.dataset.iskoOrigText; delete btn.dataset.iskoOrigText; }
+  delete btn.dataset.iskoLoading;
+}
+const stepLabels = {
+  1:'Account Setup', 2:'Program Application', 3:'Personal Information', 4:'Review & Verify'
+};
+let currentStep = 1;
+const totalSteps = 4;
+
+function showFErr(id){ const el=document.getElementById(id); if(el) el.style.display='block'; }
+function hideFErr(id){ const el=document.getElementById(id); if(el) el.style.display='none'; }
+const ICON_EYE_OPEN='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+const ICON_EYE_CLOSED='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+function togglePass(inputId,btn){
+  const inp=document.getElementById(inputId);
+  inp.type=inp.type==='password'?'text':'password';
+  btn.innerHTML=inp.type==='password'?ICON_EYE_CLOSED:ICON_EYE_OPEN;
+}
+function updatePassToggle(inputId){
+  const inp=document.getElementById(inputId);
+  const btn=document.getElementById(inputId+'-toggle');
+  if(!inp||!btn) return;
+  if(inp.value.length>0){
+    btn.style.display='inline-flex';
+  } else {
+    btn.style.display='none';
+    inp.type='password';
+    btn.innerHTML=ICON_EYE_CLOSED;
+  }
+}
+
+function renderStep(n){
+  document.querySelectorAll('.auth-panel[data-step]').forEach(p=>{
+    p.classList.toggle('active', Number(p.dataset.step)===n);
+  });
+  document.querySelectorAll('.as-step').forEach(s=>{
+    const sn = Number(s.dataset.sideStep);
+    s.classList.remove('current','done');
+    if(sn < n) s.classList.add('done');
+    else if(sn === n) s.classList.add('current');
+  });
+  const mob=document.getElementById('mobileStepIndicator');
+  if(mob) mob.textContent = 'Step '+n+' of '+totalSteps+' — '+stepLabels[n];
+  window.scrollTo({top:0,behavior:'smooth'});
+  abRefresh();
+}
+
+function validateStep(n){
+  let ok=true;
+  if(n===1){
+    const email=document.getElementById('s-email').value.trim();
+    const pass=document.getElementById('s-pass').value;
+    const pass2=document.getElementById('s-pass2').value;
+    if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showFErr('s-email-err');ok=false;}else{hideFErr('s-email-err');}
+    if(!pass||pass.length<8||!/\d/.test(pass)||!/[a-z]/.test(pass)||!/[A-Z]/.test(pass)||!/[^A-Za-z0-9]/.test(pass)){showFErr('s-pass-err');ok=false;}else{hideFErr('s-pass-err');}
+    if(!pass2||pass2!==pass){showFErr('s-pass2-err');ok=false;}else{hideFErr('s-pass2-err');}
+  }
+  if(n===2){
+    const reqIds=['pa-applying-as','pa-term','pa-choice1','pa-choice2'];
+    reqIds.forEach(id=>{
+      const el=document.getElementById(id);
+      const val=(el.value||'').trim();
+      if(!val){ showFErr(id+'-err'); ok=false; } else { hideFErr(id+'-err'); }
+    });
+  }
+  if(n===3){
+    /* Middle Name (p-mi) and Suffix (p-suffix) are optional — all other fields required. */
+    const reqIds=['p-last','p-first','p-sex','p-dob','p-civil','p-contact','p-address','p-barangay','p-residency'];
+    reqIds.forEach(id=>{
+      const el=document.getElementById(id);
+      const val=(el.value||'').trim();
+      if(!val){ showFErr(id+'-err'); ok=false; } else { hideFErr(id+'-err'); }
+    });
+  }
+  return ok;
+}
+
+function nextStep(n){
+  if(!validateStep(n)) return;
+  currentStep = n+1;
+  renderStep(currentStep);
+  abDone(document.getElementById('signupStep'+n+'Btn'));
+}
+function prevStep(n){
+  currentStep = n-1;
+  renderStep(currentStep);
+}
+
+function goToReview(){
+  if(!validateStep(3)) return;
+  populateReview();
+  currentStep = 4;
+  renderStep(4);
+  abDone(document.getElementById('signupStep3Btn'));
+}
+
+let residencyInfoTimer = null;
+function showResidencyInfo(){
+  document.getElementById('residencyInfoPopup').style.display = 'flex';
+  clearTimeout(residencyInfoTimer);
+}
+function hideResidencyInfo(){
+  document.getElementById('residencyInfoPopup').style.display = 'none';
+  clearTimeout(residencyInfoTimer);
+}
+function clickResidencyInfo(){
+  showResidencyInfo();
+  residencyInfoTimer = setTimeout(hideResidencyInfo, 5000);
+}
+
+function val(id){ const el=document.getElementById(id); return el ? el.value.trim() : ''; }
+function selText(id){ const el=document.getElementById(id); return el && el.value ? el.value : '—'; }
+
+function populateReview(){
+  document.getElementById('rv-email').textContent = val('s-email') || '—';
+
+  const name = [val('p-last'), val('p-first'), val('p-mi')].filter(Boolean).join(', ');
+  document.getElementById('rv-name').textContent = name || '—';
+  const sexdob = [selText('p-sex'), val('p-dob')].filter(v=>v && v!=='—').join(' · ');
+  document.getElementById('rv-sexdob').textContent = sexdob || '—';
+  document.getElementById('rv-civil').textContent = selText('p-civil');
+  document.getElementById('rv-contact').textContent = val('p-contact') || '—';
+  document.getElementById('rv-address').textContent = val('p-address') || '—';
+
+  document.getElementById('rv-pa-applying-as').textContent = selText('pa-applying-as');
+  document.getElementById('rv-pa-term').textContent = selText('pa-term');
+  document.getElementById('rv-pa-choice1').textContent = selText('pa-choice1');
+  document.getElementById('rv-pa-choice2').textContent = selText('pa-choice2');
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  /* OTP box behaviour for signup verification */
+  const sboxes=document.querySelectorAll('#verifyWrap .otp-box');
+  sboxes.forEach((box,i)=>{
+    box.addEventListener('input',e=>{
+      const v=e.target.value.replace(/\D/g,'');
+      e.target.value=v?v[0]:'';
+      if(v&&i<sboxes.length-1)sboxes[i+1].focus();
+      hideFErr('sotp-err');
+    });
+    box.addEventListener('keydown',e=>{
+      if(e.key==='Backspace'&&!box.value&&i>0)sboxes[i-1].focus();
+    });
+    box.addEventListener('paste',e=>{
+      e.preventDefault();
+      const p=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+      p.split('').forEach((ch,idx)=>{ if(sboxes[idx])sboxes[idx].value=ch; });
+      if(p.length)sboxes[Math.min(p.length,sboxes.length-1)].focus();
+    });
+  });
+});
+
+function submitSignup(){
+  const terms=document.getElementById('s-terms');
+  const privacy=document.getElementById('s-privacy');
+  let ok=true;
+  if(!terms.checked){ showFErr('s-terms-err'); ok=false; }else{ hideFErr('s-terms-err'); }
+  if(!privacy.checked){ showFErr('s-privacy-err'); ok=false; }else{ hideFErr('s-privacy-err'); }
+  if(!ok) return;
+
+  const btnEl=document.getElementById('signupCreateBtn');
+  iskoBtnLoading(btnEl,'Creating Account...');
+
+  /* The backend creates the Supabase Auth user, inserts the
+     public.applications row with auth_user_id set, stamps certified_info_at /
+     privacy_agreed_at / privacy_statement_version, seeds the four
+     public.application_sections rows as 'not-started', writes an
+     email_otps row and mails the 6-digit code. */
+  iskoPost('/auth/register', buildRegistrationPayload()).catch(err=>{
+    console.warn('[ISKO] register:', err.message);
+  });
+
+  setTimeout(()=>{
+  iskoBtnDone(btnEl);
+  const msgEl=document.getElementById('s-verify-msg');
+  if(msgEl) msgEl.innerHTML='A 6-digit verification code was sent to <strong id="s-email-display">'+val('s-email')+'</strong>. Enter it below to activate your account.';
+  document.getElementById('reviewWrap').style.display='none';
+  document.getElementById('verifyWrap').style.display='block';
+  startSignupOTPTimer();
+  abDone(btnEl);
+  setTimeout(()=>document.getElementById('sotp0').focus(),200);
+  },1600);
+}
+
+function backToReview(){
+  /* Simply switch the visible sub-step back to Review; deliberately does
+     NOT clear the OTP inputs, does NOT reset the resend/expiry countdown,
+     and does NOT reset the verification message — those all keep running
+     in the background so the user doesn't lose progress. */
+  document.getElementById('verifyWrap').style.display='none';
+  document.getElementById('reviewWrap').style.display='block';
+  abRefresh();
+}
+
+function verifySignup(){
+  const code=['sotp0','sotp1','sotp2','sotp3','sotp4','sotp5'].map(id=>document.getElementById(id).value).join('');
+  if(code.length<6){
+    const el=document.getElementById('sotp-err');
+    el.textContent='Please enter all 6 digits.';
+    el.style.display='block';
+    return;
+  }
+  const btnEl=document.getElementById('signupVerifyBtn');
+  iskoBtnLoading(btnEl,'Verifying...');
+  /* The backend checks the code against email_otps (hash, expires_at,
+     consumed_at, attempts), marks the auth user's email confirmed and sets
+     applications.current_step = 2. */
+  iskoPost('/auth/verify-registration', {email: val('s-email'), otp: code}).catch(err=>{
+    console.warn('[ISKO] verify-registration:', err.message);
+  });
+  setTimeout(()=>{
+  hideFErr('sotp-err');
+  clearInterval(sOtpInterval);
+  abDone(btnEl);
+  document.getElementById('verifyWrap').style.display='none';
+  document.getElementById('successWrap').style.display='block';
+  const titleEl=document.getElementById('signupTitle'); if(titleEl) titleEl.style.display='none';
+  const subEl=document.getElementById('signupSubtitle'); if(subEl) subEl.style.display='none';
+  const authMainEl=document.querySelector('.auth-main'); if(authMainEl) authMainEl.classList.add('is-success-view');
+  /* Auto sign-in: account is already verified, so we take the applicant
+     straight into their Applicant Page instead of asking them to log in again. */
+  setTimeout(()=>{ window.location.href='applicant.html'; }, 2200);
+  },1200);
+}
+
+/* ── OTP code expiry (10 min) + resend cooldown (1 min) ──
+   The code stays valid for the full 10-minute countdown, but the
+   "Resend code" button unlocks after just 1 minute. */
+function formatMMSS(secs){
+  secs=Math.max(secs,0);
+  const m=Math.floor(secs/60).toString().padStart(2,'0');
+  const s=(secs%60).toString().padStart(2,'0');
+  return m+':'+s;
+}
+function showResendTooltip(tipEl,secsLeft){
+  if(!tipEl) return;
+  const label = secsLeft>=60 ? Math.ceil(secsLeft/60)+' minute'+(Math.ceil(secsLeft/60)!==1?'s':'') : Math.max(secsLeft,1)+' second'+(secsLeft!==1?'s':'');
+  tipEl.textContent='You may request another code in '+label+'.';
+  tipEl.classList.add('show');
+  clearTimeout(tipEl._hideTimer);
+  tipEl._hideTimer=setTimeout(()=>tipEl.classList.remove('show'),5000);
+}
+function hideResendTooltip(tipEl){
+  if(!tipEl) return;
+  tipEl.classList.remove('show');
+  clearTimeout(tipEl._hideTimer);
+}
+/* dismiss an open tooltip when the user clicks anywhere outside it */
+document.addEventListener('click',e=>{
+  document.querySelectorAll('.resend-tooltip.show').forEach(tip=>{
+    const wrap=tip.closest('.resend-wrap');
+    if(wrap && !wrap.contains(e.target)) hideResendTooltip(tip);
+  });
+});
+
+let sOtpInterval;
+let sOtpCooldownSecs=0;
+function startSignupOTPTimer(){
+  let expirySecs=600; /* code stays valid for 10:00 */
+  sOtpCooldownSecs=60;  /* resend unlocks after 01:00 */
+  const rb=document.getElementById('sresend-btn');
+  if(rb) rb.classList.add('is-cooldown');
+  hideResendTooltip(document.getElementById('sresend-tooltip'));
+  clearInterval(sOtpInterval);
+  const cd=document.getElementById('sotp-countdown');
+  if(cd) cd.textContent=formatMMSS(expirySecs);
+  sOtpInterval=setInterval(()=>{
+    expirySecs--; sOtpCooldownSecs--;
+    if(!document.getElementById('sotp-countdown')){ clearInterval(sOtpInterval); return; }
+    document.getElementById('sotp-countdown').textContent=formatMMSS(expirySecs);
+    if(sOtpCooldownSecs<=0 && rb) rb.classList.remove('is-cooldown');
+    if(expirySecs<=0){
+      clearInterval(sOtpInterval);
+      document.getElementById('sotp-timer').innerHTML='<span style="color:#C0392B;font-size:.75rem">Code expired. Please resend.</span>';
+      if(rb) rb.classList.remove('is-cooldown');
+    }
+  },1000);
+}
+function resendSignupCode(){
+  const rb=document.getElementById('sresend-btn');
+  const tip=document.getElementById('sresend-tooltip');
+  if(rb && rb.classList.contains('is-cooldown')){
+    showResendTooltip(tip, Math.max(sOtpCooldownSecs,1));
+    return;
+  }
+  hideResendTooltip(tip);
+  ['sotp0','sotp1','sotp2','sotp3','sotp4','sotp5'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; });
+  hideFErr('sotp-err');
+  const email=document.getElementById('s-email-display').textContent;
+  const msgEl=document.getElementById('s-verify-msg');
+  if(msgEl) msgEl.innerHTML='A new 6-digit verification code was sent to <strong id="s-email-display">'+email+'</strong>. Enter it below to activate your account.';
+  document.getElementById('sotp-timer').innerHTML='Code expires in <strong id="sotp-countdown">10:00</strong>';
+  startSignupOTPTimer();
+  document.getElementById('sotp0').focus();
+  /* Issues a fresh public.email_otps row with purpose='login' for this email. */
+  iskoPost('/auth/resend-otp', {email: email, purpose: 'register'}).catch(err=>{
+    console.warn('[ISKO] resend-otp:', err.message);
+  });
+}
+
+/* ── SCROLL TO TOP ── */
+const toTopBtn = document.getElementById('toTop');
+if(toTopBtn){
+  window.addEventListener('scroll', () => {
+    toTopBtn.classList.toggle('show', window.scrollY > 300);
+  });
+}
+</script>
+
+<script>
+/* ── signup.html registrations (required-field lists mirror validateStep) ── */
+abRegister(document.getElementById('signupStep1Btn'), document.querySelector('.auth-panel[data-step="1"]'),
+  function(){ return abAllFilled(['s-email','s-pass','s-pass2']); });
+abRegister(document.getElementById('signupStep2Btn'), document.querySelector('.auth-panel[data-step="2"]'),
+  function(){ return abAllFilled(['pa-applying-as','pa-term','pa-choice1','pa-choice2']); });
+abRegister(document.getElementById('signupStep3Btn'), document.querySelector('.auth-panel[data-step="3"]'),
+  function(){ return abAllFilled(['p-last','p-first','p-sex','p-dob','p-civil','p-contact','p-address','p-barangay','p-residency']); });
+abRegister(document.getElementById('signupCreateBtn'), document.getElementById('reviewWrap'),
+  function(){ return abChecked('s-terms') && abChecked('s-privacy'); });
+abRegister(document.getElementById('signupVerifyBtn'), document.getElementById('verifyWrap'),
+  function(){ return abOtpFilled('sotp'); });
+</script>
+</body>
+</html>
