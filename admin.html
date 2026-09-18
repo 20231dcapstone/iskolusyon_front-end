@@ -66,10 +66,12 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .admin-name{font-family:'Montserrat',sans-serif;font-weight:800;font-size:.95rem}
 .admin-role{font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.8px;margin-top:4px;font-family:'Montserrat',sans-serif;font-weight:700}
 
-.sidebar-menu{list-style:none;display:flex;flex-direction:column;gap:3px;flex:1}
-.sidebar-menu-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:.9rem 0 .4rem .6rem}
-.sidebar-menu-label:first-child{margin-top:0}
-.menu-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:.79rem;color:rgba(255,255,255,.8);transition:background .2s,color .2s;width:100%}
+.sidebar-menu{list-style:none;display:flex;flex-direction:column;gap:11px;flex:1}
+.sidebar-menu-group{display:block}
+.sidebar-menu-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.56rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:0 0 .3rem 11px;display:flex;align-items:center;gap:6px;cursor:default;user-select:none}
+.sml-icon{width:13px;height:13px;flex-shrink:0;display:inline-flex}
+.sidebar-menu-sub{list-style:none;display:flex;flex-direction:column;gap:3px;margin:0 0 0 16px;padding-left:11px;border-left:1px solid rgba(255,255,255,.14)}
+.menu-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:.72rem;color:rgba(255,255,255,.8);transition:background .2s,color .2s;width:100%}
 .menu-btn:hover{background:rgba(255,255,255,.1);color:#fff}
 .menu-btn.active{background:#fff;color:var(--navy)}
 .menu-icon{width:18px;text-align:center;flex-shrink:0;font-size:.9rem}
@@ -78,7 +80,7 @@ body{font-family:'Open Sans',sans-serif;color:var(--text);background:var(--off);
 .count-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;margin-left:8px;background:var(--gold-light);color:var(--navy);font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:800;line-height:1;border-radius:999px;flex-shrink:0;vertical-align:middle}
 
 .sidebar-logout{margin-top:1.25rem;padding-top:1.1rem;border-top:1px solid rgba(255,255,255,.15)}
-.logout-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.79rem;color:rgba(255,255,255,.85);width:100%;transition:background .2s,color .2s}
+.logout-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:8px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;color:rgba(255,255,255,.85);width:100%;transition:background .2s,color .2s}
 .logout-btn:hover{background:rgba(192,57,43,.35);color:#fff}
 
 /* ── MAIN CONTENT ── */
@@ -569,6 +571,8 @@ span.flag-btn{cursor:default}
   .sidebar-profile{margin-bottom:0;padding-bottom:0;border-bottom:none;flex-shrink:0}
   .sidebar-menu{flex-direction:row;flex-wrap:wrap;margin-left:1rem}
   .sidebar-menu-label{display:none}
+  .sidebar-menu-group{display:contents}
+  .sidebar-menu-sub{display:contents}
   .sidebar-logout{margin-top:0;padding-top:0;border-top:none;margin-left:auto}
   .portal-main{padding:1.75rem 1.25rem 3rem}
   .edit-grid,.status-action-grid,.mini-summary-grid,.qualified-breakdown-columns{grid-template-columns:1fr}
@@ -783,6 +787,22 @@ function abTouch(target){
 function abDone(btn){ var r = abFind(btn); if(r) r.dirty = false; abRefresh(); }
 function abResetAll(){ AB_RECS.forEach(function(r){ r.dirty = false; }); abRefresh(); }
 function abLock(btn, locked){ if(btn){ btn.dataset.abLocked = locked ? '1' : '0'; abRefresh(); } }
+/* ── Dynamic loading state for primary form-submit buttons: disable + gray
+   out (via the existing abLock gray/unclickable state) and swap in
+   processing text for a moment before the real handler runs. ── */
+function runWithSaving(btn, loadingText, actionFn){
+  if(!btn || btn.dataset.abSaving === '1') return;
+  btn.dataset.abSaving = '1';
+  var originalText = btn.textContent;
+  abLock(btn, true);
+  btn.textContent = loadingText;
+  setTimeout(function(){
+    btn.textContent = originalText;
+    btn.dataset.abSaving = '0';
+    abLock(btn, false);
+    actionFn();
+  }, 1200);
+}
 /* ── small readiness helpers ── */
 function abFilled(id){ var el = document.getElementById(id); return !!(el && String(el.value||'').trim()); }
 function abAllFilled(ids){ return ids.every(abFilled); }
@@ -822,7 +842,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <a href="#" class="gate-forgot" onclick="showGateView('forgot');return false;">Forgot Password?</a>
       </div>
       <p class="gate-error" id="gateError">Incorrect email or password. Please try again.</p>
-      <button class="mbtn mbtn-primary" id="gateUnlockBtn" onclick="attemptLogin()">Unlock Console</button>
+      <button class="mbtn mbtn-primary" id="gateUnlockBtn" onclick="runWithSaving(this,'Unlocking...',attemptLogin)">Unlock Console</button>
       <p class="gate-foot">Access is logged. Unauthorized use is prohibited.</p>
     </div>
 
@@ -835,7 +855,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <label for="gateForgotEmail">Institutional Email</label>
         <input type="email" id="gateForgotEmail" placeholder="name@ccc.edu.ph" autocomplete="off"/>
       </div>
-      <button class="mbtn mbtn-primary" id="gateForgotBtn" onclick="forgotStep1()">Send Code</button>
+      <button class="mbtn mbtn-primary" id="gateForgotBtn" onclick="runWithSaving(this,'Sending...',forgotStep1)">Send Code</button>
       <a href="#" class="gate-back" onclick="showGateView('login');return false;">&larr; Back to Login</a>
     </div>
 
@@ -860,7 +880,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
           <span class="resend-tooltip" id="gateForgotResendTooltip" role="status"></span>
         </span>
       </div>
-      <button class="mbtn mbtn-primary" id="gateForgotOtpBtn" onclick="forgotStep2()">Verify Code</button>
+      <button class="mbtn mbtn-primary" id="gateForgotOtpBtn" onclick="runWithSaving(this,'Verifying...',forgotStep2)">Verify Code</button>
       <a href="#" class="gate-back" onclick="showGateView('forgot');return false;">&larr; Back</a>
     </div>
 
@@ -878,7 +898,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <input type="password" id="gateNewPasswordConfirm" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="off"/>
       </div>
       <p class="gate-error" id="gateSetPasswordError">Passwords must match and be at least 8 characters.</p>
-      <button class="mbtn mbtn-primary" id="gateSetPassBtn" onclick="submitSetPassword()">Set Password &amp; Continue</button>
+      <button class="mbtn mbtn-primary" id="gateSetPassBtn" onclick="runWithSaving(this,'Setting Password...',submitSetPassword)">Set Password &amp; Continue</button>
     </div>
 
     <!-- INVALID / EXPIRED LINK VIEW -->
@@ -954,16 +974,28 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
     </div>
 
     <ul class="sidebar-menu">
-      <li class="sidebar-menu-label">Overview</li>
-      <li><button class="menu-btn active" data-panel="dashboard" onclick="showPanel('dashboard',this)"><span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="3" y="12" width="4" height="8"/><rect x="10" y="7" width="4" height="13"/><rect x="17" y="3" width="4" height="17"/></svg></span> Dashboard <span class="menu-badge is-empty" id="dashNewBadge">0</span></button></li>
+      <li class="sidebar-menu-group">
+        <div class="sidebar-menu-label"><span class="sml-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>Overview</div>
+        <ul class="sidebar-menu-sub">
+          <li><button class="menu-btn active" data-panel="dashboard" onclick="showPanel('dashboard',this)"><span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><rect x="3" y="12" width="4" height="8"/><rect x="10" y="7" width="4" height="13"/><rect x="17" y="3" width="4" height="17"/></svg></span> Dashboard <span class="menu-badge is-empty" id="dashNewBadge">0</span></button></li>
+        </ul>
+      </li>
 
-      <li class="sidebar-menu-label">Communications</li>
-      <li class="comms-standard-only"><button class="menu-btn" data-panel="announcements" onclick="showPanel('announcements',this)"><span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 11v2a2 2 0 0 0 2 2h1l4 4V5l-4 4H5a2 2 0 0 0-2 2z"/><path d="M16 8a4 4 0 0 1 0 8"/><path d="M19 5a8 8 0 0 1 0 14"/></svg></span> Communications</button></li>
-      <li class="registrar-only"><button class="menu-btn" data-panel="allowance" onclick="showPanel('allowance',this)"><span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 11v2a2 2 0 0 0 2 2h1l4 4V5l-4 4H5a2 2 0 0 0-2 2z"/><path d="M16 8a4 4 0 0 1 0 8"/><path d="M19 5a8 8 0 0 1 0 14"/></svg></span> Allowance</button></li>
+      <li class="sidebar-menu-group">
+        <div class="sidebar-menu-label"><span class="sml-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>Communications</div>
+        <ul class="sidebar-menu-sub">
+          <li class="comms-standard-only"><button class="menu-btn" data-panel="announcements" onclick="showPanel('announcements',this)"><span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 11v2a2 2 0 0 0 2 2h1l4 4V5l-4 4H5a2 2 0 0 0-2 2z"/><path d="M16 8a4 4 0 0 1 0 8"/><path d="M19 5a8 8 0 0 1 0 14"/></svg></span> Communications</button></li>
+          <li class="registrar-only"><button class="menu-btn" data-panel="allowance" onclick="showPanel('allowance',this)"><span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M3 11v2a2 2 0 0 0 2 2h1l4 4V5l-4 4H5a2 2 0 0 0-2 2z"/><path d="M16 8a4 4 0 0 1 0 8"/><path d="M19 5a8 8 0 0 1 0 14"/></svg></span> Allowance</button></li>
+        </ul>
+      </li>
 
-      <li class="sidebar-menu-label super-admin-only" id="superAdminLabel">Super Admin</li>
-      <li class="super-admin-only"><button class="menu-btn" data-panel="admins" onclick="showPanel('admins',this)"><span class="menu-icon">&#128737;</span> Admin Accounts</button></li>
-      <li class="super-admin-only"><button class="menu-btn" data-panel="system" onclick="showPanel('system',this)"><span class="menu-icon">&#9881;</span> System &amp; Activity <span class="menu-badge is-empty" id="systemUnreadBadge">0</span></button></li>
+      <li class="sidebar-menu-group super-admin-only" id="superAdminLabel">
+        <div class="sidebar-menu-label"><span class="sml-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>Super Admin</div>
+        <ul class="sidebar-menu-sub">
+          <li><button class="menu-btn" data-panel="admins" onclick="showPanel('admins',this)"><span class="menu-icon">&#128737;</span> Admin Accounts</button></li>
+          <li><button class="menu-btn" data-panel="system" onclick="showPanel('system',this)"><span class="menu-icon">&#9881;</span> System &amp; Activity <span class="menu-badge is-empty" id="systemUnreadBadge">0</span></button></li>
+        </ul>
+      </li>
     </ul>
 
     <div class="sidebar-logout">
@@ -1218,7 +1250,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
               </div>
             </div>
 
-            <button class="mbtn mbtn-primary" id="commSubmitBtn" onclick="submitCommunication()">Publish Announcement</button>
+            <button class="mbtn mbtn-primary" id="commSubmitBtn" onclick="runWithSaving(this,'Sending...',submitCommunication)">Publish Announcement</button>
             <p class="publish-note" id="commPublishNote">&#128228; This will publish immediately to the Applicant Portal and the public website.</p>
 
           </div>
@@ -1261,7 +1293,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
             <input type="text" id="allowanceOtherDesc" placeholder="e.g.: Monetary."/>
           </div>
 
-          <button class="mbtn mbtn-primary" id="allowanceSubmitBtn" onclick="disseminateAllowance()">Disseminate Allowance</button>
+          <button class="mbtn mbtn-primary" id="allowanceSubmitBtn" onclick="runWithSaving(this,'Disseminating...',disseminateAllowance)">Disseminate Allowance</button>
           <p class="publish-note">&#128228; This will publish immediately to the Applicant Portal's Allowance Distribution page.</p>
         </div>
       </div>
@@ -1521,7 +1553,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <div class="email-fields" id="statusEmailFields"></div>
         <div class="confirm-inline-actions">
           <button class="mbtn mbtn-ghost mbtn-sm" onclick="cancelStatusChange()">Cancel</button>
-          <button class="mbtn mbtn-primary mbtn-sm" id="statusSendBtn" onclick="confirmStatusChange()">Send &amp; Update Status</button>
+          <button class="mbtn mbtn-primary mbtn-sm" id="statusSendBtn" onclick="runWithSaving(this,'Sending...',confirmStatusChange)">Send &amp; Update Status</button>
         </div>
       </div>
 
@@ -1554,7 +1586,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
     <p class="confirm-password-error" id="cyclePasswordError">Incorrect password. Please try again.</p>
     <div class="confirm-actions">
       <button class="mbtn mbtn-ghost" onclick="closeCyclePasswordModal()">Cancel</button>
-      <button class="mbtn mbtn-primary" id="cyclePwConfirmBtn" onclick="confirmCycleSettingsSave()">Confirm &amp; Save</button>
+      <button class="mbtn mbtn-primary" id="cyclePwConfirmBtn" onclick="runWithSaving(this,'Saving...',confirmCycleSettingsSave)">Confirm &amp; Save</button>
     </div>
   </div>
 </div>
@@ -1575,7 +1607,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
     <p class="confirm-password-error" id="billingRefError">Please enter a reference number.</p>
     <div class="confirm-actions">
       <button class="mbtn mbtn-ghost" onclick="closeBillingRefModal()">Cancel</button>
-      <button class="mbtn mbtn-primary" id="billingRefConfirmBtn" onclick="confirmBillingRefExport()">Confirm &amp; Download</button>
+      <button class="mbtn mbtn-primary" id="billingRefConfirmBtn" onclick="runWithSaving(this,'Preparing...',confirmBillingRefExport)">Confirm &amp; Download</button>
     </div>
   </div>
 </div>
@@ -1592,7 +1624,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
     <p class="confirm-password-error" id="adminActionPasswordError">Incorrect password. Please try again.</p>
     <div class="confirm-actions">
       <button class="mbtn mbtn-ghost" onclick="closeAdminActionPasswordModal()">Cancel</button>
-      <button class="mbtn mbtn-primary" id="adminActionConfirmBtn" onclick="confirmAdminActionPassword()">Confirm</button>
+      <button class="mbtn mbtn-primary" id="adminActionConfirmBtn" onclick="runWithSaving(this,'Confirming...',confirmAdminActionPassword)">Confirm</button>
     </div>
   </div>
 </div>
@@ -1633,24 +1665,15 @@ function checkKeepSignedIn(){
   resetInactivityTimer();
 }
 
-/* admin_accounts stores password_hash, which never reaches the browser, so the
-   comparison happens on the backend. The backend returns the mapped account
-   row on success and an { error } message on failure. */
-async function attemptLogin(){
+function attemptLogin(){
   const emailInput = document.getElementById('gateEmail');
   const passInput = document.getElementById('gatePassword');
   const err = document.getElementById('gateError');
   const email = emailInput.value.trim().toLowerCase();
+  const account = adminAccounts.find(ac=>ac.email.toLowerCase()===email);
+  const ok = !!(account && account.status==='active' && passInput.value === account.password);
 
-  let account = null, failure = '';
-  try {
-    const row = await ISKO.post('/admin/login', {email, password: passInput.value});
-    account = ISKO.mapAdminAccount(row);
-  } catch(e){
-    failure = e.message;
-  }
-
-  if(account){
+  if(ok){
     currentRole = account.role;
     currentAdminName = account.name;
     currentAdminEmail = account.email;
@@ -1668,7 +1691,7 @@ async function attemptLogin(){
     applyRoleUI(account.role);
     resetInactivityTimer();
   } else {
-    err.textContent = /invited|setup/i.test(failure)
+    err.textContent = (account && account.status==='invited')
       ? "This account hasn't completed setup yet. Check your email for the invite link."
       : 'Incorrect email or password. Please try again.';
     err.classList.add('show');
@@ -1826,19 +1849,12 @@ function submitSetPassword(){
   err.classList.remove('show');
   const account = adminAccounts.find(ac=>ac.id===pendingSetPasswordAccountId);
   if(account){
+    account.password = pw;
     account.status = 'active';
     account.inviteToken = null;
     account.inviteExpiry = null;
     account.inviteType = null;
     renderAdmins();
-    /* The backend validates the invite token, bcrypts the password into
-       admin_accounts.password_hash and clears the invite columns. */
-    ISKO.send(()=>ISKO.post('/admin-accounts/set-password', {
-      email: account.email,
-      invite_token: new URLSearchParams(window.location.search).get('invite')
-                 || new URLSearchParams(window.location.search).get('reset'),
-      password: pw
-    }));
     addActivity('Account Setup Completed', `${account.name} completed account setup.`, 'done');
   }
   document.getElementById('gateNewPassword').value='';
@@ -1846,8 +1862,10 @@ function submitSetPassword(){
   history.replaceState(null, '', window.location.pathname);
   showGateView('login');
 }
-/* Invite and reset tokens are generated by the backend and written to
-   admin_accounts.invite_token — never in the browser. */
+function generateSecureToken(){
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  return Array.from({length:32}, ()=> chars[Math.floor(Math.random()*chars.length)]).join('');
+}
 
 function applyRoleUI(role){
   const isSuper = role === 'super';
@@ -2231,190 +2249,6 @@ function goToApplicantsFiltered(status){
   document.getElementById('applicantTableBody').closest('.card').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-
-/* ══════════════════════════════════════════════════════════════════════════
-   ISKO — SUPABASE DATA ACCESS LAYER
-   ══════════════════════════════════════════════════════════════════════════
-   The frontend folder has no .env.local on purpose: no Supabase URL or key is
-   ever shipped to the browser. Every call below goes to the backend folder
-   (the one that DOES hold .env.local), which talks to Supabase with the
-   service role.
-
-   Set ISKO.BASE to wherever that backend is served from. Leave it as '/api'
-   when the backend and this page share an origin; otherwise put the full
-   origin, e.g. 'http://localhost:3000/api'.
-
-   Every property name inside ISKO.map* matches a real Supabase column exactly
-   (snake_case). Everything outside this block keeps the camelCase shapes the
-   rest of admin.html already renders, so no render path had to change.
-   ══════════════════════════════════════════════════════════════════════════ */
-const ISKO = {
-  BASE: '/api',
-
-  async req(path, opts){
-    const res = await fetch(ISKO.BASE + path, Object.assign({
-      headers: {'Content-Type':'application/json'},
-      credentials: 'include'
-    }, opts || {}));
-    if(!res.ok){
-      let msg = res.statusText;
-      try { msg = (await res.json()).error || msg; } catch(e){}
-      throw new Error(msg);
-    }
-    return res.status === 204 ? null : res.json();
-  },
-  get(path){ return ISKO.req(path); },
-  post(path, body){ return ISKO.req(path, {method:'POST', body:JSON.stringify(body)}); },
-  patch(path, body){ return ISKO.req(path, {method:'PATCH', body:JSON.stringify(body)}); },
-  del(path){ return ISKO.req(path, {method:'DELETE'}); },
-  /* Fire-and-forget: keeps the existing synchronous call sites working. */
-  send(fn){ Promise.resolve().then(fn).catch(err => console.warn('[ISKO]', err.message)); },
-
-  /* ── applications row  ->  the applicant object this page renders ──
-     documents/field counts come from the joined documents rows the backend
-     returns alongside each application. */
-  mapApplication(row){
-    const docs = row.documents || [];
-    const count = st => docs.filter(d => d.review_status === st).length;
-    return {
-      id:              String(row.id),
-      applicantId:     row.applicant_number || null,
-      name:            row.applicant_name || [row.first_name, row.last_name].filter(Boolean).join(' '),
-      email:           row.applicant_email || '',
-      phone:           row.contact_number || '',
-      address:         row.address || '',
-      residency:       row.residency || '',
-      profile:         `${row.profile_sections_done || 0} of 4 sections done (${Math.round(((row.profile_sections_done||0)/4)*100)}%)`,
-      docs:            `${count('verified')} Verified · ${count('pending')} Pending · ${count('deficient')} Deficient`,
-      status:          row.status,
-      submittedDate:   row.submitted_at ? String(row.submitted_at).slice(0,10) : '',
-      lockedBy:        row.locked_by || null,
-      approvedProgram: row.approved_program || null,
-      _row:            row,
-      _documents:      docs,
-      _flags:          row.application_field_flags || []
-    };
-  },
-
-  /* ── admin_accounts row -> the account object the gate + Admins panel use ──
-     password_hash never leaves the backend, so there is no password field. */
-  mapAdminAccount(row){
-    return {
-      id:           String(row.id),
-      name:         row.name,
-      email:        row.email,
-      role:         row.role,
-      status:       row.status,
-      inviteToken:  row.invite_token || null,
-      inviteExpiry: row.invite_expiry ? Date.parse(row.invite_expiry) : null,
-      inviteType:   row.invite_type || null,
-      protected:    !!row.is_protected
-    };
-  },
-
-  mapAnnouncement(row){
-    return {
-      id:        String(row.id),
-      type:      row.type,
-      category:  row.category || '',
-      title:     row.title,
-      body:      row.body || '',
-      imageData: row.image_url || null,   // backend returns a signed Storage URL
-      date:      ISKO.postedText(row.created_at),
-      auto:      !!row.is_auto
-    };
-  },
-  mapMessage(row){
-    return {
-      id:            String(row.id),
-      title:         row.title,
-      category:      row.category || '',
-      body:          row.body,
-      date:          ISKO.postedText(row.created_at),
-      target:        row.target_label,
-      applicantId:   row.application_id != null ? String(row.application_id) : null,
-      threadDateKey: row.thread_date_key || null
-    };
-  },
-  mapAllowance(row){
-    return {
-      id:          String(row.id),
-      studentId:   row.student_id,
-      date:        row.distribution_date,
-      type:        row.type,
-      description: row.description || null,
-      postedBy:    row.posted_by || ''
-    };
-  },
-  /* audit_log row -> the Recent Activity item.
-     action -> title, detail -> text (see the migration's section 6). */
-  mapAuditEntry(row){
-    return {
-      id:    String(row.id),
-      title: row.action,
-      text:  row.detail,
-      kind:  row.kind,
-      icon:  row.icon,
-      dt:    ISKO.postedText(row.created_at)
-    };
-  },
-  mapCycleSettings(row){
-    return {
-      appsOpen:      !!row.applications_open,
-      maxApplicants: row.max_applicants == null ? '' : String(row.max_applicants),
-      appStartDate:  row.application_start_date || '',
-      appEndDate:    row.application_end_date || '',
-      uploads:       !!row.uploads_enabled,
-      results:       !!row.results_enabled,
-      cycleYear:     row.cycle_year,
-      cycleNumber:   row.cycle_number
-    };
-  },
-
-  postedText(ts){
-    if(!ts) return '';
-    const d = new Date(ts);
-    return 'Posted ' + d.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'});
-  },
-
-  /* ── CATEGORY_DEFS field key  ->  applications column name ──
-     Also the value extracted_fields.field_name must hold, so OCR output,
-     the applicant form and this console all agree on one identifier. */
-  FIELD_TO_COLUMN: {
-    firstname:'first_name', middlename:'middle_name', lastname:'last_name', suffix:'suffix',
-    dob:'date_of_birth', pob:'place_of_birth', sex:'sex', citizenship:'citizenship',
-    religion:'religion', civilstatus:'civil_status', spousename:'spouse_name',
-    spouseoccupation:'spouse_occupation', spousecontact:'spouse_contact',
-    email:'applicant_email', contact:'contact_number', address:'address', precinct:'voter_precinct',
-    lgbtqi:'lgbtqi_member', disability:'disability', hobbies:'hobbies',
-    motivation:'motivation', selfdescription:'self_description', tenyears:'ten_year_aspiration',
-    applyingas:'applying_as', termapplying:'term_applying',
-    choice1:'program_choice_1', choice2:'program_choice_2',
-    primschool:'primary_school', primaddress:'primary_address', primsection:'primary_section',
-    primyear:'primary_year', primhonors:'primary_honors',
-    secschool:'secondary_school', secaddress:'secondary_address', secsection:'secondary_section',
-    secyear:'secondary_year', sechonors:'secondary_honors',
-    tertschool:'tertiary_school', tertaddress:'tertiary_address', tertsection:'tertiary_section',
-    tertyear:'tertiary_year', terthonors:'tertiary_honors',
-    techvoc:'techvoc_taken', techvocschool:'techvoc_school',
-    techvoccourse:'techvoc_course', techvocaddress:'techvoc_address',
-    mothername:'mother_name', mothercitizenship:'mother_citizenship', motherdob:'mother_date_of_birth',
-    mothercontact:'mother_contact', mothereducation:'mother_education', motheremployment:'mother_employment',
-    fathername:'father_name', fathercitizenship:'father_citizenship', fatherdob:'father_date_of_birth',
-    fathercontact:'father_contact', fathereducation:'father_education', fatheremployment:'father_employment',
-    guardianname:'guardian_name', guardiancitizenship:'guardian_citizenship',
-    guardiandob:'guardian_date_of_birth', guardiancontact:'guardian_contact',
-    guardianeducation:'guardian_education', guardianemployment:'guardian_employment',
-    onlychild:'only_child', numsiblings:'num_siblings',
-    siblingcurrentstudent:'sibling_current_student', siblinggraduate:'sibling_graduate',
-    emergencycontact:'emergency_contact', ecnumber:'emergency_contact_number',
-    workingstudent:'working_student', siblingincome:'sibling_income',
-    orginvolvement:'__organization_involvement',  // its own table, not a column
-    condition:'medical_condition'
-  },
-  column(fieldKey){ return ISKO.FIELD_TO_COLUMN[fieldKey] || fieldKey; }
-};
-
 /* ══ APPLICANT RECORDS ══
    Empty by design. The upcoming database integration replaces this array with
    the real applicant rows (same shape as the fields consumed below:
@@ -2428,15 +2262,10 @@ let applicants = [];
    belongs to, starting from A][-][##### running count within that cycle].
    The number is only generated the first time an applicant is marked
    "Qualified", and is only ever displayed while their status is currently
-   "Qualified" — otherwise the UI shows "Pending for review".
-
-   Issued by the database so two admins qualifying applicants at the same
-   moment can never be handed the same number — see the SQL function
-   public.issue_applicant_number(application_id). The two values below mirror
-   application_cycle_settings.cycle_year / cycle_number and are loaded at
-   bootstrap; they are used only for display. */
-let applicationCycleCount = 1;
-let applicationCycleYear = new Date().getFullYear();
+   "Qualified" — otherwise the UI shows "Pending for review". */
+let applicationCycleCount = 1; // the console starts with Applications Open already on = cycle 1 ("A")
+let applicationCycleYear = 2026;
+let cycleSeqCounters = {}; // cycle number -> last sequence number issued in that cycle (seeded from the database on load)
 function cycleLetter(n){
   let s = '';
   while(n > 0){
@@ -2448,103 +2277,53 @@ function cycleLetter(n){
 }
 function assignApplicantNumber(a){
   if(a.applicantId) return; // already disseminated once — keep it stable
-  /* Optimistic local value so the UI can paint immediately; the row the
-     backend returns from issue_applicant_number() overwrites it. */
-  a.applicantId = `${applicationCycleYear}${cycleLetter(applicationCycleCount)}-\u2026`;
-  ISKO.send(async ()=>{
-    const row = await ISKO.post(`/applications/${a.id}/applicant-number`, {});
-    a.applicantId = row.applicant_number;
-    renderApplicants();
-    if(activeApplicantId === a.id) openApplicantReview(a.id);
-  });
+  cycleSeqCounters[applicationCycleCount] = (cycleSeqCounters[applicationCycleCount] || 0) + 1;
+  const seq = String(cycleSeqCounters[applicationCycleCount]).padStart(5,'0');
+  a.applicantId = `${applicationCycleYear}${cycleLetter(applicationCycleCount)}-${seq}`;
 }
 function appIdText(a){
   return (a.status === 'qualified' && a.applicantId) ? a.applicantId : 'Pending for review';
 }
 
-/* Announcements are public: they drive this panel, every applicant's Messages
-   panel, and index.html's carousel. Table: public.announcements. */
+const ANN_STORAGE_KEY = 'iskolusyon_announcements';
+
 let announcements = [];
-/* Kept under the original name so every existing call site still works; it now
-   pushes to the database instead of localStorage. */
+/* Pick up whatever was last published, so this panel always reflects
+   what the public site (index.html) is currently showing. */
+try {
+  const storedAnn = localStorage.getItem(ANN_STORAGE_KEY);
+  if (storedAnn) announcements = JSON.parse(storedAnn);
+} catch (e) { /* ignore malformed/blocked storage, keep defaults above */ }
 function saveAnnouncementsToStorage() {
-  const pending = announcements.filter(n => n._new);
-  pending.forEach(n => {
-    delete n._new;
-    ISKO.send(async ()=>{
-      const row = await ISKO.post('/announcements', {
-        type: n.type, category: n.category || null, title: n.title,
-        body: n.body || null, image_url: n.imageData || null, is_auto: !!n.auto,
-        posted_by: currentAdminEmail
-      });
-      Object.assign(n, ISKO.mapAnnouncement(row));
-      renderAnnouncements();
-    });
-  });
+  try { localStorage.setItem(ANN_STORAGE_KEY, JSON.stringify(announcements)); } catch (e) { /* storage unavailable */ }
 }
+saveAnnouncementsToStorage();
 
 /* Messages: private, applicant-only communications (separate from public Announcements).
    Persisted the same way as Announcements so that per-applicant compiled
    update messages (see logApplicantChangeMessage) reach the applicant's own
-   Messages panel.
-
-   Table: public.messages. A compiled per-applicant update thread is upserted on
-   (application_id, thread_date_key), which is the unique index the migration
-   creates — so appending to today's thread updates it instead of duplicating. */
+   Messages panel. */
+const MSG_STORAGE_KEY = 'iskolusyon_messages';
 let messages = [];
+try {
+  const storedMsgs = localStorage.getItem(MSG_STORAGE_KEY);
+  if (storedMsgs) messages = JSON.parse(storedMsgs);
+} catch (e) { /* ignore malformed/blocked storage, keep defaults above */ }
 function saveMessagesToStorage() {
-  const pending = messages.filter(m => m._new || m._dirty);
-  pending.forEach(m => {
-    delete m._new; delete m._dirty;
-    ISKO.send(async ()=>{
-      const row = await ISKO.post('/messages', {
-        target_mode:  m.applicantId ? 'specific' : (m.targetStatus ? 'category' : 'all'),
-        target_label: m.target || 'All Applicants',
-        target_status: m.targetStatus || null,
-        application_id: m.applicantId ? Number(m.applicantId) : null,
-        thread_date_key: m.threadDateKey || null,
-        category: m.category || null,
-        title: m.title, body: m.body,
-        posted_by: currentAdminEmail
-      });
-      Object.assign(m, ISKO.mapMessage(row));
-      renderMessages();
-    });
-  });
+  try { localStorage.setItem(MSG_STORAGE_KEY, JSON.stringify(messages)); } catch (e) { /* storage unavailable */ }
 }
 
 /* Allowance Distributions: posted by the Office of the Registrar account only.
    Persisted the same way as Announcements/Messages so applicant.html's own
-   Allowance Distribution view reflects new posts.
-
-   Table: public.allowance_distributions. */
+   Allowance Distribution view can read the same key and reflect new posts. */
+const ALLOWANCE_STORAGE_KEY = 'iskolusyon_allowance_distributions';
 let allowanceDistributions = [];
+try {
+  const storedAllowance = localStorage.getItem(ALLOWANCE_STORAGE_KEY);
+  if (storedAllowance) allowanceDistributions = JSON.parse(storedAllowance);
+} catch (e) { /* ignore malformed/blocked storage, keep defaults above */ }
 function saveAllowanceDistributionsToStorage() {
-  const pending = allowanceDistributions.filter(d => d._new);
-  pending.forEach(d => {
-    delete d._new;
-    ISKO.send(async ()=>{
-      const row = await ISKO.post('/allowance-distributions', {
-        student_id: d.studentId,
-        distribution_date: d.date,
-        type: d.type,
-        description: d.description || null,
-        posted_by: currentAdminEmail
-      });
-      Object.assign(d, ISKO.mapAllowance(row));
-    });
-  });
-}
-
-/* Re-authentication for the two confirm-password modals. The account's
-   password_hash never reaches the browser, so the check runs on the backend
-   against public.admin_accounts. */
-async function iskoVerifyPassword(password){
-  if(!currentAdminEmail) return false;
-  try {
-    await ISKO.post('/admin/verify-password', {email: currentAdminEmail, password});
-    return true;
-  } catch(e){ return false; }
+  try { localStorage.setItem(ALLOWANCE_STORAGE_KEY, JSON.stringify(allowanceDistributions)); } catch (e) { /* storage unavailable */ }
 }
 
 /* ══ ADMIN / STAFF ACCOUNTS ══
@@ -3206,7 +2985,6 @@ function handleApprovedProgramChange(value){
     return;
   }
   a.approvedProgram = value || null;
-  ISKO.send(()=>ISKO.patch('/applications/'+a.id, {approved_program: a.approvedProgram}));
   updateApprovedProgramDot(a);
   addActivity('Approved Program Updated', a.approvedProgram
     ? `Approved "${a.approvedProgram}" as the program for ${a.name} (${appIdText(a)}).`
@@ -3220,7 +2998,6 @@ function handleApprovedProgramOtherChange(value){
     return;
   }
   a.approvedProgram = value || null;
-  ISKO.send(()=>ISKO.patch('/applications/'+a.id, {approved_program: a.approvedProgram}));
   updateApprovedProgramDot(a);
   addActivity('Approved Program Updated', a.approvedProgram
     ? `Approved "${a.approvedProgram}" as the program for ${a.name} (${appIdText(a)}).`
@@ -3235,7 +3012,6 @@ function openApplicantModal(id){
     return;
   }
   a.lockedBy = currentAdminName;
-  ISKO.send(()=>ISKO.patch('/applications/'+a.id, {locked_by: currentAdminName}));
   markApplicantSeen(id);
   renderApplicants();
 
@@ -3268,7 +3044,6 @@ function closeApplicantModal(){
   const a = applicants.find(x=>x.id===activeApplicantId);
   if(a && a.lockedBy===currentAdminName){
     a.lockedBy = null;
-    ISKO.send(()=>ISKO.patch('/applications/'+a.id, {locked_by: null}));
     renderApplicants();
   }
   document.getElementById('applicantModal').classList.remove('open');
@@ -3350,7 +3125,7 @@ function updateDocCatEditControls(){
   const wrap = document.getElementById('docCatEditControls');
   if(!wrap) return;
   wrap.innerHTML = docCatEditing
-    ? '<button type="button" class="section-edit-btn is-editing" onclick="cancelDocCatEdit()">Cancel</button> <button type="button" class="mbtn mbtn-primary mbtn-sm" id="docCatSaveBtn" onclick="saveDocCategory()">Save Changes</button>'
+    ? '<button type="button" class="section-edit-btn is-editing" onclick="cancelDocCatEdit()">Cancel</button> <button type="button" class="mbtn mbtn-primary mbtn-sm" id="docCatSaveBtn" onclick="runWithSaving(this,\'Saving...\',saveDocCategory)">Save Changes</button>'
     : '<button type="button" class="section-edit-btn" id="docCatEditBtn" onclick="toggleDocCatEdit()">Edit</button>';
   if(typeof registerDocCatSaveBtn === 'function') registerDocCatSaveBtn();
 }
@@ -3565,37 +3340,6 @@ function syncGeneralInfoFromCategories(a){
   document.getElementById('editPhone').value = a.phone;
   refreshProgramSummaryFields(a); // covers Applying As / Term Applying In
 }
-/* Flattens the edited category tree back into the three things Supabase
-   stores it in:
-     applications.<column>              — via ISKO.FIELD_TO_COLUMN
-     application_field_flags            — one row per flagged field
-     documents.review_status/flagged    — one row per document slot
-   '__organization_involvement' is skipped because it is its own table. */
-function iskoBuildApplicationPatch(a){
-  const fields = {}, field_flags = [], documents = [];
-  CATEGORY_ORDER.forEach(catKey=>{
-    (a.categories[catKey] ? a.categories[catKey].stacks : []).forEach(stack=>{
-      stack.fields.forEach(f=>{
-        const col = ISKO.column(f.key);
-        if(col !== '__organization_involvement' && f.value !== FIELD_NOT_SUBMITTED){
-          fields[col] = f.value === FIELD_EMPTY_VALUE ? null : f.value;
-        }
-        if(f.flagged || f.flagNote){
-          field_flags.push({field_key:f.key, category:catKey,
-                            flagged:!!f.flagged, flag_note:f.flagNote || null});
-        }
-      });
-      stack.docs.forEach(d=>{
-        documents.push({document_key:d.key, category:catKey,
-                        review_status:d.status,
-                        flagged:!!d.flagged, flag_note:d.flagNote || null});
-      });
-    });
-  });
-  fields.profile_sections_done = parseSectionsDone(a.profile);
-  return {fields, field_flags, documents};
-}
-
 function saveDocCategory(){
   const a = applicants.find(x=>x.id===activeApplicantId);
   if(!a) return;
@@ -3603,7 +3347,6 @@ function saveDocCategory(){
   const changeEntries = docCatEditSnapshot ? getCategoryChangeEntries(docCatEditSnapshot, a.categories) : [];
   recomputeDocsSummary(a);
   syncGeneralInfoFromCategories(a);
-  ISKO.send(()=>ISKO.patch('/applications/'+a.id, iskoBuildApplicationPatch(a)));
   docCatEditing = false;
   docCatEditSnapshot = null;
   updateDocCatEditControls();
@@ -3672,7 +3415,6 @@ function logApplicantChangeMessage(a, changeEntries){
     thread.entries = thread.entries.concat(changeEntries);
     thread.body = thread.entries.map(e=>'&bull; '+e).join('<br>');
     thread.date = dateDisplay;
-    thread._dirty = true; // re-upserted on (application_id, thread_date_key)
     /* New content on an already-read thread makes it unread again, otherwise
        the appended entries would never register on the count badge. */
     markNotifUnread('message', thread.id);
@@ -3686,8 +3428,7 @@ function logApplicantChangeMessage(a, changeEntries){
       target: a.name,
       entries: changeEntries.slice(),
       body: changeEntries.map(e=>'&bull; '+e).join('<br>'),
-      date: dateDisplay,
-      _new: true
+      date: dateDisplay
     };
     messages.unshift(thread);
   }
@@ -3849,7 +3590,6 @@ function confirmStatusChange(){
   const emailTo = (document.getElementById('statusEmailTo')||{}).value || a.email;
   const priorStatus = a.status;
   a.status = pendingStatus;
-  ISKO.send(()=>ISKO.patch('/applications/'+a.id, {status: a.status}));
   if(a.status === 'qualified') assignApplicantNumber(a);
   const meta = STATUS_META[pendingStatus];
   updateStatusButtons(a.status);
@@ -3863,11 +3603,9 @@ function confirmStatusChange(){
     category:'Result',
     body:`${a.name} (${appIdText(a)}) has been marked as "${meta.label}". An email notification was sent to ${emailTo}.`,
     date:'Posted just now',
-    auto:true,
-    _new:true
+    auto:true
   });
   renderAnnouncements();
-  saveAnnouncementsToStorage();
 
   /* First-ever decision on an application reads as "considered as"; any
      later revision of an already-decided result reads as "changed to". */
@@ -3996,7 +3734,6 @@ function disseminateAllowance(){
   if(type==='Other' && !otherDesc) return;
   allowanceDistributions.unshift({
     id:'al-'+Date.now(),
-    _new:true,
     studentId,
     date: dateInput.value,
     type,
@@ -4053,7 +3790,7 @@ function postAnnouncement(){
   if(!title || !body){
     return;
   }
-  announcements.unshift({id:newNotifId('m'), type:'text', title, category, body, date:'Posted just now', auto:false, _new:true});
+  announcements.unshift({id:newNotifId('m'), type:'text', title, category, body, date:'Posted just now', auto:false});
   document.getElementById('annBody').value='';
   clearRichTextEditor('annBody');
 
@@ -4067,7 +3804,7 @@ function deleteAnnouncement(id){
   const n = announcements.find(x=>x.id===id);
   announcements = announcements.filter(x=>x.id!==id);
   renderAnnouncements();
-  if(n && !n._new) ISKO.send(()=>ISKO.del('/announcements/'+encodeURIComponent(n.id)));
+  saveAnnouncementsToStorage();
   if(n) addActivity('Announcement Removed', `Removed announcement "${n.title}".`, 'warn');
 }
 
@@ -4118,8 +3855,7 @@ function postMessage(){
     const meta = STATUS_META[document.getElementById('msgTargetCategory').value];
     target = meta ? meta.label : 'Category';
   }
-  messages.unshift({id:newNotifId('msg'), title, category, body, date:'Posted just now', target, applicantId,
-    targetStatus: targetMode==='category' ? document.getElementById('msgTargetCategory').value : null, _new:true});
+  messages.unshift({id:newNotifId('msg'), title, category, body, date:'Posted just now', target, applicantId});
   document.getElementById('commTitle').value='';
   document.getElementById('msgBody').value='';
   clearRichTextEditor('msgBody');
@@ -4132,7 +3868,7 @@ function deleteMessage(id){
   const m = messages.find(x=>x.id===id);
   messages = messages.filter(x=>x.id!==id);
   renderMessages();
-  if(m && !m._new) ISKO.send(()=>ISKO.del('/messages/'+encodeURIComponent(m.id)));
+  saveMessagesToStorage();
   if(m) addActivity('Message Removed', `Removed message "${m.title}".`, 'warn');
 }
 
@@ -4218,10 +3954,11 @@ function closeAdminActionPasswordModal(){
 function handleAdminActionBackdrop(e){
   if(e.target.id==='adminActionPasswordOverlay') closeAdminActionPasswordModal();
 }
-async function confirmAdminActionPassword(){
+function confirmAdminActionPassword(){
   const input = document.getElementById('adminActionPassword');
   const err = document.getElementById('adminActionPasswordError');
-  if(!pendingAdminAction || !await iskoVerifyPassword(input.value)){
+  const me = adminAccounts.find(ac=>ac.email===currentAdminEmail);
+  if(!pendingAdminAction || !me || input.value !== me.password){
     err.classList.add('show');
     input.value='';
     input.focus();
@@ -4231,26 +3968,23 @@ async function confirmAdminActionPassword(){
 
   if(pendingAdminAction.type==='invite'){
     const {name, email, role} = pendingAdminAction;
+    const token = generateSecureToken();
+    adminAccounts.push({
+      id:'ad-'+Date.now(), name, email, role,
+      password:null, status:'invited',
+      inviteToken:token, inviteExpiry:Date.now()+24*60*60*1000, inviteType:'invite'
+    });
     document.getElementById('newAdminName').value='';
     document.getElementById('newAdminEmail').value='';
     abDone(document.getElementById('inviteAdminBtn'));
-    /* The backend generates invite_token, sets invite_expiry and invite_type,
-       inserts the row with status='invited' and mails the link. Generating the
-       token in the browser would make it guessable from client code. */
-    ISKO.send(async ()=>{
-      const row = await ISKO.post('/admin-accounts/invite', {name, email, role});
-      adminAccounts.push(ISKO.mapAdminAccount(row));
-      renderAdmins();
-    });
+    renderAdmins();
     addActivity('Admin Account Invited', `Invited new ${role==='super'?'super admin':'admin'} account for ${name} (${email}).`, 'done');
+    console.log('Admin invite link (demo only):', window.location.pathname+'?invite='+token);
   } else if(pendingAdminAction.type==='trash'){
     const ac = adminAccounts.find(x=>x.id===pendingAdminAction.id);
     adminAccounts = adminAccounts.filter(x=>x.id!==pendingAdminAction.id);
     renderAdmins();
-    if(ac){
-      ISKO.send(()=>ISKO.del('/admin-accounts/'+encodeURIComponent(ac.email)));
-      addActivity('Admin Account Removed', `Removed admin account for ${ac.name}.`, 'warn');
-    }
+    if(ac) addActivity('Admin Account Removed', `Removed admin account for ${ac.name}.`, 'warn');
   }
 
   closeAdminActionPasswordModal();
@@ -4344,16 +4078,16 @@ function closeCyclePasswordModal(){
 function handleCyclePasswordBackdrop(e){
   if(e.target.id === 'cyclePasswordOverlay') closeCyclePasswordModal();
 }
-async function confirmCycleSettingsSave(){
+function confirmCycleSettingsSave(){
   const input = document.getElementById('cyclePassword');
   const err = document.getElementById('cyclePasswordError');
-  if(!await iskoVerifyPassword(input.value)){
+  const me = adminAccounts.find(ac=>ac.email===currentAdminEmail);
+  if(!me || input.value !== me.password){
     err.classList.add('show');
     input.value = '';
     input.focus();
     return;
   }
-  input.value = '';
   const cur = readCycleSettingsFromForm();
   const prev = cycleSettingsSnapshot;
   if(cur.appsOpen !== prev.appsOpen){
@@ -4368,18 +4102,6 @@ async function confirmCycleSettingsSave(){
   if(cur.appEndDate !== prev.appEndDate) logSettingChange('Acceptance End Date', cur.appEndDate);
   if(cur.uploads !== prev.uploads) logToggle('Document Uploads', cur.uploads);
   if(cur.results !== prev.results) logToggle('Exam Results Visibility', cur.results);
-  /* public.application_cycle_settings is a single row (id = 1). */
-  ISKO.send(()=>ISKO.patch('/cycle-settings', {
-    applications_open:      cur.appsOpen,
-    max_applicants:         cur.maxApplicants === '' ? null : Number(cur.maxApplicants),
-    application_start_date: cur.appStartDate || null,
-    application_end_date:   cur.appEndDate || null,
-    uploads_enabled:        cur.uploads,
-    results_enabled:        cur.results,
-    cycle_year:             applicationCycleYear,
-    cycle_number:           applicationCycleCount,
-    updated_by:             currentAdminEmail
-  }));
   captureCycleSettingsSnapshot();
   document.getElementById('cycleCancelBtn').disabled = true;
   abRefresh();
@@ -4393,24 +4115,11 @@ function activityDateTimeStamp(){
   const time = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
   return `${date} &middot; ${time}`;
 }
-function addActivity(title, text, kind, icon, applicationId){
+function addActivity(title, text, kind, icon){
   const id = 'act-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
   const resolvedIcon = icon || (kind==='warn' ? 'alert' : 'check');
-  const entry = {id, title, text, kind: kind==='warn'?'warn':'done', icon: resolvedIcon, dt: activityDateTimeStamp()};
-  activityLog.unshift(entry);
+  activityLog.unshift({id, title, text, kind: kind==='warn'?'warn':'done', icon: resolvedIcon, dt: activityDateTimeStamp()});
   renderActivity();
-  /* public.audit_log — action holds the title, detail holds the body text. */
-  ISKO.send(async ()=>{
-    const row = await ISKO.post('/audit-log', {
-      actor: currentAdminName || currentAdminEmail || 'system',
-      action: title,
-      detail: text,
-      kind: entry.kind,
-      icon: resolvedIcon,
-      application_id: applicationId != null ? Number(applicationId) : null
-    });
-    entry.id = String(row.id);
-  });
 }
 function renderActivity(){
   const log = document.getElementById('activityLog');
@@ -4555,9 +4264,7 @@ function confirmLogout(){
   showPanel('dashboard');
 }
 
-/* ══ INIT ══
-   Paint the empty state first so the console is usable immediately, then fill
-   it from Supabase (through the backend) and repaint. */
+/* ══ INIT ══ */
 renderApplicants();
 renderAnnouncements();
 renderMessages();
@@ -4568,62 +4275,7 @@ renderDashboard();
 renderActivity();
 captureCycleSettingsSnapshot();
 checkInviteLink();
-
-/* ══ BOOTSTRAP FROM SUPABASE ══
-   One call per table. Each leg fails independently so a single unavailable
-   endpoint cannot blank the whole console — it just leaves that panel on its
-   empty state and logs why. */
-async function bootstrapFromApi(){
-  const leg = (name, fn) => fn().catch(err => console.warn('[ISKO] ' + name + ':', err.message));
-
-  await Promise.all([
-    leg('admin_accounts', async ()=>{
-      const rows = await ISKO.get('/admin-accounts');
-      adminAccounts = rows.map(ISKO.mapAdminAccount);
-      renderAdmins();
-    }),
-    leg('application_cycle_settings', async ()=>{
-      const c = ISKO.mapCycleSettings(await ISKO.get('/cycle-settings'));
-      applicationCycleYear  = c.cycleYear;
-      applicationCycleCount = c.cycleNumber;
-      document.getElementById('toggleAppsOpen').checked = c.appsOpen;
-      document.getElementById('appsOpenSettings').classList.toggle('collapsed', !c.appsOpen);
-      document.getElementById('maxApplicants').value = c.maxApplicants;
-      document.getElementById('appStartDate').value  = c.appStartDate;
-      document.getElementById('appEndDate').value    = c.appEndDate;
-      document.getElementById('toggleUploads').checked = c.uploads;
-      document.getElementById('toggleResults').checked = c.results;
-      captureCycleSettingsSnapshot();
-    }),
-    leg('applications', async ()=>{
-      const rows = await ISKO.get('/applications');
-      applicants = rows.map(ISKO.mapApplication);
-      applicants.forEach((a,i)=>{ a.categories = buildApplicantCategories(a,i); });
-      renderApplicants();
-      renderDashboard();
-      populateMsgApplicantSelect();
-    }),
-    leg('announcements', async ()=>{
-      announcements = (await ISKO.get('/announcements')).map(ISKO.mapAnnouncement);
-      renderAnnouncements();
-    }),
-    leg('messages', async ()=>{
-      messages = (await ISKO.get('/messages')).map(ISKO.mapMessage);
-      renderMessages();
-    }),
-    leg('allowance_distributions', async ()=>{
-      allowanceDistributions = (await ISKO.get('/allowance-distributions')).map(ISKO.mapAllowance);
-    }),
-    leg('audit_log', async ()=>{
-      activityLog = (await ISKO.get('/audit-log?limit=200')).map(ISKO.mapAuditEntry);
-      renderActivity();
-    })
-  ]);
-
-  /* The gate's "Keep me signed in" check needs adminAccounts loaded first. */
-  checkKeepSignedIn();
-}
-bootstrapFromApi();
+checkKeepSignedIn();
 </script>
 
 <script>
