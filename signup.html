@@ -886,7 +886,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
               <option>Single</option>
               <option>Married</option>
               <option>Widowed</option>
-              <option>Legally Separated</option>
+              <option>Separated</option>
             </select>
             <div class="field-err" id="p-civil-err">Please select your civil status.</div>
           </div>
@@ -1194,6 +1194,65 @@ document.addEventListener('keydown',e=>{
 </script>
 
 <script>
+/* ══ BACKEND BASE URL ══
+   This folder has no .env.local on purpose: no Supabase URL or key ever ships
+   to the browser. Registration goes through the backend (the folder that does
+   hold .env.local), which creates the Supabase Auth user and the
+   public.applications row. Leave as '/api' when both are served from the same
+   origin; otherwise set the full origin, e.g. 'http://localhost:3000/api'. */
+const ISKO_API_BASE = '/api';
+
+async function iskoPost(path, body){
+  const res = await fetch(ISKO_API_BASE + path, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    credentials: 'include',
+    body: JSON.stringify(body)
+  });
+  if(!res.ok){
+    let msg = res.statusText;
+    try { msg = (await res.json()).error || msg; } catch(e){}
+    throw new Error(msg);
+  }
+  return res.status === 204 ? null : res.json();
+}
+
+/* Every key below is a real public.applications column. The two password
+   fields go to Supabase Auth, not to a column. */
+function buildRegistrationPayload(){
+  const suffix    = val('p-suffix');
+  const residency = val('p-residency');
+  return {
+    email:    val('s-email'),
+    password: document.getElementById('s-pass').value,
+    application: {
+      applicant_email:  val('s-email'),
+      applicant_name:   [val('p-first'), val('p-last')].filter(Boolean).join(' '),
+      first_name:       val('p-first'),
+      middle_name:      val('p-mi') || null,
+      last_name:        val('p-last'),
+      suffix:           suffix || null,
+      sex:              val('p-sex'),
+      date_of_birth:    val('p-dob') || null,
+      civil_status:     val('p-civil'),
+      contact_number:   val('p-contact'),
+      address:          val('p-address'),
+      barangay:         val('p-barangay'),
+      residency_years:  residency === '' ? null : Number(residency),
+      applying_as:      val('pa-applying-as'),
+      term_applying:    val('pa-term'),
+      program_choice_1: val('pa-choice1'),
+      program_choice_2: val('pa-choice2'),
+      status:           'pending',
+      current_step:     1
+    },
+    consents: {
+      certified_info:   document.getElementById('s-terms').checked,
+      privacy_agreed:   document.getElementById('s-privacy').checked
+    }
+  };
+}
+
 const stepLabels = {
   1:'Account Setup', 2:'Program Application', 3:'Personal Information', 4:'Review & Verify'
 };
@@ -1351,12 +1410,15 @@ function submitSignup(){
   if(!privacy.checked){ showFErr('s-privacy-err'); ok=false; }else{ hideFErr('s-privacy-err'); }
   if(!ok) return;
 
-  /* In production:
-     POST /api/auth/register { email, password, personal, academic,
-       financial, demographics, health }
-     → backend creates the user + admin data rows (RDBMS), then sends a
-       6-digit email verification code, returns { success: true }
-  */
+  /* The backend creates the Supabase Auth user, inserts the
+     public.applications row with auth_user_id set, stamps certified_info_at /
+     privacy_agreed_at / privacy_statement_version, seeds the four
+     public.application_sections rows as 'not-started', writes an
+     email_otps row and mails the 6-digit code. */
+  iskoPost('/auth/register', buildRegistrationPayload()).catch(err=>{
+    console.warn('[ISKO] register:', err.message);
+  });
+
   const msgEl=document.getElementById('s-verify-msg');
   if(msgEl) msgEl.innerHTML='A 6-digit verification code was sent to <strong id="s-email-display">'+val('s-email')+'</strong>. Enter it below to activate your account.';
   document.getElementById('reviewWrap').style.display='none';
@@ -1384,10 +1446,12 @@ function verifySignup(){
     el.style.display='block';
     return;
   }
-  /* In production:
-     POST /api/auth/verify-registration { email, otp: code }
-     → backend activates the account, returns { success: true }
-  */
+  /* The backend checks the code against email_otps (hash, expires_at,
+     consumed_at, attempts), marks the auth user's email confirmed and sets
+     applications.current_step = 2. */
+  iskoPost('/auth/verify-registration', {email: val('s-email'), otp: code}).catch(err=>{
+    console.warn('[ISKO] verify-registration:', err.message);
+  });
   hideFErr('sotp-err');
   clearInterval(sOtpInterval);
   abDone(document.getElementById('signupVerifyBtn'));
@@ -1470,7 +1534,10 @@ function resendSignupCode(){
   document.getElementById('sotp-timer').innerHTML='Code expires in <strong id="sotp-countdown">10:00</strong>';
   startSignupOTPTimer();
   document.getElementById('sotp0').focus();
-  /* In production: POST /api/auth/resend-otp { email } */
+  /* Issues a fresh public.email_otps row with purpose='login' for this email. */
+  iskoPost('/auth/resend-otp', {email: email, purpose: 'register'}).catch(err=>{
+    console.warn('[ISKO] resend-otp:', err.message);
+  });
 }
 
 /* ── SCROLL TO TOP ── */
