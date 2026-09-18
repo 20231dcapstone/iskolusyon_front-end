@@ -3,8 +3,8 @@
         meaning its lines CAN POSSIBLY BE CHANGED DEPENDING ON BACKEND 
         but their design is final unless something is not related/does not make logical sense.
 #    - Added 2 folders at main containing different HTMLS for:
-#      - "[HTMLNAME]_with-built-in-tables" - contains SQL table connections and can also use as reference on how it connects; and 
-#      - "[HTMLNAME]_with-mock-data"       - IMPORTANT TO USE FOR CHECKING IN LOGIC/FEATURE AS REFERENCE.
+       - "[HTMLNAME]_with-built-in-tables" - contains SQL table connections and can also use as reference on how it connects; and 
+       - "[HTMLNAME]_with-mock-data"       - IMPORTANT TO USE FOR CHECKING IN LOGIC/FEATURE AS REFERENCE.
 #    - IMPORTANT NOTE: All documents are still final with minimal UI changes.
 
 # =================================================================
