@@ -629,7 +629,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       <div class="stat-grid" id="statGrid">
         <div class="stat-card unlocked-clickable tab-active" data-stage="profile" data-required-step="2" onclick="selectStage('profile', this)" role="button" tabindex="0" aria-label="View Profile Completion progress">
           <div class="stat-label">Profile Completion</div>
-          <div class="stat-value" id="profileCompletionValue">0 of 5 sections done</div>
+          <div class="stat-value" id="profileCompletionValue">0 of 4 sections done</div>
           <div class="stat-progress"><div class="stat-progress-bar" id="profileCompletionBar" style="width:0%"></div></div>
           <div class="stat-note">Includes filling out each section and uploading &amp; submitting its documents.</div>
           <div class="stat-card-hint">&#9660; Viewing details below</div>
@@ -1421,6 +1421,189 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
 </div>
 
 <script>
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ISKO — SUPABASE DATA ACCESS LAYER
+   ══════════════════════════════════════════════════════════════════════════
+   This folder has no .env.local on purpose: no Supabase URL or key ever ships
+   to the browser. Every call goes to the backend folder (the one that DOES
+   hold .env.local), which talks to Supabase with the service role and scopes
+   every query to the signed-in applicant's own session.
+
+   Set ISKO.BASE to wherever that backend is served from. Leave it as '/api'
+   when both share an origin; otherwise use the full origin, e.g.
+   'http://localhost:3000/api'.
+
+   Every name inside ISKO.FIELD_TO_COLUMN / ISKO.DOC_KEYS / ISKO.SECTIONS is a
+   real Supabase column or value. Nothing outside this block had to change its
+   element ids.
+   ══════════════════════════════════════════════════════════════════════════ */
+const ISKO = {
+  BASE: '/api',
+
+  async req(path, opts){
+    const res = await fetch(ISKO.BASE + path, Object.assign({
+      headers: {'Content-Type':'application/json'},
+      credentials: 'include'
+    }, opts || {}));
+    if(!res.ok){
+      let msg = res.statusText;
+      try { msg = (await res.json()).error || msg; } catch(e){}
+      throw new Error(msg);
+    }
+    return res.status === 204 ? null : res.json();
+  },
+  get(p){ return ISKO.req(p); },
+  post(p, b){ return ISKO.req(p, {method:'POST', body:JSON.stringify(b)}); },
+  patch(p, b){ return ISKO.req(p, {method:'PATCH', body:JSON.stringify(b)}); },
+  send(fn){ Promise.resolve().then(fn).catch(e => console.warn('[ISKO]', e.message)); },
+
+  /* ── this page's element id  ->  public.applications column ──
+     The same string is what public.extracted_fields.field_name must hold, so
+     the OCR pass, this form and the admin console all use one identifier. */
+  FIELD_TO_COLUMN: {
+    'pi-firstname':'first_name', 'pi-middlename':'middle_name', 'pi-lastname':'last_name',
+    'pi-suffix':'suffix', 'pi-dob':'date_of_birth', 'pi-pob':'place_of_birth',
+    'pi-sex':'sex', 'pi-citizenship':'citizenship', 'pi-religion':'religion',
+    'pi-civilstatus':'civil_status', 'pi-spouse-name':'spouse_name',
+    'pi-spouse-occupation':'spouse_occupation', 'pi-spouse-contact':'spouse_contact',
+    'pi-email':'applicant_email', 'pi-contact':'contact_number',
+    'pi-address':'address', 'pi-precinct':'voter_precinct',
+    'pi-lgbtqi':'lgbtqi_member', 'pi-disability':'disability', 'pi-hobbies':'hobbies',
+    'pi-motivation':'motivation', 'pi-selfdescription':'self_description',
+    'pi-tenyears':'ten_year_aspiration',
+    'a-applyingas':'applying_as', 'a-termapplying':'term_applying',
+    'pi-choice1':'program_choice_1', 'pi-choice2':'program_choice_2',
+    'a-edu-prim-school':'primary_school', 'a-edu-prim-address':'primary_address',
+    'a-edu-prim-section':'primary_section', 'a-edu-prim-year':'primary_year',
+    'a-edu-prim-honors':'primary_honors',
+    'a-edu-sec-school':'secondary_school', 'a-edu-sec-address':'secondary_address',
+    'a-edu-sec-section':'secondary_section', 'a-edu-sec-year':'secondary_year',
+    'a-edu-sec-honors':'secondary_honors',
+    'a-edu-tert-school':'tertiary_school', 'a-edu-tert-address':'tertiary_address',
+    'a-edu-tert-section':'tertiary_section', 'a-edu-tert-year':'tertiary_year',
+    'a-edu-tert-honors':'tertiary_honors',
+    'a-techvoc':'techvoc_taken', 'a-techvoc-school':'techvoc_school',
+    'a-techvoc-course':'techvoc_course', 'a-techvoc-address':'techvoc_address',
+    'fam-mother-name':'mother_name', 'fam-mother-citizenship':'mother_citizenship',
+    'fam-mother-dob':'mother_date_of_birth', 'fam-mother-contact':'mother_contact',
+    'fam-mother-education':'mother_education', 'fam-mother-employment':'mother_employment',
+    'fam-father-name':'father_name', 'fam-father-citizenship':'father_citizenship',
+    'fam-father-dob':'father_date_of_birth', 'fam-father-contact':'father_contact',
+    'fam-father-education':'father_education', 'fam-father-employment':'father_employment',
+    'fam-guardian-name':'guardian_name', 'fam-guardian-citizenship':'guardian_citizenship',
+    'fam-guardian-dob':'guardian_date_of_birth', 'fam-guardian-contact':'guardian_contact',
+    'fam-guardian-education':'guardian_education', 'fam-guardian-employment':'guardian_employment',
+    'fam-onlychild':'only_child', 'fam-numsiblings':'num_siblings',
+    'fam-sibling-currentstudent':'sibling_current_student',
+    'fam-sibling-graduate':'sibling_graduate',
+    'fam-emergency-contact':'emergency_contact', 'h-ec-number':'emergency_contact_number',
+    'fam-workingstudent':'working_student', 'h-condition':'medical_condition',
+    'pi-email-updates':'email_updates_opt_in', 'pi-sms-updates':'sms_updates_opt_in'
+  },
+  /* Columns whose value is a boolean in Supabase but Yes/No or a checkbox here. */
+  BOOLEAN_COLUMNS: ['lgbtqi_member','techvoc_taken','only_child','sibling_current_student',
+                    'sibling_graduate','working_student','email_updates_opt_in','sms_updates_opt_in'],
+  NUMERIC_COLUMNS: ['num_siblings'],
+
+  /* ── upload row id  ->  public.documents.document_key + category ──
+     Sent explicitly so the backend never has to guess the slot from a DOM id. */
+  DOC_KEYS: {
+    'up-profilepic':       {document_key:'profilepic',      category:'personal'},
+    'up-birthcert':        {document_key:'birthcert',       category:'personal'},
+    'up-voterid':          {document_key:'voterid',         category:'personal'},
+    'up-form138':          {document_key:'form138',         category:'academic'},
+    'up-voterid-guardian': {document_key:'voteridguardian', category:'financial'},
+    'up-employment':       {document_key:'employment',      category:'financial'},
+    'up-indigency':        {document_key:'indigency',       category:'financial'},
+    'up-medcert':          {document_key:'medcert',         category:'health'},
+    'up-appeal':           {document_key:'appeal',          category:'appeal'}
+  },
+
+  /* Submit-button label  ->  public.application_sections.section */
+  SECTIONS: {
+    'Personal Information':    'personal',
+    'Educational Background':  'academic',
+    'Financial & Employment':  'financial',
+    'Health & Wellness':       'health'
+  },
+  /* The panel each section lives in, so a save can collect just that panel. */
+  SECTION_PANELS: {
+    personal:'panel-personal', academic:'panel-academic',
+    financial:'panel-financial', health:'panel-health'
+  },
+
+  /* Reads one panel (or the whole page) into a {column: value} object. */
+  collect(panelId){
+    const out = {};
+    const root = panelId ? document.getElementById(panelId) : document;
+    if(!root) return out;
+    Object.keys(ISKO.FIELD_TO_COLUMN).forEach(id=>{
+      const el = root.querySelector('#'+CSS.escape(id));
+      if(!el) return;
+      const col = ISKO.FIELD_TO_COLUMN[id];
+      let v = el.type === 'checkbox' ? el.checked : (el.value || '').trim();
+      if(ISKO.BOOLEAN_COLUMNS.includes(col)){
+        v = typeof v === 'boolean' ? v : (v === 'Yes' ? true : v === 'No' ? false : null);
+      } else if(ISKO.NUMERIC_COLUMNS.includes(col)){
+        v = v === '' ? null : Number(v);
+      } else if(v === ''){
+        v = null;
+      }
+      out[col] = v;
+    });
+    return out;
+  },
+  /* Writes a {column: value} object back into the form. */
+  fill(row){
+    if(!row) return;
+    Object.keys(ISKO.FIELD_TO_COLUMN).forEach(id=>{
+      const el = document.getElementById(id);
+      const col = ISKO.FIELD_TO_COLUMN[id];
+      if(!el || !(col in row) || row[col] == null) return;
+      if(el.type === 'checkbox') el.checked = !!row[col];
+      else if(ISKO.BOOLEAN_COLUMNS.includes(col)) el.value = row[col] ? 'Yes' : 'No';
+      else el.value = row[col];
+    });
+  },
+
+  /* public.organization_involvement rows <-> the "+"-row table. */
+  collectOrgRows(){
+    const body = document.getElementById('org-table-body');
+    if(!body) return [];
+    return Array.from(body.querySelectorAll('tr')).map((tr, i)=>{
+      const v = Array.from(tr.querySelectorAll('input')).map(x=>x.value.trim());
+      return {sort_order:i, organization:v[0]||null, position:v[1]||null,
+              nature:v[2]||null, year_joined:v[3]||null};
+    }).filter(r => r.organization || r.position || r.nature || r.year_joined);
+  },
+
+  /* public.siblings rows <-> the column-per-sibling income table. */
+  collectSiblingRows(){
+    const table = document.getElementById('sibling-income-table');
+    if(!table) return [];
+    const byField = {};
+    table.querySelectorAll('tbody tr[data-field]').forEach(tr=>{
+      byField[tr.dataset.field] = Array.from(tr.querySelectorAll('td'))
+        .map(td => { const i = td.querySelector('input,select'); return i ? i.value.trim() : ''; });
+    });
+    const n = (byField.name || []).length;
+    const rows = [];
+    for(let i=0;i<n;i++){
+      const r = {
+        sort_order: i,
+        name:           (byField.name||[])[i] || null,
+        date_of_birth:  (byField.dob||[])[i] || null,
+        civil_status:   (byField.civilstatus||[])[i] || null,
+        contact_number: (byField.contact||[])[i] || null,
+        education:      (byField.education||[])[i] || null
+      };
+      if(r.name || r.date_of_birth || r.contact_number || r.education) rows.push(r);
+    }
+    return rows;
+  }
+};
+
 /* ── MESSAGES PANEL: Announcements (public) &amp; Messages (private) with filter ──
    kind: 'announcement' (received by all applicants + guest page) or 'message'
    (sent to you specifically, or to your applicant category). */
@@ -1430,77 +1613,69 @@ const communications = [];
    Expected shape: {id, kind:'announcement'|'message', icon, iconStyle,
    title, body, date}. */
 
-/* This portal represents one applicant record on the Admin console; the id
-   below is a placeholder until the database integration supplies the
-   signed-in applicant's real record id. Compiled messages the admin sends when they edit or flag
-   something in that applicant's reviewed record (see admin.html >
-   logApplicantChangeMessage) are written to the same-origin localStorage
-   key below, one compiled message per calendar day the admin made changes
-   (a new thread starts the first time changes/flags happen on a new day). */
-const CURRENT_APPLICANT_ID = 'a1';
-const MSG_STORAGE_KEY = 'iskolusyon_messages';
+/* public.applications.id for the signed-in applicant. Set by loadMyApplication()
+   from the session the backend resolves — never hardcoded, and never taken from
+   the URL, since that would let anyone read another applicant's record. */
+let CURRENT_APPLICANT_ID = null;
 const ADMIN_MSG_ICON = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>';
-/* Re-reads the admin-written messages and merges them in. Called again
-   whenever the Messages panel is opened, when another tab writes to the key,
-   and when this tab regains focus — so a message the admin sends while this
-   portal is already open still arrives and still bumps the unread badge,
-   instead of only ever being picked up at first page load.
+const ANN_ICON = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+
+/* Pulls public.announcements (everyone) plus the public.messages rows scoped to
+   this applicant, and merges them into one list. Called at load, whenever the
+   Messages panel is opened, and when the tab regains focus — so a message the
+   admin sends while this portal is already open still arrives and still bumps
+   the unread badge.
    Returns true when anything was added or an existing thread changed. */
-function syncAdminMessages(){
+async function syncAdminMessages(){
   let changed = false;
+  let rows;
   try {
-    const storedMsgs = localStorage.getItem(MSG_STORAGE_KEY);
-    if (!storedMsgs) return false;
-    JSON.parse(storedMsgs)
-      .filter(m => m.applicantId === CURRENT_APPLICANT_ID)
-      .forEach(m => {
-        const mapped = {
-          id: m.id,
-          kind: 'message',
-          icon: ADMIN_MSG_ICON,
-          iconStyle: '',
-          title: m.title,
-          body: m.body,
-          date: m.date
-        };
-        const existing = communications.find(c => c.id === m.id);
-        if(!existing){
-          communications.push(mapped);
-          changed = true;
-        } else if(existing.body !== m.body || existing.title !== m.title){
-          /* An existing same-day thread the admin appended to: refresh it and
-             flag it unread again so the badge counts the new content. */
-          Object.assign(existing, mapped);
-          if(commsReadState[m.id]){
-            delete commsReadState[m.id];
-            saveCommsReadState();
-          }
-          changed = true;
-        }
-      });
-  } catch (e) { /* ignore malformed/blocked storage, keep the defaults above */ }
+    rows = await ISKO.get('/applicant/communications');
+  } catch(e){ return false; }
+  (rows || []).forEach(r => {
+    const mapped = {
+      id:        String(r.id),
+      kind:      r.kind,                       // 'announcement' | 'message'
+      icon:      r.kind === 'announcement' ? ANN_ICON : ADMIN_MSG_ICON,
+      iconStyle: '',
+      title:     r.title,
+      body:      r.body,
+      date:      r.created_at
+                   ? 'Posted ' + new Date(r.created_at).toLocaleDateString(undefined,
+                       {month:'long', day:'numeric', year:'numeric'})
+                   : ''
+    };
+    const existing = communications.find(c => c.id === mapped.id && c.kind === mapped.kind);
+    if(!existing){
+      communications.push(mapped);
+      changed = true;
+    } else if(existing.body !== mapped.body || existing.title !== mapped.title){
+      /* An existing same-day thread the admin appended to: refresh it and
+         flag it unread again so the badge counts the new content. */
+      Object.assign(existing, mapped);
+      if(commsReadState[mapped.id]){
+        delete commsReadState[mapped.id];
+        saveCommsReadState();
+      }
+      changed = true;
+    }
+  });
   return changed;
 }
 
 /* ══ ALLOWANCE DISTRIBUTION (view-only) ══
-   Published by the Office of the Registrar in admin.html (see
-   disseminateAllowance) and written to the same-origin localStorage key
-   below. Rendered here strictly read-only, filtered to this applicant's
-   own account. Student ID format is not yet finalized admin-side, so this
-   demo matches it against CURRENT_APPLICANT_ID above; update the match
-   once a real Student ID format is set. */
-const ALLOWANCE_STORAGE_KEY = 'iskolusyon_allowance_distributions';
+   Published by the Office of the Registrar in admin.html into
+   public.allowance_distributions. Read-only here; the backend already scopes
+   the query to this applicant's own rows (matched on application_id, with
+   student_id kept as the human-readable reference), so no client-side filter
+   is needed or trusted. */
 let allowanceDistributions = [];
-try {
-  const storedAllowance = localStorage.getItem(ALLOWANCE_STORAGE_KEY);
-  if (storedAllowance) allowanceDistributions = JSON.parse(storedAllowance);
-} catch (e) { /* ignore malformed/blocked storage */ }
 function renderAllowanceDistributions(){
   const table = document.getElementById('allowanceTableWrap');
   const emptyNote = document.getElementById('allowanceEmptyNote');
   const tbody = document.getElementById('allowanceTableBody');
   if(!table || !emptyNote || !tbody) return;
-  const myRecords = allowanceDistributions.filter(d => d.studentId === CURRENT_APPLICANT_ID);
+  const myRecords = allowanceDistributions;
   if(!myRecords.length){
     table.style.display = 'none';
     emptyNote.style.display = '';
@@ -1510,7 +1685,7 @@ function renderAllowanceDistributions(){
   emptyNote.style.display = 'none';
   tbody.innerHTML = myRecords.map(d => `
     <tr>
-      <td>${d.date}</td>
+      <td>${d.distribution_date}</td>
       <td>${d.type}</td>
       <td>${d.type==='Other' ? (d.description || '&mdash;') : '&mdash;'}</td>
     </tr>
@@ -1618,25 +1793,24 @@ function renderComms(){
     });
   updateMessagesBadge();
 }
-/* Initial load: pull in any admin-written messages, then paint + count. */
-syncAdminMessages();
+/* Initial paint happens on the empty state; bootstrapFromApi() below fills it. */
 renderComms();
 updateMessagesBadge();
 
-/* Keep the badge live while the portal sits open: another tab writing new
-   admin messages fires 'storage', and returning to this tab re-checks. */
-window.addEventListener('storage', e => {
-  if(e.key !== MSG_STORAGE_KEY) return;
-  if(syncAdminMessages()){
+/* Keep the badge live while the portal sits open: poll for anything the admin
+   sent since the last check, and re-check whenever the tab regains focus. */
+setInterval(async () => {
+  if(document.hidden) return;
+  if(await syncAdminMessages()){
     const onMessagesPanel = document.getElementById('panel-messages').classList.contains('active');
     if(onMessagesPanel) markAllCommsRead();
     renderComms();
   }
   updateMessagesBadge();
-});
-document.addEventListener('visibilitychange', () => {
+}, 60000);
+document.addEventListener('visibilitychange', async () => {
   if(document.hidden) return;
-  if(syncAdminMessages()) renderComms();
+  if(await syncAdminMessages()) renderComms();
   updateMessagesBadge();
 });
 
@@ -1750,9 +1924,11 @@ function showPanel(name, btn){
     /* Pick up anything the admin sent since this page loaded, mark the list
        read (clearing the badge), then repaint so the newly-read items still
        show their unread flag for this visit. */
-    syncAdminMessages();
-    markAllCommsRead();
-    renderComms();
+    ISKO.send(async ()=>{
+      await syncAdminMessages();
+      markAllCommsRead();
+      renderComms();
+    });
   } else {
     /* Navigating away retires this visit's unread highlight. */
     if(commsJustOpenedUnread.size){
@@ -1761,11 +1937,10 @@ function showPanel(name, btn){
     }
   }
   if(name==='allowance'){
-    try {
-      const storedAllowance = localStorage.getItem(ALLOWANCE_STORAGE_KEY);
-      if(storedAllowance) allowanceDistributions = JSON.parse(storedAllowance);
-    } catch (e) { /* ignore malformed/blocked storage */ }
-    renderAllowanceDistributions();
+    ISKO.send(async ()=>{
+      allowanceDistributions = await ISKO.get('/applicant/allowance-distributions');
+      renderAllowanceDistributions();
+    });
   }
   if(name==='dashboard'){
     const active = document.querySelector('.stat-card.tab-active');
@@ -1842,12 +2017,9 @@ function renderAppHistory(){
 renderAppHistory();
 
 /* ── DOCUMENT UPLOAD ── */
-/* Field values pulled from each uploaded file by the OCR/text-extraction pass.
-   Empty by design — the upcoming backend integration fills this keyed by
-   upload-row id, e.g. {'up-birthcert': {'pi-firstname': '...'}}. It only ever
-   fills EMPTY fields below, so it never overwrites something the applicant
-   already typed, since extraction isn't always perfect. */
-const DOC_EXTRACTED_DATA = {};
+/* OCR extraction now happens server-side and lands in public.extracted_fields;
+   the upload response carries the rows back (see applyExtractedFields below),
+   so there is no client-side extraction table any more. */
 
 function handleDocUpload(input, rowId){
   const file = input.files[0];
@@ -1868,14 +2040,45 @@ function handleDocUpload(input, rowId){
     reader.readAsDataURL(file);
   }
 
-  const extracted = DOC_EXTRACTED_DATA[rowId];
-  if(extracted){
-    Object.entries(extracted).forEach(([fieldId, value])=>{
-      const field = document.getElementById(fieldId);
-      if(field && !field.value.trim()) field.value = value;
+  /* Upload to Supabase Storage through the backend, which also inserts the
+     public.documents row (file_path, sha256_hash, document_key, category,
+     application_id, review_status='pending') and runs the OCR pass that
+     fills public.extracted_fields. It returns the extracted values keyed by
+     applications COLUMN NAME. */
+  const slot = ISKO.DOC_KEYS[rowId];
+  if(!slot) return;
+  const form = new FormData();
+  form.append('file', file);
+  form.append('document_key', slot.document_key);
+  form.append('category', slot.category);
+  ISKO.send(async ()=>{
+    const res = await fetch(ISKO.BASE + '/applicant/documents', {
+      method:'POST', credentials:'include', body: form
     });
-    syncProfileNameFromPersonalInfo();
-  }
+    if(!res.ok) throw new Error('upload failed');
+    const doc = await res.json();
+    applyExtractedFields(doc.extracted_fields);
+    loadDocumentStatus();
+  });
+}
+
+/* extracted_fields rows arrive as {field_name: <applications column>, value}.
+   Only EMPTY inputs are filled, so OCR never overwrites something the
+   applicant already typed — extraction isn't always perfect. */
+const COLUMN_TO_INPUT = Object.fromEntries(
+  Object.entries(ISKO.FIELD_TO_COLUMN).map(([inputId, col]) => [col, inputId])
+);
+function applyExtractedFields(fields){
+  if(!Array.isArray(fields)) return;
+  fields.forEach(f=>{
+    const inputId = COLUMN_TO_INPUT[f.field_name];
+    if(!inputId) return;
+    const el = document.getElementById(inputId);
+    if(el && el.type !== 'checkbox' && !el.value.trim() && f.extracted_value){
+      el.value = f.extracted_value;
+    }
+  });
+  syncProfileNameFromPersonalInfo();
 }
 
 /* ── ORGANIZATIONAL INVOLVEMENT: expandable row table ── */
@@ -1967,12 +2170,29 @@ function toggleIfTechVoc(sel){
    state engine at the bottom of this file: gray while the section is empty or
    its required items are incomplete, blue when ready but untouched, green while
    there are pending changes, and blue again once saved/submitted. */
+function sectionKeyFor(btn){
+  const panel = btn.closest('.portal-panel');
+  if(!panel) return null;
+  const found = Object.entries(ISKO.SECTION_PANELS).find(([, id]) => id === panel.id);
+  return found ? found[0] : null;
+}
+/* Writes the panel's fields into public.applications and marks the matching
+   public.application_sections row 'draft'. The repeating tables travel
+   alongside as their own rows. */
 function saveDraft(btn){
   const original = btn.textContent;
   btn.textContent = 'Saved ✓';
   abDone(btn);
   setTimeout(()=>{ btn.textContent = original; abRefresh(); }, 1600);
-  /* In production: POST /api/applicant/save-draft { section, data } */
+
+  const section = sectionKeyFor(btn);
+  if(!section) return;
+  ISKO.send(()=>ISKO.patch('/applicant/section/' + section, {
+    status: 'draft',
+    fields: ISKO.collect(ISKO.SECTION_PANELS[section]),
+    organization_involvement: section === 'personal' ? ISKO.collectOrgRows() : undefined,
+    siblings:                 section === 'financial' ? ISKO.collectSiblingRows() : undefined
+  }));
 }
 /* Returns the missing required-document labels for a panel, skipping any
    required upload row that's currently hidden (e.g. a document that only
@@ -2012,6 +2232,39 @@ function submitSection(btn, sectionName){
   setTimeout(()=>{ btn.textContent = original; abLock(btn, false); abDone(btn); }, 1800);
   const ownerPanel = btn.closest('.portal-panel');
   if(ownerPanel) abDone(ownerPanel.querySelector('.save-draft-btn'));
+
+  if(sectionName === 'Appeal / Reschedule Request'){
+    /* public.appeals — the supporting file was already uploaded through
+       handleDocUpload() with document_key='appeal'; the backend links the
+       newest one as appeals.document_path. */
+    ISKO.send(async ()=>{
+      await ISKO.post('/applicant/appeals', {
+        request_type: document.getElementById('ap-type').value,
+        details:      document.getElementById('ap-details').value.trim()
+      });
+      document.getElementById('ap-type').value = '';
+      document.getElementById('ap-details').value = '';
+      loadApplicationHistory();
+    });
+    return;
+  }
+
+  const section = ISKO.SECTIONS[sectionName];
+  if(!section) return;
+  /* status='submitted' fires the trigger that recomputes
+     applications.profile_sections_done, which is what both this page's
+     progress card and the admin console's Profile column read. */
+  ISKO.send(async ()=>{
+    await ISKO.patch('/applicant/section/' + section, {
+      status: 'submitted',
+      fields: ISKO.collect(ISKO.SECTION_PANELS[section]),
+      organization_involvement: section === 'personal' ? ISKO.collectOrgRows() : undefined,
+      siblings:                 section === 'financial' ? ISKO.collectSiblingRows() : undefined
+    });
+    await loadMyApplication();
+    loadDocumentStatus();
+    loadApplicationHistory();
+  });
 
   /* Educational Background: editable while in progress, but locked for good
      once submitted — matches the rest of the profile's "editable" fields,
@@ -2108,6 +2361,123 @@ function abPanelHasContent(panelId){
 });
 abRegister(document.getElementById('submitAppealBtn'), document.getElementById('panel-appeals'),
   function(){ return abMissingRequired('panel-appeals').length === 0; });
+
+/* ══ BOOTSTRAP FROM SUPABASE ══
+   The page paints its empty state first (VER88), then fills from the backend.
+   Each leg fails independently so one unavailable endpoint cannot blank the
+   whole portal — that panel just stays on its empty state. */
+const APPLICATION_STATUS_TEXT = {
+  'pending':       'Under review',
+  'qualified':     'Qualified',
+  'not-qualified': 'Not qualified',
+  'waitlisted':    'Waitlisted',
+  'appealed':      'Appeal under review'
+};
+
+async function loadMyApplication(){
+  const row = await ISKO.get('/applicant/application');
+  CURRENT_APPLICANT_ID = String(row.id);
+
+  ISKO.fill(row);
+  fillOrgRows(row.organization_involvement || []);
+  fillSiblingRows(row.siblings || []);
+  syncProfileNameFromPersonalInfo();
+
+  const done = row.profile_sections_done || 0;
+  const total = 4;                              // personal, academic, financial, health
+  const pv = document.getElementById('profileCompletionValue');
+  const pb = document.getElementById('profileCompletionBar');
+  if(pv) pv.textContent = done + ' of ' + total + ' sections done';
+  if(pb) pb.style.width = Math.round((done/total)*100) + '%';
+
+  const badge = document.getElementById('statusHeroBadge');
+  if(badge) badge.textContent = 'Step ' + (row.current_step || 0) + ' of 6 \u00b7 '
+    + (APPLICATION_STATUS_TEXT[row.status] || 'Not yet started');
+  return row;
+}
+
+/* public.organization_involvement -> the "+"-row table. One extra empty row is
+   always left at the end so the applicant can keep adding. */
+function fillOrgRows(rows){
+  const body = document.getElementById('org-table-body');
+  if(!body || !rows.length) return;
+  const cell = v => `<td><input type="text" value="${(v||'').replace(/"/g,'&quot;')}"/></td>`;
+  body.innerHTML = rows
+    .slice()
+    .sort((a,b)=>(a.sort_order||0)-(b.sort_order||0))
+    .map(r => '<tr>' + cell(r.organization) + cell(r.position) + cell(r.nature) + cell(r.year_joined) +
+      '<td class="org-row-action"><button type="button" class="org-row-btn org-row-remove" onclick="removeOrgRow(this)" title="Remove row">&times;</button></td></tr>')
+    .join('')
+    + '<tr>' + cell('') + cell('') + cell('') + cell('') +
+      '<td class="org-row-action"><button type="button" class="org-row-btn org-row-add" onclick="addOrgRow(this)" title="Add row">&plus;</button></td></tr>';
+}
+
+/* public.siblings -> the column-per-sibling income table. The table renders
+   three sibling columns by default; addSiblingColumn() appends more. */
+function fillSiblingRows(rows){
+  const table = document.getElementById('sibling-income-table');
+  if(!table || !rows.length) return;
+  const ordered = rows.slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+  const addBtn = table.querySelector('.sib-col-btn');
+  while(table.querySelectorAll('thead th.sib-col').length < ordered.length && addBtn){
+    addSiblingColumn(addBtn);
+  }
+  const colFor = {name:'name', dob:'date_of_birth', civilstatus:'civil_status',
+                  contact:'contact_number', education:'education'};
+  table.querySelectorAll('tbody tr[data-field]').forEach(tr=>{
+    const col = colFor[tr.dataset.field];
+    tr.querySelectorAll('td').forEach((td, i)=>{
+      const input = td.querySelector('input,select');
+      if(input && ordered[i] && ordered[i][col] != null) input.value = ordered[i][col];
+    });
+  });
+}
+
+async function loadDocumentStatus(){
+  const rows = await ISKO.get('/applicant/documents');
+  DOC_STATUS_ROWS.personal.length = 0;
+  DOC_STATUS_ROWS.academic.length = 0;
+  DOC_STATUS_ROWS.financial.length = 0;
+  rows.forEach(d=>{
+    const bucket = DOC_STATUS_ROWS[d.category];
+    if(!bucket) return;                          // 'health' and 'appeal' have no table here
+    bucket.push({
+      name: d.document_label || d.document_key,
+      status: d.review_status === 'not-submitted' ? 'pending' : d.review_status,
+      note: d.flag_note
+            || (d.reviewed_at ? 'Verified ' + new Date(d.reviewed_at).toLocaleDateString()
+                              : 'Submitted ' + new Date(d.created_at).toLocaleDateString()),
+      reuploadPanel: d.review_status === 'deficient' ? ISKO.SECTION_PANELS[d.category].replace('panel-','') : null
+    });
+  });
+  renderDocStatusTables();
+}
+
+async function loadApplicationHistory(){
+  const rows = await ISKO.get('/applicant/history');
+  APP_HISTORY_ENTRIES.length = 0;
+  rows.forEach(r => APP_HISTORY_ENTRIES.push({
+    title: r.action,
+    detail: r.detail,
+    state: r.kind === 'warn' ? 'warn' : 'done'
+  }));
+  renderAppHistory();
+}
+
+async function bootstrapFromApi(){
+  const leg = (name, fn) => fn().catch(e => console.warn('[ISKO] ' + name + ':', e.message));
+  await leg('applications', loadMyApplication);
+  await Promise.all([
+    leg('documents', loadDocumentStatus),
+    leg('audit_log', loadApplicationHistory),
+    leg('communications', async ()=>{ await syncAdminMessages(); renderComms(); updateMessagesBadge(); }),
+    leg('allowance_distributions', async ()=>{
+      allowanceDistributions = await ISKO.get('/applicant/allowance-distributions');
+      renderAllowanceDistributions();
+    })
+  ]);
+}
+bootstrapFromApi();
 </script>
 </body>
 </html>
