@@ -1304,7 +1304,12 @@ function closeGuide(e) {
 }
 
 // ── CAROUSEL ──
-const ANN_STORAGE_KEY = 'iskolusyon_announcements';
+/* ── Backend base URL ──
+   This folder has no .env.local on purpose: no Supabase URL or key ever ships
+   to the browser. The carousel reads public.announcements through the backend
+   (the folder that holds .env.local). Leave as '/api' when both are served
+   from the same origin; otherwise set the full origin. */
+const ISKO_API_BASE = '/api';
 let currentSlide = 0;
 let totalSlides = 0; // set by loadCarouselFromAdmin() from published announcements
 let autoTimer;
@@ -1313,22 +1318,25 @@ function escapeHtml(str) {
   return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-// If the admin has published announcements (via admin.html), render the
-// carousel from that data instead of the default placeholder images.
-function loadCarouselFromAdmin() {
+// Renders the carousel from public.announcements, newest first. Columns used:
+// type ('text' | 'image'), category, title, body, image_url (a signed Storage
+// URL the backend resolves from announcements.image_path). Leaves the page's
+// empty-state slide in place when the table is empty or the backend is down.
+async function loadCarouselFromAdmin() {
   let data = null;
   try {
-    const stored = localStorage.getItem(ANN_STORAGE_KEY);
-    if (stored) data = JSON.parse(stored);
-  } catch (e) { /* ignore malformed/blocked storage, keep default slides */ }
+    const res = await fetch(ISKO_API_BASE + '/announcements');
+    if (!res.ok) return;
+    data = await res.json();
+  } catch (e) { /* backend unavailable — keep the empty state */ }
   if (!Array.isArray(data) || data.length === 0) return;
 
   const track = document.getElementById('carouselTrack');
   const dots = document.getElementById('carouselDots');
 
   track.innerHTML = data.map(n => {
-    if (n.type === 'image' && n.imageData) {
-      return `<div class="carousel-slide"><img src="${n.imageData}" alt="${escapeHtml(n.title || 'Announcement')}"/></div>`;
+    if (n.type === 'image' && n.image_url) {
+      return `<div class="carousel-slide"><img src="${escapeHtml(n.image_url)}" alt="${escapeHtml(n.title || 'Announcement')}"/></div>`;
     }
     return `<div class="carousel-slide"><div class="carousel-text-slide">` +
       `<span class="carousel-text-cat">${escapeHtml(n.category || 'General')}</span>` +
