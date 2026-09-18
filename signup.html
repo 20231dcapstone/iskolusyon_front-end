@@ -567,6 +567,8 @@ img,svg,video,canvas{max-width:100%}
   .footer-logo-col img{height:68px}
   .map-overlay-label{max-width:calc(100% - 16px);font-size:.92em}
 }
+
+.icon-inline{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;flex-shrink:0}
 </style>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
@@ -704,7 +706,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
       </div>
 
       <div class="auth-back">
-        <a href="index.html" onclick="confirmLeaveSignup(event)">&#8592; Back to homepage</a>
+        <a href="index.html" onclick="confirmLeaveSignup(event)"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to homepage</a>
       </div>
     </div>
 
@@ -749,7 +751,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         </div>
 
         <div class="form-actions">
-          <button class="mbtn mbtn-primary" id="signupStep1Btn" onclick="nextStep(1)" type="button">Continue &rarr;</button>
+          <button class="mbtn mbtn-primary" id="signupStep1Btn" onclick="nextStep(1)" type="button">Continue <svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
         <div class="modal-footer-note">
           Already have an account? <a href="index.html#login">Log in here</a>
@@ -826,8 +828,8 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <hr class="guide-divider"/>
 
         <div class="form-actions">
-          <button class="mbtn mbtn-ghost" onclick="prevStep(2)" type="button">&#8592; Back</button>
-          <button class="mbtn mbtn-primary" id="signupStep2Btn" onclick="nextStep(2)" type="button">Continue &rarr;</button>
+          <button class="mbtn mbtn-ghost" onclick="prevStep(2)" type="button"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
+          <button class="mbtn mbtn-primary" id="signupStep2Btn" onclick="nextStep(2)" type="button">Continue <svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
 
@@ -886,7 +888,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
               <option>Single</option>
               <option>Married</option>
               <option>Widowed</option>
-              <option>Separated</option>
+              <option>Legally Separated</option>
             </select>
             <div class="field-err" id="p-civil-err">Please select your civil status.</div>
           </div>
@@ -976,8 +978,8 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         </div>
 
         <div class="form-actions">
-          <button class="mbtn mbtn-ghost" onclick="prevStep(3)" type="button">&#8592; Back</button>
-          <button class="mbtn mbtn-primary" id="signupStep3Btn" onclick="goToReview()" type="button">Review &amp; Continue &rarr;</button>
+          <button class="mbtn mbtn-ghost" onclick="prevStep(3)" type="button"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
+          <button class="mbtn mbtn-primary" id="signupStep3Btn" onclick="goToReview()" type="button">Review &amp; Continue <svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
 
@@ -1021,7 +1023,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
           <div class="field-err" id="s-privacy-err">You must agree to the Privacy Statement terms to continue.</div>
 
           <div class="form-actions">
-            <button class="mbtn mbtn-ghost" onclick="prevStep(4)" type="button">&#8592; Back</button>
+            <button class="mbtn mbtn-ghost" onclick="prevStep(4)" type="button"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
             <button class="mbtn mbtn-primary" id="signupCreateBtn" onclick="submitSignup()" type="button">Create Account</button>
           </div>
         </div>
@@ -1052,7 +1054,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
           </div>
 
           <button class="mbtn mbtn-primary" id="signupVerifyBtn" onclick="verifySignup()" type="button">Sign up</button>
-          <button class="mbtn mbtn-ghost" onclick="backToReview()" type="button">&#8592; Back</button>
+          <button class="mbtn mbtn-ghost" onclick="backToReview()" type="button"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
         <div class="modal-footer-note" style="margin-top:.5rem">
           Please check your spam folder if you haven&rsquo;t received an email within a minute.
         </div>
@@ -1061,7 +1063,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
         <!-- Success state -->
         <div id="successWrap" style="display:none">
           <div class="auth-success">
-            <div class="succ-icon">&#10003;</div>
+            <div class="succ-icon"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
             <h3>Account Created!</h3>
             <p>Please wait while we redirect you&hellip;</p>
           </div>
@@ -1148,7 +1150,7 @@ document.addEventListener('click', function(){ setTimeout(abRefresh, 0); }, true
 <div class="footer-bar">&#169; 2026 Iskolusyon Scholarship Management System &nbsp;|&nbsp; Developed for the City College of Calamba</div>
 
 <!-- SCROLL TO TOP -->
-<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">&#8679;</button>
+<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 
 <!-- ══ LEAVE SIGN UP CONFIRMATION POPUP ══ -->
 <div class="modal-backdrop" id="leaveConfirmModal" onclick="handleLeaveBackdropClick(event)">
@@ -1194,65 +1196,21 @@ document.addEventListener('keydown',e=>{
 </script>
 
 <script>
-/* ══ BACKEND BASE URL ══
-   This folder has no .env.local on purpose: no Supabase URL or key ever ships
-   to the browser. Registration goes through the backend (the folder that does
-   hold .env.local), which creates the Supabase Auth user and the
-   public.applications row. Leave as '/api' when both are served from the same
-   origin; otherwise set the full origin, e.g. 'http://localhost:3000/api'. */
-const ISKO_API_BASE = '/api';
-
-async function iskoPost(path, body){
-  const res = await fetch(ISKO_API_BASE + path, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    credentials: 'include',
-    body: JSON.stringify(body)
-  });
-  if(!res.ok){
-    let msg = res.statusText;
-    try { msg = (await res.json()).error || msg; } catch(e){}
-    throw new Error(msg);
-  }
-  return res.status === 204 ? null : res.json();
+/* -- Reusable button loading-state helper: disables + grays the button and
+   shows processing text for a moment before the action completes -- */
+function iskoBtnLoading(btn, text){
+  if(!btn || btn.dataset.iskoLoading) return;
+  btn.dataset.iskoLoading = '1';
+  btn.dataset.iskoOrigText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = text;
 }
-
-/* Every key below is a real public.applications column. The two password
-   fields go to Supabase Auth, not to a column. */
-function buildRegistrationPayload(){
-  const suffix    = val('p-suffix');
-  const residency = val('p-residency');
-  return {
-    email:    val('s-email'),
-    password: document.getElementById('s-pass').value,
-    application: {
-      applicant_email:  val('s-email'),
-      applicant_name:   [val('p-first'), val('p-last')].filter(Boolean).join(' '),
-      first_name:       val('p-first'),
-      middle_name:      val('p-mi') || null,
-      last_name:        val('p-last'),
-      suffix:           suffix || null,
-      sex:              val('p-sex'),
-      date_of_birth:    val('p-dob') || null,
-      civil_status:     val('p-civil'),
-      contact_number:   val('p-contact'),
-      address:          val('p-address'),
-      barangay:         val('p-barangay'),
-      residency_years:  residency === '' ? null : Number(residency),
-      applying_as:      val('pa-applying-as'),
-      term_applying:    val('pa-term'),
-      program_choice_1: val('pa-choice1'),
-      program_choice_2: val('pa-choice2'),
-      status:           'pending',
-      current_step:     1
-    },
-    consents: {
-      certified_info:   document.getElementById('s-terms').checked,
-      privacy_agreed:   document.getElementById('s-privacy').checked
-    }
-  };
+function iskoBtnDone(btn){
+  if(!btn) return;
+  btn.disabled = false;
+  if(btn.dataset.iskoOrigText !== undefined){ btn.innerHTML = btn.dataset.iskoOrigText; delete btn.dataset.iskoOrigText; }
+  delete btn.dataset.iskoLoading;
 }
-
 const stepLabels = {
   1:'Account Setup', 2:'Program Application', 3:'Personal Information', 4:'Review & Verify'
 };
@@ -1410,22 +1368,24 @@ function submitSignup(){
   if(!privacy.checked){ showFErr('s-privacy-err'); ok=false; }else{ hideFErr('s-privacy-err'); }
   if(!ok) return;
 
-  /* The backend creates the Supabase Auth user, inserts the
-     public.applications row with auth_user_id set, stamps certified_info_at /
-     privacy_agreed_at / privacy_statement_version, seeds the four
-     public.application_sections rows as 'not-started', writes an
-     email_otps row and mails the 6-digit code. */
-  iskoPost('/auth/register', buildRegistrationPayload()).catch(err=>{
-    console.warn('[ISKO] register:', err.message);
-  });
-
+  const btnEl=document.getElementById('signupCreateBtn');
+  iskoBtnLoading(btnEl,'Creating Account...');
+  setTimeout(()=>{
+  iskoBtnDone(btnEl);
+  /* In production:
+     POST /api/auth/register { email, password, personal, academic,
+       financial, demographics, health }
+     → backend creates the user + admin data rows (RDBMS), then sends a
+       6-digit email verification code, returns { success: true }
+  */
   const msgEl=document.getElementById('s-verify-msg');
   if(msgEl) msgEl.innerHTML='A 6-digit verification code was sent to <strong id="s-email-display">'+val('s-email')+'</strong>. Enter it below to activate your account.';
   document.getElementById('reviewWrap').style.display='none';
   document.getElementById('verifyWrap').style.display='block';
   startSignupOTPTimer();
-  abDone(document.getElementById('signupCreateBtn'));
+  abDone(btnEl);
   setTimeout(()=>document.getElementById('sotp0').focus(),200);
+  },1600);
 }
 
 function backToReview(){
@@ -1446,15 +1406,16 @@ function verifySignup(){
     el.style.display='block';
     return;
   }
-  /* The backend checks the code against email_otps (hash, expires_at,
-     consumed_at, attempts), marks the auth user's email confirmed and sets
-     applications.current_step = 2. */
-  iskoPost('/auth/verify-registration', {email: val('s-email'), otp: code}).catch(err=>{
-    console.warn('[ISKO] verify-registration:', err.message);
-  });
+  const btnEl=document.getElementById('signupVerifyBtn');
+  iskoBtnLoading(btnEl,'Verifying...');
+  setTimeout(()=>{
+  /* In production:
+     POST /api/auth/verify-registration { email, otp: code }
+     → backend activates the account, returns { success: true }
+  */
   hideFErr('sotp-err');
   clearInterval(sOtpInterval);
-  abDone(document.getElementById('signupVerifyBtn'));
+  abDone(btnEl);
   document.getElementById('verifyWrap').style.display='none';
   document.getElementById('successWrap').style.display='block';
   const titleEl=document.getElementById('signupTitle'); if(titleEl) titleEl.style.display='none';
@@ -1463,6 +1424,7 @@ function verifySignup(){
   /* Auto sign-in: account is already verified, so we take the applicant
      straight into their Applicant Page instead of asking them to log in again. */
   setTimeout(()=>{ window.location.href='applicant.html'; }, 2200);
+  },1200);
 }
 
 /* ── OTP code expiry (10 min) + resend cooldown (1 min) ──
@@ -1534,10 +1496,7 @@ function resendSignupCode(){
   document.getElementById('sotp-timer').innerHTML='Code expires in <strong id="sotp-countdown">10:00</strong>';
   startSignupOTPTimer();
   document.getElementById('sotp0').focus();
-  /* Issues a fresh public.email_otps row with purpose='login' for this email. */
-  iskoPost('/auth/resend-otp', {email: email, purpose: 'register'}).catch(err=>{
-    console.warn('[ISKO] resend-otp:', err.message);
-  });
+  /* In production: POST /api/auth/resend-otp { email } */
 }
 
 /* ── SCROLL TO TOP ── */
