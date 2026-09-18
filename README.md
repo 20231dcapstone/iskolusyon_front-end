@@ -1,10 +1,11 @@
-# FRONT-END PATCH 4 (Sept. 17, 2026):
-#    - (REQUIRED FOR OCR TRAINING) applicant.html > pull description (for summary) / code
-#        - NOTES: Documents are still final with minimal UI changes. Didn't affect the documents and their design.
-#    - (REQUIRED FOR OCR TRAINING) admin.html > pull description (for summary) / code
-#        - NOTE: Documents are still final with minimal UI changes. Didn't affect the documents and their design.
-#    - signup.html & index.html
-#        - NOTE: Both minimal changes (for improvement).
+# FRONT-END PATCH 5 (Sept. 19, 2026):
+#    - Updated ALL HTML files, they're currently "cleaned with no mock data", 
+        meaning its lines CAN POSSIBLY BE CHANGED DEPENDING ON BACKEND 
+        but their design is final unless something is not related/does not make logical sense.
+#    - Added 2 folders at main containing different HTMLS for:
+#      - "[HTMLNAME]_with-built-in-tables" - contains SQL table connections and can also use as reference on how it connects; and 
+#      - "[HTMLNAME]_with-mock-data"       - IMPORTANT TO USE FOR CHECKING IN LOGIC/FEATURE AS REFERENCE.
+#    - IMPORTANT NOTE: All documents are still final with minimal UI changes.
 
 # =================================================================
 
